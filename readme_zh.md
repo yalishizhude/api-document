@@ -10,11 +10,16 @@
 ```
 $ git clone https://github.com/yalishizhude/api-server.git
 ```
-或者
+4. 安装bower
 ```
-$ npm install api-document-server
+$ npm install bower -g
 ```
-
+5. 安装依赖
+```
+$ npm install
+$ bower install
+```
+ 
 ## 特点
 * 基于MEAN(Mongodb,Express,Angular,Node)技术实现。
 * 支持在线编辑和查看文档。

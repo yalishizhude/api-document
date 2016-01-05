@@ -12,9 +12,14 @@ API document manage&http request test server.
 ```
 $ git clone https://github.com/yalishizhude/api-server.git
 ```
-or
+4. Install bower
 ```
-$ npm install api-document-server
+$ npm install bower
+```
+5. install modules
+```
+$ npm install
+$ bower install
 ```
 
 ## Features
