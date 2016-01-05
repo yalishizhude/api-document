@@ -1,97 +1,64 @@
-# HTTP API server
+# HTTP API 服务器
 
-API document manage&http request test server.
+用来管理HTTP API文档和测试http请求的服务器。
 
-## Installation
+## 安装
 
-1. please make sure that you have installed [mongodb](https://www.mongodb.org/)
-2. [Node.js](https://nodejs.org) also needs to be installed
-3. install the project
+1. 请确认已经安装了[mongodb](https://www.mongodb.org/)。
+2. [Node.js](https://nodejs.org)也需要提前安装。
+3. 安装项目
 ```
 $ git clone https://github.com/yalishizhude/api-server.git
 ```
-or
+或者
 ```
-$ npm install api-server
-```
-
-## Features
-* based on MEAN(Mongodb,Express,Angular,Node) stack.
-* support edit&view api document online.
-* provide a mock server responding data to front-end without database and back-end server. 
-* send request to back-end and display response.
-* according to REST specification.
-
-## Quick Start
-
-  The quickest way to get started with express is to utilize the executable [`express(1)`](https://github.com/expressjs/generator) to generate an application as shown below:
-
-  Install the executable. The executable's major version will match Express's:
-
-```bash
-$ npm install -g express-generator@4
+$ npm install api-document-server
 ```
 
-  Create the app:
+## 特点
+* 基于MEAN(Mongodb,Express,Angular,Node)技术实现。
+* 支持在线编辑和查看文档。
+* 支持简单的权限管理。
+* 提供了一个mock服务器用来响应前端浏览器请求，不需要后端服务器和数据库（需要安装[api-mock](https://github.com/yalishizhude/api-mock)）。
+* 发送请求给后端并显示结果
+* 依照REST规范
 
-```bash
-$ express /tmp/foo && cd /tmp/foo
+## 快速开始
+
+1. 启动mongodb
+2. 安装依赖模块
+
 ```
-
-  Install dependencies:
-
-```bash
 $ npm install
 ```
 
-  Start the server:
+3. 启动服务器
 
-```bash
+```
 $ npm start
 ```
 
-## Philosophy
+## 注意事项
 
-  The Express philosophy is to provide small, robust tooling for HTTP servers, making
-  it a great solution for single page applications, web sites, hybrids, or public
-  HTTP APIs.
+* 如果你修改了mongodb的默认连接，请在 **routes/config.js**中进行重新配置。
+* 所有的 **删除** 操作都是 **双击左键**.
 
-  Express does not force you to use any specific ORM or template engine. With support for over
-  14 template engines via [Consolidate.js](https://github.com/tj/consolidate.js),
-  you can quickly craft your perfect framework.
+## 测试
 
-## Examples
-
-  To view the examples, clone the Express repo and install the dependencies:
-
-```bash
-$ git clone git://github.com/strongloop/express.git --depth 1
-$ cd express
-$ npm install
-```
-
-  Then run whichever example you want:
-
-```bash
-$ node examples/content-negotiation
-```
-
-## Tests
-
-  To run the test suite, first install the dependencies, then run `npm test`:
+  为了执行测试案例，请先安装依赖模块，然后执行 `npm test`:
 
 ```
 $ npm install
 $ npm test
 ```
 
-## Docs
+## 文档
 [mockjs](http://mockjs.com/)
 [mongodb](https://www.mongodb.org/)
 [express](http://expressjs.com/)
 [angular](http://docs.angularjs.cn/guide)
 [node](https://nodejs.org)
 
-## License
+## 证书
 
   [MIT](LICENSE)
