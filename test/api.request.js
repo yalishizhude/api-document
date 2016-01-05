@@ -5,7 +5,6 @@ var express = require('express');
 var app = require('../app');
 var api = require('../routes/api');
 var conf = require('../routes/config');
-var muk = require('muk');
 var monk = require('monk');
 var db = monk(conf.mongoUrl);
 var s = supertest.agent(app);
@@ -28,5 +27,10 @@ var s = supertest.agent(app);
 				done();
 			});
 		});
+		it('loginout', function(done){
+	    	s.get('/api/login.html?loginout=true')
+	    	.expect('Content-Type', 'text/html; charset=utf-8')
+	    	.expect(200, done);
+	    });
 	});
 })();

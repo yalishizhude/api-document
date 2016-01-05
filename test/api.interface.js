@@ -5,7 +5,6 @@ var express = require('express');
 var app = require('../app');
 var api = require('../routes/api');
 var conf = require('../routes/config');
-var muk = require('muk');
 var monk = require('monk');
 var db = monk(conf.mongoUrl);
 var s = supertest.agent(app);
