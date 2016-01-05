@@ -1,0 +1,45 @@
+<div ng-controller="mainCtrl"> 
+	<div ng-if="message" class="alert alert-//message.level//" role="alert">
+	  <span  class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  <span  class="sr-only">Error:</span>
+	  //message.text//
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-body">
+	    <form class="form-inline" ng-init="self._id='{{_id}}';self.name='{{name}}'">
+			  <div class="form-group">
+			    <label>原密码</label>
+			    <input ng-model="self.password" type="text" class="form-control">
+			  </div>
+			  <div class="form-group">
+			    <label>新密码</label>
+			    <input ng-model="self._password" type="text" class="form-control">
+			  </div>
+			  <button type="button" class="btn btn-primary btn-sm" ng-click="save();">保存</button>
+			</form>
+	  </div>
+	</div>
+	{{#if manageable}}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class="table text-center">
+				<tr ng-repeat="u in userList">
+					<td ng-bind="u.name"></td>
+					<td> <input type="checkbox" ng-model="u.manageable">管理账号权限</td>
+					<td> <input type="checkbox" ng-model="u.editable">编辑接口权限</td>
+					<td> 
+						<button type="button" ng-dblclick="delete(u._id);" class="pull-right btn-danger btn btn-sm">删除</button>
+	  				<button type="button" ng-click="edit(u);" class="btn btn-sm btn-warning pull-right">修改</button>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="text" class="form-control input-sm" placeholder="账号" ng-model="user.name"></td>
+					<td><input type="checkbox" ng-model="user.manageable" ng-init="user.manageable=false;">管理账号权限</td>
+					<td><input type="checkbox" ng-model="user.editable" ng-init="user.editable=false;">编辑接口权限</td>
+					<td><button type="button" class="btn btn-sm btn-success" ng-click="add(user);">新增</button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</div>

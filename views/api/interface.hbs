@@ -1,0 +1,131 @@
+<div class="container col-sm-12" ng-controller="mainCtrl">
+	<span ng-init="api.pid='{{pid}}';api.mid='{{mid}}'"><a href="/api/modules.html?projectName={{projectName}}#{{pid}}">{{projectName}}</a>&nbsp;>&nbsp;{{moduleName}}</span>
+	<h3>
+		<small class="text-info" ng-bind="'版本:'+api.version" ng-init="api.version=1;api.author='{{userName}}';"></small>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="text-info" ng-bind="'更新日期:'+api.updateDate" ng-init="api.updateDate='{{updateDate}}'"></small>
+	</h3>
+	<div class="col-sm-7">
+		<form name="form">
+		  <div class="form-group">
+		      <input type="text" name="name" class="form-control" ng-model="api.name" placeholder="接口名称" validator="required">
+		  </div>
+		  <div class="form-group">
+		      <input type="text" name="url" class="form-control" ng-model="api.url" placeholder='请求URL(必须以"/"开头)' validator="required">
+		  </div>
+		  <div class="form-group">
+			  <div class="col-sm-3">
+			  	<label for="" class="control-label">请求方式</label>
+			  </div>
+				<div class="col-sm-3">
+			  		<select name="method" class="form-control" ng-model="api.method" ng-init="api.method='get'">
+			  			<option value="get">get</option>
+			  			<option value="post">post</option>
+			  			<option value="put">put</option>
+			  			<option value="delete">delete</option>
+			  		</select>	
+				</div>
+<!-- 				<div class="col-sm-3">
+		  		<label class="control-label" ng-init="api.authorize=false;">是否需要登陆</label>
+				</div>
+				<div class="col-sm-3">
+					  <button type="button" name="authorize" ng-click="api.authorize=true" class="btn //true===api.authorize?'btn-info':'btn-default'// btn-sm" >是</button>
+					  <button type="button" name="authorize" ng-click="api.authorize=false" class="btn //false===api.authorize?'btn-info':'btn-default'// btn-sm" >否</button>
+				</div>
+ -->				<div class="clearfix"></div>
+		  </div>
+		  <div class="form-group">
+			  <table class="table table-bordered table-hover">
+			  	<tr><td colspan="5" class="text-center" ng-init="api.inParams=[];">请求参数说明</td></tr>
+			  	<tr>
+			  		<th class="col-sm-2 text-center">参数名</th>
+			  		<th class="col-sm-2 text-center">是否必传</th>
+			  		<th class="col-sm-2 text-center">类型</th>
+			  		<th class="text-center">说明</th>
+			  		<th class="col-sm-1 text-center"></th>
+			  	</tr>
+			  	<tr ng-repeat="p in api.inParams" >
+			  		<td><input type="text" class="form-control" ng-model="p.name" title="//p.name//"></td>
+			  		<td>
+			  			<select name="" id="" class="form-control" ng-model="p.isNeed">
+				  			<option value="true">是</option>
+				  			<option value="false">否</option>
+				  		</select>
+			  		</td>
+			  		<td>
+			  			<select name="" class="form-control" ng-model="p.type">
+				  			<option value="string">string</option>
+				  			<option value="number">number</option>
+				  			<option value="double">double</option>
+				  			<option value="boolean">boolean</option>
+				  			<option value="object">object</option>
+				  			<option value="array">array</option>
+				  			<option value="stream">stream</option>
+				  		</select>
+			  		</td>
+			  		<td><input type="text" class="form-control" ng-model="p.desc" title="//p.name//"></td>
+			  		<td class="text-center"><span class="label label-danger" ng-click="delParam(p.seq, api.inParams)">-</span></td>
+			  	</tr>
+			  	<tr>
+			  		<td colspan="5" class="text-center">
+			  			<span class="label label-info" ng-click="addParam(api.inParams)">&nbsp;&nbsp;+&nbsp;&nbsp;</span>
+			  		</td>
+			  	</tr>
+			  </table>
+		</div>
+		<div class="form-group">
+		    <textarea name="inObject" class="form-control" rows="10" ng-change="print(api.inObject)" ng-model="api.inObject" placeholder="请求示例（JSON格式或字符串形式：?key=bay&hello=1）"></textarea>
+		</div>
+		<div class="form-group">
+			  <table class="table table-bordered table-hover">
+			  <tr><td colspan="5" class="text-center" ng-init="api.outParams=[];">返回参数说明</td></tr>
+			  	<tr>
+			  		<th class="col-sm-2 text-center">参数名</th>
+			  		<th class="col-sm-2 text-center">类型</th>
+			  		<th class="text-center">说明</th>
+			  		<th class="col-sm-1 text-center"> </th>
+			  	</tr>
+			  	<tr ng-repeat="p in api.outParams">
+			  		<td><input type="text" class="form-control" ng-model="p.name" title="//p.name//"></td>
+			  		<td>
+			  			<select name="" id="" class="form-control" ng-model="p.type">
+				  			<option value="string">String</option>
+				  			<option value="number">Number</option>
+				  			<option value="double">Double</option>
+				  			<option value="boolean">Boolean</option>
+				  			<option value="object">object</option>
+				  			<option value="array">array</option>
+				  		</select>
+			  		</td>
+			  		<td><input type="text" class="form-control" ng-model="p.desc" title="//p.name//"></td>
+			  		<td class="text-center"><span class="label label-danger" ng-click="delParam(p.seq, api.outParams)">-</span></td>
+			  	</tr>
+			  	<tr>
+			  		<td colspan="5" class="text-center">
+			  			<span class="label label-info" ng-click="addParam(api.outParams)">&nbsp;&nbsp;+&nbsp;&nbsp;</span>
+			  		</td>
+			  	</tr>
+			  </table>
+		</div>
+		<div class="form-group">
+      <textarea name="outObject" class="form-control" ng-model="api.outObject"  placeholder="返回示例（JSON格式）" rows="10" validator="required,json"></textarea>
+		</div>
+		<div class="form-group">
+			<textarea name="remark" class="form-control" placeholder="备注" ng-model="api.remark"></textarea>
+		</div>
+		<div ng-if="message" class="alert alert-//message.level//" role="alert">
+		  <span  class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		  <span  class="sr-only">Error:</span>
+		  //message.text//
+		</div>
+	  <div class="form-group text-right">
+	  		<a href="http://mockjs.com/examples.html#Name" target="_blank">JSON模板示例</a>
+	      <button validation-submit="form" ng-click="submit(form);" class="btn btn-large btn-primary">保存</button>
+	      <button type="button" class="btn btn-large btn-default">测试接口</button>
+	  </div>
+		</form>
+	</div>
+	<div class="col-sm-5">
+		{{>viewInterface}}
+	</div>
+</div>

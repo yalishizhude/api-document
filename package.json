@@ -1,0 +1,32 @@
+{
+  "name": "api-document-server",
+  "version": "1.0.0",
+  "description": "based on MEAN,http interface management",
+  "main": "bin/www",
+  "author": "yalishizhude",
+  "license": "MIT"
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "istanbul cover node_modules/mocha/bin/_mocha"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "express-session": "^1.12.1",
+    "hbs": "~3.1.0",
+    "log4js": "^0.6.29",
+    "mongodb": "^1.4.39",
+    "morgan": "~1.6.1",
+    "node-uuid": "^1.4.7",
+    "q": "^1.4.1",
+    "serve-favicon": "~2.3.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.1",
+    "mocha": "^2.3.4",
+    "supertest": "^1.1.0"
+  }
+}

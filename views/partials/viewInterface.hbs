@@ -1,0 +1,65 @@
+<div ng-if="api">
+	<span contenteditable>{{backEndHost}}:{{backEndPort}}</span>
+	<code ng-bind="api.url"></code>
+	<button type="button" class="pull-right btn btn-primary btn-sm" ng-click="sendRequest();">发送请求</button>
+	<div class="clearfix"></div>
+	<br>
+</div>
+<p><b>接口名称</b></p>
+<ul>
+	<li ng-bind="api.name"></li>
+</ul>
+<p><b>请求URL</b></p>
+<ul>
+	<li><code ng-bind="api.url"></code></li>
+</ul>
+<p><b>请求方式</b></p>
+<ul>
+	<li ng-bind="api.method"></li>
+</ul>
+<p><b>是否需要登陆</b></p>
+<ul>
+	<li ng-bind="api.authorize?'是':'否'"></li>
+</ul>
+<p><b>请求参数</b></p>
+<table class="table table-bordered table-striped">
+	<tr>
+		<th>参数名</th>
+		<th>是否必传</th>
+		<th>类型</th>
+		<th>说明</th>
+	</tr>
+	<tr ng-repeat="p in api.inParams">
+		<td ng-bind="p.name"></td>
+		<td ng-bind="p.isNeed"></td>
+		<td ng-bind="p.type"></td>
+		<td ng-bind="p.desc"></td>
+	</tr>
+</table>
+<p><b>请求示例</b></p>
+<pre ng-bind="inObject">
+</pre>
+<p><b>返回参数</b></p>
+<table class="table table-bordered table-striped">
+	<tr>
+		<th>参数名</th>
+		<th>是否必传</th>
+		<th>类型</th>
+		<th>说明</th>
+	</tr>
+	<tr ng-repeat="p in api.outParams">
+		<td ng-bind="p.name"></td>
+		<td ng-bind="p.isNeed"></td>
+		<td ng-bind="p.type"></td>
+		<td ng-bind="p.desc"></td>
+	</tr>
+</table>
+<p><b>返回示例</b></p>
+<pre ng-bind="outObject">
+</pre>
+<p><b>备注</b></p>
+<ul>
+	<li ng-bind="api.remark"></li>
+</ul>
+<p ng-if="result"><b>返回结果</b></p>
+<pre ng-bind="result"></pre>

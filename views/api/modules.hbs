@@ -1,0 +1,52 @@
+<div class="container col-sm-12" ng-controller="mainCtrl">
+<h1>{{projectName}}</h1>
+	<div class="col-sm-6">
+		<div class="panel panel-default" ng-repeat="m in modules">
+		  <div class="panel-heading">
+		  	<span ng-bind="m.name" ng-hide="m.text" placeholder="模块名称"></span>
+		  	{{#if editable}}
+		  	<input id="_moduleName" type="text" ng-model="m.text" ng-if="m.text" ng-keydown="keydown($event, m);" ng-blur="cancel(m)">
+		  	<a href="javascript:void(0);" ng-hide="m.text" ng-dblclick="remove(m._id);" class="pull-right text-danger glyphicon glyphicon-minus">删除&nbsp;</a>
+		  	<a href="javascript:void(0);" ng-hide="m.text" ng-click="edit(m)"class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a>
+		  	{{/if}}
+		  </div>
+		  <div class="panel-body">
+				<table class="table">
+						<tr ng-repeat="i in m.interfaces">
+							<td><a href="" ng-bind="i.name" ng-click="showInterfaceDetail(i._id)"></a></td>
+							<td ng-bind="i.method"></td>
+							<td ng-bind="i.author"></td>
+							<td ng-bind="i.updateDate"></td>
+							{{#if editable}}
+							<td><a href="/api/interface.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a></td>
+							<td><a href="" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a></td>
+							{{/if}}
+						</tr>
+						{{#if editable}}
+						<tr>
+							<td colspan="6" class="text-center">
+								<a href="/api/interface.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="text-success glyphicon glyphicon-plus">新增接口</a>
+							</td>
+						</tr>
+						{{/if}}
+				</table>
+		  </div>
+		</div>
+		{{#if editable}}
+		<div class="panel panel-default">
+		  <div class="panel-heading text-center"><a href="javascript:void 0;" ng-click="edit();"><span class="glyphicon glyphicon-plus"></span>新增模块</a></div>
+		  <div class="panel-body" ng-if="mod">
+	  		<input type="text" id="moduleName" placeholder="模块名称" class="form-control" ng-model="mod.name" ng-keydown="keydown($event);" ng-blur="cancel()">
+		  </div>
+		</div>
+		{{/if}}
+		<div ng-if="message" class="alert alert-danger" role="alert">
+		  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		  <span class="sr-only">Error:</span>
+		  //message//
+		</div>
+	</div>
+	<div class="col-sm-6">
+	{{>viewInterface}} 
+	</div>
+</div>
