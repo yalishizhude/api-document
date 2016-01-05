@@ -7,7 +7,7 @@
 	    $interpolateProvider.endSymbol('//');
 	})
 	.controller('mainCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
-		if(location.hash.replace('#','')) $http.get('/api/getInterfaceById.json?_id='+location.hash.replace('#','')).success(function(resp){
+		if(location.hash.replace('#','')) $http.get('/api/interface.json/'+location.hash.replace('#','')).success(function(resp){
 			$scope.api = resp;
 		}).error(function(resp){
 			$scope.hint(resp);
