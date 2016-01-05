@@ -19,7 +19,7 @@ $ npm install bower -g
 $ npm install
 $ bower install
 ```
- 
+
 ## 特点
 * 基于MEAN(Mongodb,Express,Angular,Node)技术实现。
 * 支持在线编辑和查看文档。
@@ -58,11 +58,16 @@ $ npm test
 ```
 
 ## 文档
-[mockjs](http://mockjs.com/)
-[mongodb](https://www.mongodb.org/)
-[express](http://expressjs.com/)
-[angular](http://docs.angularjs.cn/guide)
-[node](https://nodejs.org)
+
+mockjs (http://mockjs.com/)
+
+mongodb (https://www.mongodb.org/)
+
+express (http://expressjs.com/)
+
+angular (http://docs.angularjs.cn/guide)
+
+node (https://nodejs.org)
 
 ## 证书
 
