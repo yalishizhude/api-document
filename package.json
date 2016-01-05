@@ -4,7 +4,7 @@
   "description": "based on MEAN,http interface management",
   "main": "bin/www",
   "author": "yalishizhude",
-  "license": "MIT"
+  "license": "MIT",
   "scripts": {
     "start": "node ./bin/www",
     "test": "istanbul cover node_modules/mocha/bin/_mocha"
