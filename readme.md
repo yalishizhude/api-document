@@ -55,11 +55,16 @@ $ npm test
 ```
 
 ## Docs
-[mockjs](http://mockjs.com/)
-[mongodb](https://www.mongodb.org/)
-[express](http://expressjs.com/)
-[angular](http://docs.angularjs.cn/guide)
-[node](https://nodejs.org)
+
+mockjs (http://mockjs.com/)
+
+mongodb (https://www.mongodb.org/)
+
+express (http://expressjs.com/)
+
+angular (http://docs.angularjs.cn/guide)
+
+node (https://nodejs.org)
 
 ## License
 
