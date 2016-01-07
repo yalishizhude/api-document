@@ -46,7 +46,8 @@
 				$scope.pro = null;
 			};
 			$scope.remove = function(_id){
-				$http.delete('/api/project.json/'+_id).success(function(resp){
+				//delete为关键字，避免在IE下报错
+				$http['delete']('/api/project.json/'+_id).success(function(resp){
 					if(resp){
 						for(var i=$scope.projects.length-1;i>=0;i--){
 							if(_id===$scope.projects[i]._id) {
