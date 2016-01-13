@@ -7,7 +7,6 @@ var monk = require('monk');
 var db = monk(conf.mongoUrl);
 var _ = require('underscore');
 var http = require('http');
-var querystring = require('querystring');
 
 var cPro = db.get('projects');
 var cMod = db.get('modules');
@@ -19,7 +18,7 @@ var cUsr = db.get('users');
   router.post('/request.json', function(req, res) {
       var postData = '';
       var hostport = req.body.hostport.replace('http://','').split(':');
-      if ('put' === req.body.method || 'post' === req.body.method) postData = querystring.stringify(JSON.parse(req.body.param));
+      if ('put' === req.body.method || 'post' === req.body.method) postData = JSON.stringify(JSON.parse(req.body.param));
       var opt = {
         method: req.body.method.toUpperCase(),
         host: hostport[0],
