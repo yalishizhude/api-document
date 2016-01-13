@@ -24,8 +24,14 @@
 				$scope.outObject = JSON.stringify(Mock.mock(JSON.parse(nVal)), null, '  ');
 			} catch(e){}
 		});
+		$scope.keydown = function($event, arr){
+			if(13===$event.keyCode){
+				$scope.addParam(arr);
+			}
+			$event.stopPropagation();
+		};
 		$scope.sendRequest = function(){
-			$http.post('/api/request.json', {method: $scope.api.method, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
+			$http.post('/api/request.json', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
 			}).error(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
@@ -33,7 +39,7 @@
 		};
 		$scope.addParam = function(arr){
 			arr.push({
-				seq: _.uniqueId('api'),
+				seq: _.now(),
 				name:'',
 				isNeed: 'true',
 				type: 'string',

@@ -24,7 +24,7 @@
 			} catch(e){}
 		});
 		$scope.sendRequest = function(){
-			$http.post('/api/request.json', {method: $scope.api.method, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
+			$http.post('/api/request.json', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
 			}).error(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
