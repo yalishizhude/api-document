@@ -10,7 +10,7 @@ API document manage&http request test server.
 2. [Node.js](https://nodejs.org) also needs to be installed
 3. Install the project
 ```
-$ git clone https://github.com/yalishizhude/api-server.git
+$ git clone https://github.com/yalishizhude/api-document.git
 ```
 4. Install bower
 ```
