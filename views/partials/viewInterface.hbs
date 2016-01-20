@@ -1,7 +1,7 @@
 <div ng-if="api">
 	<button type="button" class="pull-right btn btn-primary btn-sm" ng-click="sendRequest();">发送请求</button>
-	<input type="text" ng-model="$parent.hostport" ng-init="$parent.hostport='{{backEndHost}}:{{backEndPort}}'">
-	<code ng-bind="api.url"></code>
+	<code class="code" ng-keyup="keyup($event);" ng-init="$parent.hostport='{{backEndHost}}:{{backEndPort}}'" contenteditable>{{backEndHost}}:{{backEndPort}}</code>
+	<code class="code" ng-bind="api.url"></code>
 	<div class="clearfix"></div>
 	<br>
 </div>

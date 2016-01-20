@@ -7,6 +7,7 @@ var monk = require('monk');
 var db = monk(conf.mongoUrl);
 var _ = require('underscore');
 var http = require('http');
+var crypto = require('crypto');
 
 var cPro = db.get('projects');
 var cMod = db.get('modules');
@@ -113,12 +114,11 @@ var cUsr = db.get('users');
     })
     .get('/modules.json/:pid', function(req, res) {
       var pId = req.params.pid;
-
       function gm(pId) {
         var def = q.defer();
         cMod.find({
           pid: pId
-        }, function(err, data) {
+        }, {sort: {name:1}}, function(err, data) {
           if (err) def.reject(err);
           else def.resolve(data || []);
         });
@@ -127,15 +127,29 @@ var cUsr = db.get('users');
 
       function gi(pId) {
         var def = q.defer();
+        var orderby = {};
+        console.log(req.query.sort);
+        if('name'===req.query.sort) {
+          orderby = {sort: {mid: 1, name: 1 } };
+        } else {
+          orderby = {sort: {mid: 1, updateDate: -1 } };
+        }
         cInt.find({
-          pid: pId
-        }, {
-          sort: {
-            mid: 1
+          pid: pId,
+          valid: {$ne: false}
+        }, orderby, function(err, data) {
+          if (err) {
+            def.reject(err);
+          } else {
+            var map = {};
+            _.each(data, function(i){
+              map[i._id.toString()] = i.name;
+            });
+            _.each(_.filter(data, function(it){return it.referenceId;}), function(ref){
+              ref.referenceName = map[ref.referenceId];
+            });
+            def.resolve(data || []);
           }
-        }, function(err, data) {
-          if (err) def.reject(err);
-          else def.resolve(data || []);
         });
         return def.promise;
       }
@@ -210,27 +224,61 @@ var cUsr = db.get('users');
         }]
       });
     })
-    .get('/interface.json/:_id', function(req, res) {
-      cInt.find({
-        _id: req.params._id
-      }, function(err, data) {
+    .get('/interface.json/:oid/:version', function(req, res) {
+      var result = {};
+      var condition = {oid: req.params.oid, version: parseInt(req.params.version)};
+      cInt.find(condition, function(err, data) {
         if (err) throw err;
-        res.json(data.length > 0 ? data[0] : {});
+        if(data.length>0){
+          result.api = data[0];
+          cInt.find({oid: data[0].oid}, {sort:{version:-1}}, function(err, versions){
+            if(err) throw err;
+            result.versions = _.pluck(versions, 'version');
+            if(data[0].referenceId){
+              cInt.find({_id: data[0].referenceId}, function(e, data){
+                if(e) throw e;
+                result.api.referenceName = data[0].name;
+                res.json(result);
+              });
+            } else {
+              res.json(result);
+            }
+          });
+        } else {
+          res.json({});
+        }
       });
     })
     .post('/interface.json', function(req, res) {
+      req.body.valid = true;
       cInt.insert(req.body, function(err, data) {
         if (err) throw err;
         http.get(conf.mockUrl + _.now()).on('error', function() {
           console.log('mock server error');
         });
+        cInt.update({_id:data._id}, {$set:{'oid':data._id.toString()}}, function(e, data){
+          if(e) throw e;
+        });
         res.json(data);
       });
     })
     .put('/interface.json/:_id', function(req, res) {
-      cInt.update({
-        _id: req.params._id
-      }, req.body, function(err, data) {
+      cInt.update({_id:req.body._id}, {$set:{valid:false}}, function(err){
+        if(err) throw err;
+        delete req.body._id;
+        req.body.valid = true;
+        cInt.insert(req.body, function(err, data) {
+          if(err) throw err;
+          http.get(conf.mockUrl + _.now()).on('error', function() {
+            console.log('mock server error');
+          });
+          res.json(data);
+        });
+      });
+    })
+    .put('/interface.json/:_id/:referenceId', function(req, res){
+      cInt.update({_id:req.params._id}, {$set:{referenceId:req.params.referenceId}}, function(err, data){
+        if(err) throw err;
         http.get(conf.mockUrl + _.now()).on('error', function() {
           console.log('mock server error');
         });
@@ -238,9 +286,7 @@ var cUsr = db.get('users');
       });
     })
     .delete('/interface.json/:_id', function(req, res) {
-      cInt.remove({
-        _id: req.params._id
-      }, function(err, data) {
+      cInt.update({_id:req.params._id}, {$set:{valid:false}}, function(err, data){
         if (err) throw err;
         http.get(conf.mockUrl + _.now()).on('error', function() {
           console.log('mock server error');
@@ -250,7 +296,10 @@ var cUsr = db.get('users');
     })
     /*登陆权限*/
     .get('/login.html', function(req, res) {
-      if (req.query.loginout) req.session.user = null;
+      if (req.query.loginout){
+        req.session.user = null;
+        res.locals.user = null;
+      }
       res.render('api/login', {
         js: [{
           path: '/lib/angular-validation/dist/angular-validation.min.js'
@@ -259,26 +308,6 @@ var cUsr = db.get('users');
         }, {
           path: '/javascripts/api/login.js'
         }]
-      });
-    })
-    .post('/login.json', function(req, res) {
-      var self = this;
-      cUsr.find({
-        name: req.body.name,
-        password: req.body.password
-      }, function(err, data) {
-        if (err) {
-          throw err;
-        } else if (data.length) {
-          req.session.user = data[0];
-          res.json({
-            url: '/api/projects.html'
-          });
-        } else {
-          res.json({
-            message: '登陆失败'
-          });
-        }
       });
     })
     .get('/user.html', function(req, res) {

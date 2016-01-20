@@ -11,7 +11,7 @@ var hbs = require('hbs');
 var log = require('./log');
 var session = require('express-session');
 var uuid = require('node-uuid');
-
+var login = require('./routes/login');
 var app = express();
 
 // view engine setup
@@ -30,7 +30,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 //会话
 app.use(session({
   genid: uuid.v1, 
@@ -39,18 +38,7 @@ app.use(session({
   secret: 'api-document-server'
 }));
 //登陆拦截
-app.use(function (req, res, next) {
-  'use strict';
-  //根路径跳转
-  if(/\/(index.html)?$/.test(req.path)||'/'===req.path) return res.redirect('/api/projects.html');
-  if(!req.session.user && !/\/api\/login.*/.test(req.path)) {
-    if(/(.html)$/.test(req.path)) return res.redirect("/api/login.html");
-    else return res.send(401, {message:'请重新登陆'});
-  } else if(req.session.user){
-    app.locals.user = req.session.user;
-  }
-  next();
-});
+app.use(login);
 app.use('/api', api);
 
 // catch 404 and forward to error handler

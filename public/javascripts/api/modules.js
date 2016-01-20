@@ -1,4 +1,4 @@
-/*global angular, _*/
+/*global angular, _, Mock*/
 (function(window, angular) {
 	'use strict';
 	angular.module('indexApp', [])
@@ -23,6 +23,11 @@
 				$scope.outObject = JSON.stringify(Mock.mock(JSON.parse(nVal)), null, '  ');
 			} catch(e){}
 		});
+		$scope.sort = function(col){
+			$http.get('/api/modules.json/'+pid+'?sort='+col).success(function(resp){
+				$scope.modules = resp;
+			});
+		};
 		$scope.sendRequest = function(){
 			$http.post('/api/request.json', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
@@ -32,6 +37,9 @@
 		};
 		$scope.keydown = function($event, module){
 			if(13===$event.keyCode) $scope.save(module);
+		};
+		$scope.keyup = function(dom){
+			$scope.hostport = dom.target.innerText;
 		};
 		$scope.save = function(module){
 			if(module){
@@ -73,9 +81,31 @@
 			if(module) module.text = null;
 			else $scope.mod = null;
 		};
-		$scope.showInterfaceDetail = function(_id){
-			$http.get('/api/interface.json/'+_id).success(function(resp){
-				$scope.api = resp;
+		$scope.showReference = function($event, refering){
+			$event.stopPropagation();
+			$scope.refering = refering;
+		};
+		$scope.setReference = function($event, reference){
+			$event.stopPropagation();
+			$http.put('/api/interface.json/'+$scope.refering._id+'/'+reference._id).success(function(resp){
+				// _.each($scope.modules, function(m){
+				// 	_.each(m.interfaces, function(i){
+				// 		if(i._id===reference._id){
+				$scope.refering.referenceId = reference._id;
+				$scope.refering.referenceName = reference.name;
+				// 			return false;
+				// 		}
+				// 	});
+				// });
+				$scope.cancelRefer();
+			});
+		};
+		$scope.cancelRefer = function(){
+			$scope.refering = null;
+		};
+		$scope.showInterfaceDetail = function(oid, version){
+			$http.get('/api/interface.json/'+oid+'/'+version).success(function(resp){
+				$scope.api = resp.api;
 			});
 		};
 		$scope.edit = function(module){

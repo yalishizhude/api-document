@@ -7,11 +7,24 @@
 	    $interpolateProvider.endSymbol('//');
 	})
 	.controller('mainCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
-		if(location.hash.replace('#','')) $http.get('/api/interface.json/'+location.hash.replace('#','')).success(function(resp){
-			$scope.api = resp;
-		}).error(function(resp){
-			$scope.hint(resp);
-		});
+		function change(version){
+			var hash = location.hash.replace('#', '');
+			var url = '/api/interface.json/';
+			var oid = hash.split('|')[0];
+			version = version||hash.split('|')[1];
+			url += oid + '/' + version;
+			console.log(url);
+			if(oid) $http.get(url).success(function(resp){
+				$scope.versions = resp.versions;
+				$scope.api = resp.api;
+			}).error(function(resp){
+				$scope.hint(resp);
+			});
+		}
+		change();
+		$scope.change = function(){
+			change($scope.api.version);
+		};
 		$scope.$watch('api.inObject', function(nVal){
 			try{
 				$scope.inObject = JSON.stringify(Mock.mock(JSON.parse(nVal)), null, '  ');
@@ -24,6 +37,9 @@
 				$scope.outObject = JSON.stringify(Mock.mock(JSON.parse(nVal)), null, '  ');
 			} catch(e){}
 		});
+		$scope.keyup = function(dom){
+			$scope.hostport = dom.target.innerText;
+		};
 		$scope.keydown = function($event, arr){
 			if(13===$event.keyCode){
 				$scope.addParam(arr);

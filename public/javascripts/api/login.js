@@ -5,12 +5,17 @@
 	.controller('mainCtrl', ['$scope', '$http', function($scope, $http){
 		$scope.submit = function(){
 			$http.post('/api/login.json', $scope.user).success(function(resp){
-				if(resp.url) location.href = resp.url;
+				if(resp.url){
+					location.href = resp.url;
+					document.cookie="token="+resp.token;
+				}
 				else $scope.message = '用户名/密码错误';
 			});
 		};
 		$scope.keydown = function($event){
-			if($event.keyCode===13) $scope.submit();
+			if($event.keyCode===13) {
+				$scope.submit();
+			}
 		};
 	}])
 	;

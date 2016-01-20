@@ -11,3 +11,9 @@ a {
 	color: red;
 }
 .ng-cloak{display:none;}  
+.code{
+  height: 30px;
+  display: inline-block;
+  line-height: 30px;
+  font-size: 16px;
+}
