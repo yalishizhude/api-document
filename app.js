@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var api = require('./routes/api');
 var hbs = require('hbs');
 var log = require('./log');
 var session = require('express-session');
@@ -37,9 +36,13 @@ app.use(session({
   saveUninitialized: true,
   secret: 'api-document-server'
 }));
-//登陆拦截
+//路由
 app.use(login);
-app.use('/api', api);
+app.use('/', require('./routes/index'));
+app.use('/project', require('./routes/project'));
+app.use('/module', require('./routes/module'));
+app.use('/interface', require('./routes/interface'));
+app.use('/user', require('./routes/user'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

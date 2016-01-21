@@ -23,6 +23,7 @@
     "node-uuid": "^1.4.7",
     "q": "^1.4.1",
     "serve-favicon": "~2.3.0",
+    "superagent": "^1.7.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

@@ -27,7 +27,7 @@
         	</tr>
           <tr ng-repeat="i in m.interfaces">
             <td>
-              <a href="" ng-bind="i.name" ng-click="showInterfaceDetail(i.oid, i.version)"></a>
+              <a href="" ng-bind="i.name" ng-click="showInterfaceDetail(i._id)"></a>
             </td>
             <td ng-bind="i.url"></td>
             <td ng-bind="i.version"></td>
@@ -38,12 +38,13 @@
               {{#if editable}}
               <a href="javascript:void 0;"><span ng-hide="refering" class="glyphicon glyphicon-retweet" ng-click="showReference($event,i)"></span></a>
               <a href="javascript:void 0;"><span ng-show="refering&&refering._id!=i._id" class="glyphicon glyphicon-magnet" ng-click="setReference($event,i)"></span></a>
+              <a href="javascript:void 0;"><span ng-show="refering&&refering._id==i._id" class="glyphicon glyphicon-remove" ng-click="setReference($event)"></span></a>
               {{/if}}
               <span ng-bind="i.referenceName"></span>
             </td>
             {{#if editable}}
             <td style="text-align:right;">
-              <a href="/api/interface.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i.oid//|//i.version//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
+              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
               <a href="" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
             </td>
             {{/if}}
@@ -51,7 +52,7 @@
           {{#if editable}}
           <tr>
             <td colspan="8" class="text-center">
-              <a href="/api/interface.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="text-success glyphicon glyphicon-plus">新增接口</a>
+              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="text-success glyphicon glyphicon-plus">新增接口</a>
             </td>
           </tr>
           {{/if}}

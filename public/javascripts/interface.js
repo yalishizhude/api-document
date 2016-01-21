@@ -1,4 +1,4 @@
-/*global angular, _*/
+/*global angular, _, Mock*/
 (function(window, angular) {
 	'use strict';
 	angular.module('indexApp', ['validation.rule'])
@@ -7,24 +7,12 @@
 	    $interpolateProvider.endSymbol('//');
 	})
 	.controller('mainCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
-		function change(version){
-			var hash = location.hash.replace('#', '');
-			var url = '/api/interface.json/';
-			var oid = hash.split('|')[0];
-			version = version||hash.split('|')[1];
-			url += oid + '/' + version;
-			console.log(url);
-			if(oid) $http.get(url).success(function(resp){
-				$scope.versions = resp.versions;
-				$scope.api = resp.api;
-			}).error(function(resp){
-				$scope.hint(resp);
-			});
-		}
-		change();
-		$scope.change = function(){
-			change($scope.api.version);
-		};
+		$http.get('/interface/' + location.hash.replace('#', '')).success(function(resp){
+			$scope.versions = resp.versions;
+			$scope.api = resp.api;
+		}).error(function(resp){
+			$scope.hint(resp);
+		});
 		$scope.$watch('api.inObject', function(nVal){
 			try{
 				$scope.inObject = JSON.stringify(Mock.mock(JSON.parse(nVal)), null, '  ');
@@ -47,7 +35,7 @@
 			$event.stopPropagation();
 		};
 		$scope.sendRequest = function(){
-			$http.post('/api/request.json', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
+			$http.post('/request', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject, referenceId: $scope.api.referenceId}).success(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
 			}).error(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
@@ -70,16 +58,17 @@
 		$scope.submit = function(){
 			if($scope.api._id){
 				$scope.api.version++;
-				$http.put('/api/interface.json/'+$scope.api._id, $scope.api).success(function(resp){
+				$http.put('/interface/'+$scope.api._id, $scope.api).success(function(resp){
 					if(resp) {
-						location.hash = '#'+$scope.api._id;
+						$scope.api = resp.api;
+						$scope.versions = resp.versions;
 						$scope.hint('保存成功!', 'success');
 					} else {
 						$scope.hint('保存失败!\n'+resp, 'danger');
 					}
 				});
 			} else {
-				$http.post('/api/interface.json', $scope.api).success(function(resp){
+				$http.post('/interface', $scope.api).success(function(resp){
 					if(resp){
 						$scope.api = resp;
 						location.hash = '#'+resp._id;

@@ -7,11 +7,11 @@
 	  $interpolateProvider.endSymbol('//');
 	}])
 	.controller('mainCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
-		$http.get('/api/users.json').success(function(resp){
+		$http.get('/user').success(function(resp){
 			if(resp) $scope.userList = resp;
 		});
 		$scope.save = function(){
-			$http.put('/api/self.json', $scope.self).success(function(resp){
+			$http.put('/self', $scope.self).success(function(resp){
 				if(resp){
 					$scope.hint('保存成功', 'success');
 				} else {
@@ -20,12 +20,12 @@
 			});
 		};
 		$scope.edit = function(u){
-			$http.put('/api/user.json/'+u._id, u).success(function(resp){
+			$http.put('/user/'+u._id, u).success(function(resp){
 				if(!resp) $scope.hint('修改用户权限失败！\n'+resp);
 			});
 		};
 		$scope.add = function(u){
-			$http.post('/api/user.json', u).success(function(resp){
+			$http.post('/user', u).success(function(resp){
 				$scope.userList = $scope.userList||[];
 				if(resp.status===0){
 					$scope.hint(resp.message);
@@ -36,7 +36,7 @@
 			});
 		};
 		$scope.delete = function(_id){
-			$http.delete('/api/user.json/'+_id).success(function(resp){
+			$http.delete('/user/'+_id).success(function(resp){
 				if(resp){
 					for(var i=$scope.userList.length-1;i>=0;i--){
 						if($scope.userList[i]._id===_id){

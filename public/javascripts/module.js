@@ -8,7 +8,7 @@
 	}])
 	.controller('mainCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
 		var pid = location.hash.replace('#', '');
-		$http.get('/api/modules.json/'+pid).success(function(resp){
+		$http.get('/module/'+pid).success(function(resp){
 			$scope.modules = resp;
 		});
 		$scope.$watch('api.inObject', function(nVal){
@@ -24,16 +24,16 @@
 			} catch(e){}
 		});
 		$scope.sort = function(col){
-			$http.get('/api/modules.json/'+pid+'?sort='+col).success(function(resp){
+			$http.get('/module/'+pid+'?sort='+col).success(function(resp){
 				$scope.modules = resp;
 			});
 		};
 		$scope.sendRequest = function(){
-			$http.post('/api/request.json', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject}).success(function(resp){
+			$http.post('/request', {method: $scope.api.method, hostport: $scope.hostport, url:$scope.api.url, param:$scope.inObject, referenceId: $scope.api.referenceId}).success(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
 			}).error(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
-			});
+			});		
 		};
 		$scope.keydown = function($event, module){
 			if(13===$event.keyCode) $scope.save(module);
@@ -43,7 +43,7 @@
 		};
 		$scope.save = function(module){
 			if(module){
-				$http.put('/api/module.json/'+module._id, {pid: module.pid, interfaces: module.interfaces, name: module.text}).success(function(resp){
+				$http.put('/module/'+module._id, {pid: module.pid, interfaces: module.interfaces, name: module.text}).success(function(resp){
 					if(resp){
 						module.name = module.text;
 						module.text = null;
@@ -52,7 +52,7 @@
 					}
 				});
 			} else {
-				$http.post('/api/module.json', {name: $scope.mod.name, pid: pid}).success(function(resp){
+				$http.post('/module', {name: $scope.mod.name, pid: pid}).success(function(resp){
 					if(resp){
 						$scope.modules = $scope.modules||[];
 						$scope.modules.push(resp);
@@ -64,7 +64,7 @@
 			}
 		};
 		$scope.remove = function(_id){
-			$http.delete('/api/module.json/'+_id).success(function(resp){
+			$http.delete('/module/'+_id).success(function(resp){
 				if(resp){
 					for(var i=$scope.modules.length-1;i>=0;i--){
 						if($scope.modules[i]._id===_id){
@@ -87,24 +87,22 @@
 		};
 		$scope.setReference = function($event, reference){
 			$event.stopPropagation();
-			$http.put('/api/interface.json/'+$scope.refering._id+'/'+reference._id).success(function(resp){
-				// _.each($scope.modules, function(m){
-				// 	_.each(m.interfaces, function(i){
-				// 		if(i._id===reference._id){
-				$scope.refering.referenceId = reference._id;
-				$scope.refering.referenceName = reference.name;
-				// 			return false;
-				// 		}
-				// 	});
-				// });
+			$http.put('/interface/'+$scope.refering._id+'/'+(reference?'reference._id':'/1')).success(function(resp){
+				if(reference){
+					$scope.refering.referenceId = reference._id;
+					$scope.refering.referenceName = reference.name;
+				} else {
+					$scope.refering.referenceId = null;
+					$scope.refering.referenceName = null;
+				}
 				$scope.cancelRefer();
 			});
 		};
 		$scope.cancelRefer = function(){
 			$scope.refering = null;
 		};
-		$scope.showInterfaceDetail = function(oid, version){
-			$http.get('/api/interface.json/'+oid+'/'+version).success(function(resp){
+		$scope.showInterfaceDetail = function(_id){
+			$http.get('/interface/'+_id).success(function(resp){
 				$scope.api = resp.api;
 			});
 		};
@@ -122,7 +120,7 @@
 			}
 		};
 		$scope.deleteInterface = function(_id, list){
-			$http.delete('/api/interface.json/'+_id).success(function(resp){
+			$http.delete('/interface/'+_id).success(function(resp){
 				if(resp){
 					for(var i=list.length-1;i>=0;i--){
 						if(list[i]._id===_id){

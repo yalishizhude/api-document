@@ -7,7 +7,7 @@
 	  $interpolateProvider.endSymbol('//');
 	}])
 	.controller('mainCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
-		$http.get('/api/project.json').success(function(resp){
+		$http.get('/project').success(function(resp){
 			$scope.projects = resp;
 			$scope.edit = function(_id, name){
 				$scope.pro = _id?{_id: _id, name: name}:{};
@@ -17,7 +17,7 @@
 			};
 			$scope.save = function(){
 				if($scope.pro._id){
-					$http.put('/api/project.json/'+$scope.pro._id, $scope.pro).success(function(resp){
+					$http.put('/project/'+$scope.pro._id, $scope.pro).success(function(resp){
 						if(resp){
 							_.each($scope.projects, function(item){
 								if(item._id===$scope.pro._id){
@@ -31,7 +31,7 @@
 						}
 					});
 				} else {
-					$http.post('/api/project.json', $scope.pro).success(function(resp){
+					$http.post('/project', $scope.pro).success(function(resp){
 						if(resp){
 							$scope.projects = $scope.projects||[];
 							$scope.projects.push(resp);
@@ -47,7 +47,7 @@
 			};
 			$scope.remove = function(_id){
 				//delete为关键字，避免在IE下报错
-				$http['delete']('/api/project.json/'+_id).success(function(resp){
+				$http['delete']('/project/'+_id).success(function(resp){
 					if(resp){
 						for(var i=$scope.projects.length-1;i>=0;i--){
 							if(_id===$scope.projects[i]._id) {

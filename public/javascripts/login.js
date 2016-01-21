@@ -3,8 +3,9 @@
 	'use strict';
 	angular.module('loginApp', ['validation.rule'])
 	.controller('mainCtrl', ['$scope', '$http', function($scope, $http){
+		if(location.search.indexOf('loginout')>-1)document.cookie="token=";
 		$scope.submit = function(){
-			$http.post('/api/login.json', $scope.user).success(function(resp){
+			$http.post('/login', $scope.user).success(function(resp){
 				if(resp.url){
 					location.href = resp.url;
 					document.cookie="token="+resp.token;

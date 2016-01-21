@@ -1,12 +1,12 @@
 <div class="container col-sm-12" ng-controller="mainCtrl">
-  <span ng-init="api.pid='{{pid}}';api.mid='{{mid}}'"><a href="/api/modules.html?projectName={{projectName}}#{{pid}}">{{projectName}}</a>&nbsp;>&nbsp;{{moduleName}}</span>
+  <span ng-init="api.pid='{{pid}}';api.mid='{{mid}}'"><a href="/module/index.html?projectName={{projectName}}#{{pid}}">{{projectName}}</a>&nbsp;>&nbsp;{{moduleName}}</span>
   <h3>
 		<small class="text-info" ng-bind="'版本:'" ng-init="api.version=1;api.author='{{userName}}';">
 		</small>
-		<small>
-			<select style="width:50px;" ng-model="api.version" ng-change="change();" ng-init="versions=[1]">
+		<small ng-bind="api.version">
+			<!-- <select style="width:50px;" ng-model="api.version" ng-change="change();" ng-init="versions=[1]">
 				<option ng-repeat="v in versions" value="//v//" ng-bind="//v//"></option>
-			</select>
+			</select> -->
 		</small>
 		&nbsp;&nbsp;
 		&nbsp;&nbsp;
@@ -85,7 +85,7 @@
         </table>
       </div>
       <div class="form-group">
-        <textarea name="inObject" class="form-control" rows="10" ng-change="print(api.inObject)" ng-model="api.inObject" placeholder="请求示例（JSON格式或字符串形式：?key=bay&hello=1）"></textarea>
+        <textarea name="inObject" class="form-control" rows="10" ng-change="print(api.inObject)" ng-model="api.inObject" placeholder="请求示例（JSON格式）" validator="json"></textarea>
       </div>
       <div class="form-group">
         <table class="table table-bordered table-hover">
