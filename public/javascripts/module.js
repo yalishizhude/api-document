@@ -104,6 +104,7 @@
 		$scope.showInterfaceDetail = function(_id){
 			$http.get('/interface/'+_id).success(function(resp){
 				$scope.api = resp.api;
+				$scope.result = '';
 			});
 		};
 		$scope.edit = function(module){

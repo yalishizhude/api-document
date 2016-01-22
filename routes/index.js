@@ -15,7 +15,7 @@ var cUsr = db.get('users');
   router.get('/login.html', function(req, res) {
       if (req.query.loginout) {
         req.session.user = null;
-        res.locals.user = null;
+        res.app.locals.user = null;
       }
       res.render('login', {
         js: [{
@@ -63,12 +63,17 @@ var cUsr = db.get('users');
           if(e) {
             console.error(e);
             res.send(e);
+          } else {
+            req.body.param = JSON.stringify(_.extend(JSON.parse(req.body.param || '{}'), r1.body));
+            if ('get' !== req.body.method) req.body.param = JSON.stringify(req.body.param);
+            sendRequest(superagent, req.body, function(e, r2) {
+              if(e) {
+                console.error(e);
+                res.send(e);
+              }
+              res.json(r2.body);
+            }); 
           }
-          req.body.param = JSON.stringify(_.extend(JSON.parse(req.body.param || '{}'), r1.body));
-          if ('get' !== req.body.method) req.body.param = JSON.stringify(req.body.param);
-          sendRequest(superagent, req.body, function(e, r2) {
-            res.json(r2.body);
-          });
         });
       });
     } else {
@@ -76,8 +81,9 @@ var cUsr = db.get('users');
         if(e){
           console.error(e);
           res.send(e);
+        } else {
+          res.json(r.body);
         }
-        res.json(r.body);
       });
     }
   });
