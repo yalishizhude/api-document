@@ -105,7 +105,7 @@ var cIntHis = db.get('interfacesHistory');
           req.body.oid = r[0].oid;
           cInt.insert(req.body, function(e3, r3){
             if(e3) throw e3;
-            res.json(r3);
+            res.json({api:r3});
           });
         });
       });
