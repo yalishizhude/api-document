@@ -100,6 +100,7 @@ var cIntHis = db.get('interfacesHistory');
       cInt.find({_id:req.params._id}, function(e, r){
         if(e) throw e;
         delete r[0]._id;
+        cInt.remove({_id:req.params._id});
         cIntHis.insert(r[0], function(e2, r2){
           if(e2) throw e2;
           req.body.oid = r[0].oid;
