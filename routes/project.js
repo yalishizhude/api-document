@@ -13,7 +13,10 @@ var cInt = db.get('interfaces');
   'use strict';
   router.get('/index.html', function(req, res) {
       cPro.find({}, function(err, data) {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          res.status(500).send(err);
+        }
         else res.render('project', {
           editable: req.session.user.editable,
           js: [{
@@ -26,13 +29,18 @@ var cInt = db.get('interfaces');
     })
     .get('', function(req, res) {
       cPro.find({}, function(err, data) {
-        if (err) throw err;
-        else res.json(data);
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        } else res.json(data);
       });
     })
     .post('', function(req, res) {
       cPro.insert(req.body, function(err, data) {
-        if (err) throw err;
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        }
         else res.json(data);
       });
     })
@@ -47,15 +55,20 @@ var cInt = db.get('interfaces');
       cPro.remove({
         _id: req.params._id
       }, function(err, data) {
-        if (err) throw err;
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        }
         cMod.remove({
           pid: req.params._id
         });
         cInt.remove({
           pid: req.params._id
         }, function(err, data) {
-          if (err) throw err;
-          else http.get(conf.mockUrl + (new Date().getTime())).on('error', function() {
+          if (err) {
+            console.error(err);
+            res.status(500).send(err);
+          } else http.get(conf.mockUrl + (new Date().getTime())).on('error', function() {
             console.log('mock server error');
           });
         });

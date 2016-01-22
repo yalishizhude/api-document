@@ -94,21 +94,26 @@ var cInt = db.get('interfaces');
         });
         res.json(modules);
       }, function(err) {
-        throw err;
+        console.error(err);
+        res.status(500).send(err);
       });
     })
     .post('', function(req, res) {
       cMod.insert(req.body, function(err, data) {
-        if (err) throw err;
-        else res.json(data);
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        } else res.json(data);
       });
     })
     .put('/:_id', function(req, res) {
       cMod.update({
         _id: req.params._id
       }, req.body, function(err, data) {
-        if (err) throw err;
-        else res.json(data);
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        } else res.json(data);
       });
     })
     .delete('/:_id', function(req, res) {
@@ -116,14 +121,17 @@ var cInt = db.get('interfaces');
         _id: req.params._id
       }, function(err, data) {
         if (err) {
-          throw err;
+          console.error(err);
+          res.status(500).send(err);
         } else {
           res.json(data);
           cInt.remove({
             mid: req.params._id
           }, function(err, data) {
-            if (err) throw err;
-            else http.get(conf.mockUrl + _.now()).on('error', function() {
+            if (err) {
+              console.error(err);
+              res.status(500).send(err);
+            } else http.get(conf.mockUrl + _.now()).on('error', function() {
               console.log('mock server error');
             });
           });

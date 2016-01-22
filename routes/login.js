@@ -12,15 +12,20 @@ module.exports = function (req, res, next) {
       var dec = decode(req.cookies.token);
       var user = JSON.parse(dec);
       cUsr.find(user, function(err, data){
-        if(err) throw err;
-        if(data){
-          req.session.user = data[0];
-          res.app.locals.user = data[0];
-          logined();
+        if(err){
+          console.error(err);
+          res.status(500).send(err);
+        } else {
+          if(data){
+            req.session.user = data[0];
+            res.app.locals.user = data[0];
+            logined();
+          }
         }
       });
     } catch(e){
-      throw e;
+      console.error(e);
+      res.status(500).send(e);
     }
   } else {
     logined();
@@ -37,7 +42,8 @@ module.exports = function (req, res, next) {
         password: req.body.password
       }, function(err, data) {
         if (err) {
-          throw err;
+          console.error(err);
+          res.status(500).send(err);
         } else if (data.length) {
           var token = encode(JSON.stringify({name: req.body.name, password: req.body.password }));
           res.json({

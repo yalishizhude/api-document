@@ -56,31 +56,35 @@ var cUsr = db.get('users');
       cInt.find({
         _id: req.body.referenceId
       }, function(e, ref) {
-        if (e) throw e;
-        ref[0].hostport = req.body.hostport;
-        ref[0].param = ref[0].inObject;
-        sendRequest(superagent, ref[0], function(e, r1) {
-          if(e) {
-            console.error(e);
-            res.send(e);
-          } else {
-            req.body.param = JSON.stringify(_.extend(JSON.parse(req.body.param || '{}'), r1.body));
-            if ('get' !== req.body.method) req.body.param = JSON.stringify(req.body.param);
-            sendRequest(superagent, req.body, function(e, r2) {
-              if(e) {
-                console.error(e);
-                res.send(e);
-              }
-              res.json(r2.body);
-            }); 
-          }
-        });
+        if(e){
+          console.error(e);
+          res.stauts(500).send(e);
+        } else {
+          ref[0].hostport = req.body.hostport;
+          ref[0].param = ref[0].inObject;
+          sendRequest(superagent, ref[0], function(e, r1) {
+            if(e) {
+              console.error(e);
+              res.status(500).send(e);
+            } else {
+              req.body.param = JSON.stringify(_.extend(JSON.parse(req.body.param || '{}'), r1.body));
+              if ('get' !== req.body.method) req.body.param = JSON.stringify(req.body.param);
+              sendRequest(superagent, req.body, function(e, r2) {
+                if(e) {
+                  console.error(e);
+                  res.status(500).send(e);
+                }
+                res.json(r2.body);
+              }); 
+            }
+          });
+        }
       });
     } else {
       sendRequest(superagent, req.body, function(e, r) {
         if(e){
           console.error(e);
-          res.send(e);
+          res.status(500).send(e);
         } else {
           res.json(r.body);
         }
@@ -99,7 +103,7 @@ var cUsr = db.get('users');
     name: 'admin'
   }, function(err, data) {
     if (err) {
-      throw err;
+      console.error(err);
     } else if (data.length === 0) {
       cUsr.insert(admin);
     }

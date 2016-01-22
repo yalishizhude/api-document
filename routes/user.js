@@ -25,8 +25,12 @@ var cUsr = db.get('users');
             $ne: 'admin'
           }
         }, function(err, data) {
-          if (err) throw err;
-          else res.json(data);
+          if (err){
+            console.error(err);
+            res.status(500).send(err);
+          } else {
+            res.json(data);
+          }
         });
       } else {
         res.json([]);
@@ -38,15 +42,18 @@ var cUsr = db.get('users');
         password: req.body.password
       }, function(err, data) {
         if (err) {
-          throw err;
+          console.error(err);
+          res.status(500).send(err);
         } else if (data.length) {
           cUsr.update({
             _id: req.body._id
           }, {
             password: req.body._password
           }, function(err, data) {
-            if (err) throw err;
-            else res.json({
+            if (err) {
+             console.error(err);
+             res.status(500).send(err); 
+            } else res.json({
               status: data,
               message: '修改成功'
             });
@@ -63,19 +70,24 @@ var cUsr = db.get('users');
       cUsr.update({
         _id: req.params._id
       }, req.body, function(err, data) {
-        if (err) throw err;
-        else res.json(data);
+        if (err){
+          res.status(500).send(err); 
+        } else res.json(data);
       });
     })
     .post('', function(req, res) {
       cUsr.find({
         name: req.body.name
       }, function(err, data) {
-        if (err) throw err;
+        if (err){
+          res.status(500).send(err); 
+        }
         else if (data.length === 0) {
           req.body.password = '111111'; //默认密码 
           cUsr.insert(req.body, function(err, data) {
-            if (err) throw err;
+            if (err) {
+              res.status(500).send(err);
+            }
             else res.json(data);
           });
         } else {
@@ -90,7 +102,10 @@ var cUsr = db.get('users');
       cUsr.remove({
         _id: req.params._id
       }, function(err, data) {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          res.status(500).send(err);
+        }
         else res.json(data);
       });
     });
