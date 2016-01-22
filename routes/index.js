@@ -60,8 +60,10 @@ var cUsr = db.get('users');
         ref[0].hostport = req.body.hostport;
         ref[0].param = ref[0].inObject;
         sendRequest(superagent, ref[0], function(e, r1) {
-          if (e) throw e;
-          console.log(r1);
+          if(e) {
+            console.error(e);
+            res.send(e);
+          }
           req.body.param = JSON.stringify(_.extend(JSON.parse(req.body.param || '{}'), r1.body));
           if ('get' !== req.body.method) req.body.param = JSON.stringify(req.body.param);
           sendRequest(superagent, req.body, function(e, r2) {
@@ -71,7 +73,10 @@ var cUsr = db.get('users');
       });
     } else {
       sendRequest(superagent, req.body, function(e, r) {
-        if (e) throw e;
+        if(e){
+          console.error(e);
+          res.send(e);
+        }
         res.json(r.body);
       });
     }
