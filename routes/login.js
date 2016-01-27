@@ -28,6 +28,8 @@ module.exports = function (req, res, next) {
       res.status(500).send(e);
     }
   } else {
+    console.log(req.session.user);
+    res.app.locals.user = req.session.user;
     logined();
   }
   function logined(){

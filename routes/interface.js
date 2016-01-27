@@ -133,6 +133,7 @@ var cIntHis = db.get('interfacesHistory');
               res.status(500).send(e2);
             } else {
               req.body.oid = r[0].oid;
+              req.body.author = req.session.user.name;
               cInt.insert(req.body, function(e3, r3){
                 if(e3){
                   console.error(e3);
