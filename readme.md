@@ -26,7 +26,7 @@ $ bower install
 * Based on MEAN(Mongodb,Express,Angular,Node) stack.
 * Support edit&view api document online.
 * Support simple authority management.
-* Provide a mock server responding data to front-end without database and back-end server([api-mock](https://github.com/yalishizhude/api-mock)must be installed). 
+* Provide a mock server responding data to front-end without database and back-end server([api-mock](https://github.com/yalishizhude/api-mock)must be installed).
 * Send request to back-end and display response.
 * According to REST specification.
 
@@ -75,10 +75,22 @@ node (https://nodejs.org)
 
   [MIT](LICENSE)
 
-<!-- 
+<!--
 1.增加历史接口归档；
 2.接口列表排序；
 3.前置登录接口（支持token方式登陆，暂不支持session）；
 4.登陆方式改为cookie；
 5.优化路由逻辑；
+ -->
+
+
+<!--
+1. 自动刷新mock服务器bug修复
+2. 参数说明按表格切分
+3. 参数校验
+4. 路由排序加载解决重载覆盖问题
+5. 默认按添加排序
+6. 操作手册
+7. 接口列表查看页面优化
+8. 富文本编辑器
  -->
