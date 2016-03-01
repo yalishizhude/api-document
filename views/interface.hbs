@@ -85,6 +85,8 @@
         </table>
       </div>
       <div class="form-group">
+        <json-editor schema="mySchema" startval="myStartVal" buttons-controller="SyncButtonsController" on-change="onChange()">
+
         <textarea name="inObject" class="form-control" rows="10" ng-change="print(api.inObject)" ng-model="api.inObject" placeholder="请求示例（JSON格式）" validator="json"></textarea>
       </div>
       <div class="form-group">
