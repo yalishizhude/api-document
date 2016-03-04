@@ -12,7 +12,6 @@
 		&nbsp;&nbsp;
 		<small class="text-info" ng-bind="'更新日期:'+api.updateDate" ng-init="api.updateDate='{{updateDate}}'"></small>
 	</h3>
-  <div class="col-sm-7">
     <form name="form">
       <div class="form-group">
         <input type="text" name="name" class="form-control" ng-model="api.name" placeholder="接口名称" validator="required">
@@ -141,8 +140,4 @@
         <button validation-submit="form" ng-click="submit(form);" class="btn btn-large btn-primary">保存</button>
       </div>
     </form>
-  </div>
-  <div class="col-sm-5">
-    {{>viewInterface}}
-  </div>
 </div>

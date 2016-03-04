@@ -1,6 +1,6 @@
 <div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()">
   <h1>{{projectName}} </h1>
-  <div class="col-sm-7">
+  <div>
     <div class="pull-right">
       <a href="javascript:void(0);" ng-click="sort('name');">按名称&uarr;</a>&nbsp;&nbsp;
       <a href="javascript:void(0);" ng-click="sort('updateDate');">按日期&darr;</a>
@@ -10,7 +10,7 @@
       <div class="panel-heading">
         <span ng-bind="m.name" ng-hide="m.text" placeholder="模块名称"></span> {{#if editable}}
         <input id="_moduleName" type="text" ng-model="m.text" ng-if="m.text" ng-keydown="keydown($event, m);" ng-blur="cancel(m)">
-        <a href="javascript:void(0);" ng-hide="m.text" ng-dblclick="remove(m._id);" class="pull-right text-danger glyphicon glyphicon-minus">删除&nbsp;</a>
+        <a href="javascript:void(0);" title="双击删除" ng-hide="m.text" ng-dblclick="remove(m._id);" class="pull-right text-danger glyphicon glyphicon-minus">删除&nbsp;</a>
         <a href="javascript:void(0);" ng-hide="m.text" ng-click="edit(m)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a> {{/if}}
       </div>
       <div class="panel-body">
@@ -45,7 +45,7 @@
             {{#if editable}}
             <td style="text-align:right;">
               <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
-              <a href="" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
+              <a href="" title="双击删除" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
             </td>
             {{/if}}
           </tr>
@@ -71,8 +71,5 @@
       <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
       <span class="sr-only">Error:</span> //message//
     </div>
-  </div>
-  <div class="col-sm-5">
-    {{>viewInterface}}
   </div>
 </div>

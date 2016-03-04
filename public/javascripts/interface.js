@@ -1,7 +1,7 @@
 /*global angular, _, Mock*/
 (function (window, angular) {
   'use strict';
-  angular.module('indexApp', ['validation.rule']).config(function ($interpolateProvider) {
+  angular.module('indexApp', ['validation.rule', 'xeditable']).config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   }).controller('mainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
