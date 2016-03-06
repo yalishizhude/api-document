@@ -11,6 +11,7 @@
     hbsutils = require('hbs-utils')(hbs),
     log = require('./log'),
     session = require('express-session'),
+    sessionstore = require('sessionstore'),
     uuid = require('node-uuid'),
     login = require('./routes/login'),
     app = express();
@@ -38,6 +39,7 @@
     genid: uuid.v1,
     resave: false,
     saveUninitialized: true,
+    store: sessionstore.createSessionStore(),
     secret: 'api-document-server'
   }));
   //路由
