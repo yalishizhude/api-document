@@ -17,3 +17,11 @@ a {
   line-height: 30px;
   font-size: 16px;
 }
+
+span.editable-textarea {
+  width: 100%;
+}
+
+.hide-edit-btn .xeditable-btn {
+  display: none;
+}
