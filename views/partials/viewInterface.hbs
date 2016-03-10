@@ -5,61 +5,104 @@
 	<div class="clearfix"></div>
 	<br>
 </div>
-<p><b>接口名称</b></p>
-<ul>
-	<li ng-bind="api.name"></li>
-</ul>
-<p><b>请求URL</b></p>
-<ul>
-	<li><code ng-bind="api.url"></code></li>
-</ul>
-<p><b>请求方式</b></p>
-<ul>
-	<li ng-bind="api.method"></li>
-</ul>
-<p><b>是否需要登陆</b></p>
-<ul>
-	<li ng-bind="api.authorize?'是':'否'"></li>
-</ul>
-<p><b>请求参数</b></p>
-<table class="table table-bordered table-striped">
-	<tr>
-		<th>参数名</th>
-		<th>是否必传</th>
-		<th>类型</th>
-		<th>说明</th>
-	</tr>
-	<tr ng-repeat="p in api.inParams">
-		<td ng-bind="p.name"></td>
-		<td ng-bind="p.isNeed"></td>
-		<td ng-bind="p.type"></td>
-		<td ng-bind="p.desc"></td>
-	</tr>
-</table>
-<p><b>请求示例</b></p>
-<pre ng-bind="inObject">
-</pre>
-<p><b>返回参数</b></p>
-<table class="table table-bordered table-striped">
-	<tr>
-		<th>参数名</th>
-		<th>是否必传</th>
-		<th>类型</th>
-		<th>说明</th>
-	</tr>
-	<tr ng-repeat="p in api.outParams">
-		<td ng-bind="p.name"></td>
-		<td ng-bind="p.isNeed"></td>
-		<td ng-bind="p.type"></td>
-		<td ng-bind="p.desc"></td>
-	</tr>
-</table>
-<p><b>返回示例</b></p>
-<pre ng-bind="outObject">
-</pre>
-<p><b>备注</b></p>
-<ul>
-	<li ng-bind="api.remark"></li>
-</ul>
-<p ng-if="result"><b>返回结果</b></p>
-<pre ng-bind="result"></pre>
+<form editable-form name="editableForm" onaftersave="submit()">
+<div>
+ <button type="button" class="btn btn-default xeditable-btn" ng-click="editableForm.$show()" ng-show="!editableForm.$visible" ng-if="api">
+    Edit
+ </button>
+ <span ng-show="editableForm.$visible">
+  <button class="btn btn-primary" type="submit" ng-disabled="editableForm.$waiting">
+    Save
+  </button>
+  <button class="btn btn-default" type="button" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+    Cancel
+  </button>
+ </span>
+</div>
+  <p><b>接口名称</b></p>
+  <ul>
+    <li editable-text="api.name" ng-bind="api.name" e-required></li>
+  </ul>
+  <p><b>请求URL</b></p>
+  <ul>
+    <li><code editable-text="api.url" ng-bind="api.url" e-placeholder="请求URL(必须以'/'开头)"e-required></code></li>
+  </ul>
+  <p><b>请求方式</b></p>
+  <ul>
+    <li editable-select="api.method" e-ng-options="method for method in ['get', 'post', 'put', 'delete']" ng-bind="api.method"></li>
+  </ul>
+  <p><b>是否需要登陆</b></p>
+  <ul>
+    <li ng-bind="api.authorize?'是':'否'"></li>
+  </ul>
+  <p><b>请求参数</b></p>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>参数名</th>
+      <th>是否必传</th>
+      <th>类型</th>
+      <th>说明</th>
+      <th ng-if="editableForm.$visible">&nbsp;</th>
+    </tr>
+    <tr ng-repeat="p in api.inParams">
+      <td>
+        <span editable-text="p.name" e-form="editableForm" ng-bind="p.name"></span>
+      </td>
+      <td>
+      <span editable-select="p.isNeed" e-ng-options="bool ? '是':'否' for bool in [true, false]" e-form="editableForm" ng-bind="p.isNeed ? '是':'否'"></span>
+      </td>
+      <td>
+      <span editable-select="p.type" e-ng-options="t for t in types" e-form="editableForm" ng-bind="p.type"></span>
+      <td>
+      <span editable-text="p.desc" e-form="editableForm" ng-bind="p.desc"></span>
+      </td>
+      <td class="text-center" ng-if="editableForm.$visible">
+      <span class="label label-danger btn" ng-dblclick="delParam(p.seq, api.inParams)">-</span>
+      </td>
+    </tr>
+    <tr ng-if="editableForm.$visible">
+      <td colspan="5" class="text-center">
+        <span class="label label-info btn" ng-click="addParam(api.inParams)">&nbsp;&nbsp;+&nbsp;&nbsp;</span>
+      </td>
+    </tr>
+  </table>
+  <p><b>请求示例</b></p>
+  <pre editable-textarea="api.inObject" ng-bind="inObject" e-rows="10">
+  </pre>
+  <p><b>返回参数</b></p>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>参数名</th>
+      <th>类型</th>
+      <th>说明</th>
+      <th ng-if="editableForm.$visible">&nbsp;</th>
+    </tr>
+    <tr ng-repeat="p in api.outParams">
+      <td>
+        <span editable-text="p.name" e-form="editableForm" ng-bind="p.name"></span>
+      </td>
+      <td>
+      <span editable-select="p.type" e-ng-options="t for t in types" e-form="editableForm" ng-bind="p.type"></span>
+      <td>
+      <span editable-text="p.desc" e-form="editableForm" ng-bind="p.desc"></span>
+      </td>
+      <td class="text-center" ng-if="editableForm.$visible">
+      <span class="label label-danger btn" ng-dblclick="delParam(p.seq, api.outParams)">-</span>
+      </td>
+    </tr>
+    <tr ng-if="editableForm.$visible">
+      <td colspan="5" class="text-center">
+        <span class="label label-info btn" ng-click="addParam(api.outParams)">&nbsp;&nbsp;+&nbsp;&nbsp;</span>
+      </td>
+    </tr>
+  </table>
+  <p><b>返回示例</b></p>
+  <pre editable-textarea="api.outObject" ng-bind="outObject" e-rows="10">
+  </pre>
+  <p><b>备注</b></p>
+  <ul>
+    <li editable-textarea="api.remark" ng-bind="api.remark"></li>
+  </ul>
+  <p ng-if="result"><b>返回结果</b></p>
+  <pre ng-bind="result"></pre>
+</form>
