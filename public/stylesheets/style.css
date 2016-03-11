@@ -17,3 +17,15 @@ a {
   line-height: 30px;
   font-size: 16px;
 }
+
+.hide-edit-btn .save-btn {
+  display: none;
+}
+
+.hide-edit-btn .show-none {
+  display: none;
+}
+
+.editable-click {
+  border-bottom: none!important;
+}
