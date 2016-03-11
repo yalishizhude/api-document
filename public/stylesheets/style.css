@@ -18,10 +18,14 @@ a {
   font-size: 16px;
 }
 
-span.editable-textarea {
-  width: 100%;
+.hide-edit-btn .save-btn {
+  display: none;
 }
 
-.hide-edit-btn .xeditable-btn {
+.hide-edit-btn .show-none {
   display: none;
+}
+
+.editable-click {
+  border-bottom: none!important;
 }

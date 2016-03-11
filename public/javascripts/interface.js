@@ -64,10 +64,10 @@
     $scope.addParam = function (arr) {
       arr.push({
         seq: _.now(),
-        name: '',
+        name: '参数名',
         isNeed: 'true',
         type: 'string',
-        desc: ''
+        desc: '说明'
       });
     };
     $scope.delParam = function (index, arr) {
