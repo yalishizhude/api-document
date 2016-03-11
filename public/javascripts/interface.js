@@ -1,9 +1,25 @@
 /*global angular, _, Mock*/
 (function (window, angular) {
   'use strict';
-  angular.module('indexApp', ['validation.rule', 'xeditable']).config(function ($interpolateProvider) {
+  angular.module('indexApp', ['validation.rule', 'angular-json-editor', 'xeditable']).config(function ($interpolateProvider, JSONEditorProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
+    JSONEditorProvider.configure({
+      plugins: {
+        sceditor: {
+          style: 'sce/development/jquery.sceditor.default.css'
+        }
+      },
+      defaults: {
+        options: {
+          iconlib: 'bootstrap3',
+          theme: 'bootstrap3',
+          ajax: true
+        }
+      }
+    });
+  }).run(function(editableOptions) {
+    editableOptions.theme = 'bs3';
   }).controller('mainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     $http.get('/interface/' + location.hash.replace('#', '')).success(function (resp) {
       $scope.versions = resp.versions;
@@ -48,10 +64,10 @@
     $scope.addParam = function (arr) {
       arr.push({
         seq: _.now(),
-        name: '',
+        name: '参数名',
         isNeed: 'true',
         type: 'string',
-        desc: ''
+        desc: '说明'
       });
     };
     $scope.delParam = function (index, arr) {
@@ -92,6 +108,7 @@
         $scope.message = null;
       }, 5000);
     };
+    $scope.types = ['string', 'number', 'double', 'boolean', 'object', 'array', 'stream'];
   }]).controller('SyncButtonsController', [function(){}]);
   angular.bootstrap(document, ['indexApp']);
 })(window, angular);
