@@ -1,0 +1,13 @@
+{
+	"ignore": [
+		"dist/",
+		".git/"
+	],
+	"watch": [
+    "views/**/*",
+    "config/**/*",
+    "routes/**/*",
+    "app.js"
+  ],
+  "ext": "hbs js"
+}

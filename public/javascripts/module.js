@@ -33,7 +33,7 @@
 				$scope.result = JSON.stringify(resp, null, '  ');
 			}).error(function(resp){
 				$scope.result = JSON.stringify(resp, null, '  ');
-			});		
+			});
 		};
 		$scope.keydown = function($event, module){
 			if(13===$event.keyCode) $scope.save(module);
@@ -120,6 +120,10 @@
 				},0);
 			}
 		};
+    $scope.showParam = function(title, content){
+      $scope.modalTitle = title;
+      $scope.modalContent = content;
+    };
 		$scope.deleteInterface = function(_id, list){
 			$http.delete('/interface/'+_id).success(function(resp){
 				if(resp){

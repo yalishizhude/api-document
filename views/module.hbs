@@ -16,32 +16,27 @@
       <div class="panel-body">
         <table class="table">
         	<tr>
-        		<th>接口名称</th>
+        		<th>接口名称（版本）</th>
             <th>请求路径</th>
-        		<th>版本</th>
         		<th>请求方式</th>
         		<th>修改者</th>
         		<th>修改日期</th>
-            <th>前置接口</th>
+            <th>登录授权</th>
+            <th></th>
+            <th></th>
         		<th></th>
         	</tr>
           <tr ng-repeat="i in m.interfaces">
             <td>
-              <a href="" ng-bind="i.name" ng-click="showInterfaceDetail(i._id)"></a>
+              <a href="" ng-bind="i.name+'('+i.version+')'" ng-click="showInterfaceDetail(i._id)"></a>
             </td>
             <td ng-bind="i.url"></td>
-            <td ng-bind="i.version"></td>
             <td ng-bind="i.method"></td>
             <td ng-bind="i.author"></td>
             <td ng-bind="i.updateDate"></td>
-            <td>
-              {{#if editable}}
-              <a href="javascript:void 0;"><span ng-hide="refering" class="glyphicon glyphicon-retweet" ng-click="showReference($event,i)"></span></a>
-              <a href="javascript:void 0;"><span ng-show="refering&&refering._id!=i._id" class="glyphicon glyphicon-magnet" ng-click="setReference($event,i)"></span></a>
-              <a href="javascript:void 0;"><span ng-show="refering&&refering._id==i._id" class="glyphicon glyphicon-remove" ng-click="setReference($event)"></span></a>
-              {{/if}}
-              <span ng-bind="i.referenceName"></span>
-            </td>
+            <td ng-bind="i.login?i.login:'否'"></td>
+            <td><a href="" ng-click="showParam(i.name, i.inObject)"  data-toggle="modal" data-target="#myModal">参数</a></td>
+            <td><a href="" ng-click="showParam(i.name, i.outObject)"  data-toggle="modal" data-target="#myModal">返回值</a></td>
             {{#if editable}}
             <td style="text-align:right;">
               <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
@@ -51,8 +46,8 @@
           </tr>
           {{#if editable}}
           <tr>
-            <td colspan="8" class="text-center">
-              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="text-success glyphicon glyphicon-plus">新增接口</a>
+            <td colspan="10" class="text-center">
+              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="glyphicon glyphicon-plus">新增接口</a>
             </td>
           </tr>
           {{/if}}
@@ -72,4 +67,21 @@
       <span class="sr-only">Error:</span> //message//
     </div>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body" ng-bind="modalContent">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

@@ -18,7 +18,7 @@ var cInt = db.get('interfaces');
       backEndPort: conf.backEndPort,
       editable: req.session.user.editable,
       projectName: req.query.projectName,
-      js: ['/lib/mockjs/dist/mock-min.js', '/lib/underscore/underscore-min.js', '/javascripts/viewInterface.js', '/javascripts/module.js']
+      js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/underscore/underscore-min.js', '/javascripts/viewInterface.js', '/javascripts/module.js']
     });
   }).get('/:pid', function (req, res) {
     var pId = req.params.pid;

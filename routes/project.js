@@ -12,23 +12,25 @@ var cInt = db.get('interfaces');
 (function () {
   'use strict';
   router.get('/index.html', function (req, res) {
-    cPro.find({}, function (err, data) {
+    cPro.find({}, {sort: {createDate: 1}}, function (err, data) {
       if (err) {
         console.error(err);
         res.status(500).send(err);
       } else {
         res.render('project', {
-          editable: req.session.user.editable,
+          editable: req.session.user?req.session.user.editable:false,
           js: ['/lib/underscore/underscore-min.js', '/javascripts/project.js']
         });
       }
     });
   }).get('', function (req, res) {
+    var time = (new Date()).getTime();
     cPro.find({}, function (err, data) {
       if (err) {
         console.error(err);
         res.status(500).send(err);
       } else {
+        console.log('zdl',(new Date()).getTime() - time);
         res.json(data);
       }
     });
