@@ -1,7 +1,7 @@
 /*global angular, _, Mock*/
 (function (window, angular) {
   'use strict';
-  angular.module('indexApp', ['validation.rule', 'angular-json-editor']).config(function ($interpolateProvider, JSONEditorProvider) {
+  angular.module('indexApp', ['validation.rule']).config(function ($interpolateProvider, JSONEditorProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
     JSONEditorProvider.configure({
