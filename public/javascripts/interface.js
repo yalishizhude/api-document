@@ -1,23 +1,9 @@
 /*global angular, _, Mock*/
 (function (window, angular) {
   'use strict';
-  angular.module('indexApp', ['validation.rule']).config(function ($interpolateProvider, JSONEditorProvider) {
+  angular.module('indexApp', ['validation.rule']).config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
-    JSONEditorProvider.configure({
-      plugins: {
-        sceditor: {
-          style: 'sce/development/jquery.sceditor.default.css'
-        }
-      },
-      defaults: {
-        options: {
-          iconlib: 'bootstrap3',
-          theme: 'bootstrap3',
-          ajax: true
-        }
-      }
-    });
   }).controller('mainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     $http.get('/interface/' + location.hash.replace('#', '')).success(function (resp) {
       $scope.versions = resp.versions;
