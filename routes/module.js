@@ -40,7 +40,11 @@ var cInt = db.get('interfaces');
 
     function gi(pId) {
       var def = q.defer();
-      var orderby = {};
+      var orderby = {
+        sort: {
+          oid: 1
+        }
+      };
       console.log(req.query.sort);
       if ('name' === req.query.sort) {
         orderby = {
@@ -49,7 +53,7 @@ var cInt = db.get('interfaces');
             name: 1
           }
         };
-      } else {
+      } else if ('updateDate' === req.query.sort){
         orderby = {
           sort: {
             mid: 1,

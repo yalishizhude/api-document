@@ -102,10 +102,7 @@
 			$scope.refering = null;
 		};
 		$scope.showInterfaceDetail = function(_id){
-			$http.get('/interface/'+_id).success(function(resp){
-				$scope.api = resp.api;
-				$scope.result = '';
-			});
+      window.open('/interface/'+_id);
 		};
 		$scope.edit = function(module){
 			if(module){
@@ -122,7 +119,12 @@
 		};
     $scope.showParam = function(title, content){
       $scope.modalTitle = title;
-      $scope.modalContent = content;
+      try {
+        $scope.modalContent = JSON.stringify(JSON.parse(content), null, '  ');
+      } catch (e) {
+        console.log(e);
+        $scope.modalContent = content;
+      }
     };
 		$scope.deleteInterface = function(_id, list){
 			$http.delete('/interface/'+_id).success(function(resp){

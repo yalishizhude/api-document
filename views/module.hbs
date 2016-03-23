@@ -2,7 +2,8 @@
   <h1>{{projectName}} </h1>
   <div>
     <div class="pull-right">
-      <a href="javascript:void(0);" ng-click="sort('name');">按名称&uarr;</a>&nbsp;&nbsp;
+      <a href="javascript:void(0);" ng-click="sort('');">默认</a>&emsp;
+      <a href="javascript:void(0);" ng-click="sort('name');">按名称&uarr;</a>&emsp;
       <a href="javascript:void(0);" ng-click="sort('updateDate');">按日期&darr;</a>
     </div>
     <div class="clearfix"></div><br>
@@ -28,15 +29,15 @@
         	</tr>
           <tr ng-repeat="i in m.interfaces">
             <td>
-              <a href="" ng-bind="i.name+'('+i.version+')'" ng-click="showInterfaceDetail(i._id)"></a>
+              <a target="_blank" href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//"  ng-bind="i.name+'('+i.version+')'"></a>
             </td>
             <td ng-bind="i.url"></td>
             <td ng-bind="i.method"></td>
             <td ng-bind="i.author"></td>
             <td ng-bind="i.updateDate"></td>
             <td ng-bind="i.login?i.login:'否'"></td>
-            <td><a href="" ng-click="showParam(i.name, i.inObject)"  data-toggle="modal" data-target="#myModal">参数</a></td>
-            <td><a href="" ng-click="showParam(i.name, i.outObject)"  data-toggle="modal" data-target="#myModal">返回值</a></td>
+            <td><a ng-if="i.inObject" href="" ng-click="showParam(i.name, i.inObject)"  data-toggle="modal" data-target="#myModal">参数</a></td>
+            <td><a ng-if="i.outObject" href="" ng-click="showParam(i.name, i.outObject)"  data-toggle="modal" data-target="#myModal">返回值</a></td>
             {{#if editable}}
             <td style="text-align:right;">
               <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
@@ -47,7 +48,7 @@
           {{#if editable}}
           <tr>
             <td colspan="10" class="text-center">
-              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="glyphicon glyphicon-plus">新增接口</a>
+              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="glyphicon glyphicon-plus text-success">新增接口</a>
             </td>
           </tr>
           {{/if}}
@@ -56,7 +57,7 @@
     </div>
     {{#if editable}}
     <div class="panel panel-default">
-      <div class="panel-heading text-center"><a href="javascript:void 0;" ng-click="edit();"><span class="glyphicon glyphicon-plus"></span>新增模块</a></div>
+      <div class="panel-heading text-center"><a class=" text-success" href="javascript:void 0;" ng-click="edit();"><span class="glyphicon glyphicon-plus"></span>新增模块</a></div>
       <div class="panel-body" ng-if="mod">
         <input type="text" id="moduleName" placeholder="模块名称" class="form-control" ng-model="mod.name" ng-keydown="keydown($event);" ng-blur="cancel()">
       </div>
@@ -75,8 +76,8 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="myModalLabel" ng-bind="modalTitle"></h4>
         </div>
-        <div class="modal-body" ng-bind="modalContent">
-        </div>
+        <textarea id="modalContent" style="width: 100%;height: 600px;" class="modal-body" ng-bind="modalContent">
+        </textarea>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         </div>
