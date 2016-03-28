@@ -1,0 +1,70 @@
+<div class="container col-sm-12" ng-controller="ctrl">
+  <span ng-init="api.pid='{{pid}}';api.mid='{{mid}}'"><a href="/module/index.html?projectName={{projectName}}#{{pid}}">{{projectName}}</a>&nbsp;&lt;&nbsp;{{moduleName}}</span>
+  <h3>
+		<small class="text-info" ng-bind="'版本:'" ng-init="api.version=1;api.author='{{userName}}';">
+		</small>
+		<small ng-bind="api.version">
+			<!-- <select style="width:50px;" ng-model="api.version" ng-change="change();" ng-init="versions=[1]">
+				<option ng-repeat="v in versions" value="//v//" ng-bind="//v//"></option>
+			</select> -->
+		</small>
+    &emsp;
+		<small class="text-info" ng-bind="'更新日期:'+api.updateDate" ng-init="api.updateDate='{{updateDate}}'"></small>
+	</h3>
+    <form name="form">
+      <div class="form-group">
+        <input type="text" name="name" class="form-control" ng-model="api.name" placeholder="接口名称" validator="required">
+      </div>
+      <div class="form-group">
+        <input type="text" name="url" class="form-control" ng-model="api.url" placeholder="请求URL(必须以'/'开头)" validator="required">
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2" style="line-height:34px;">
+          <label for="" class="control-label">请求方式</label>
+        </div>
+        <div class="col-sm-3">
+          <select name="method" class="form-control" ng-model="api.method" ng-init="api.method='get'">
+            <option value="get">get</option>
+            <option value="post">post</option>
+            <option value="put">put</option>
+            <option value="delete">delete</option>
+          </select>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <b>请求参数</b>
+      <div class="form-group">
+        <div class="col-sm-6">
+          <h4>编辑器</h4>
+          <div id="inEditor"></div>
+        </div>
+        <div class="col-sm-6">
+          <h4>示例</h4>
+          <pre id="inObject" contenteditable=""></pre>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-6">
+          <h4>校验规则</h4>
+          <pre id="inSchema" contenteditable=""></pre>
+        </div>
+        <div class="col-sm-6">
+          <h4>校验结果</h4>
+          <pre id="inError" class="col-sm-6"></pre>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="form-group">
+        <textarea name="remark" class="form-control" placeholder="备注" ng-model="api.remark"></textarea>
+      </div>
+      <div ng-if="message" class="alert alert-//message.level//" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span> //message.text//
+      </div>
+      <div class="form-group text-right">
+        <button type="button" class="pull-left btn btn-primary btn-large" ng-click="sendRequest();">发送请求</button>
+        <button validation-submit="form" ng-click="submit(form);" class="btn btn-large btn-warning">保存</button>&emsp;&emsp;
+      </div>
+    </form>
+</div>

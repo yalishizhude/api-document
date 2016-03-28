@@ -46,6 +46,7 @@
   app.use('/project', require('./routes/project'));
   app.use('/module', require('./routes/module'));
   app.use('/interface', require('./routes/interface'));
+  app.use('/schema', require('./routes/schema'));
   app.use('/user', require('./routes/user'));
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
