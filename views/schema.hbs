@@ -11,18 +11,24 @@
     &emsp;
 		<small class="text-info" ng-bind="'更新日期:'+api.updateDate" ng-init="api.updateDate='{{updateDate}}'"></small>
 	</h3>
-    <form name="form">
+    <form name="form" class="form-horizontal">
       <div class="form-group">
-        <input type="text" name="name" class="form-control" ng-model="api.name" placeholder="接口名称" validator="required">
-      </div>
-      <div class="form-group">
-        <input type="text" name="url" class="form-control" ng-model="api.url" placeholder="请求URL(必须以'/'开头)" validator="required">
-      </div>
-      <div class="form-group">
-        <div class="col-sm-2" style="line-height:34px;">
-          <label for="" class="control-label">请求方式</label>
+        <label for="name" class="col-sm-1 control-label required">接口名称</label>
+        <div class="col-sm-5">
+          <input type="text" name="name" class="form-control" ng-model="api.name" validator="required">
         </div>
-        <div class="col-sm-3">
+        <label for="remark" class="col-sm-1 control-label">接口说明</label>
+        <div class="col-sm-5">
+          <textarea name="remark" rows="1" class="form-control" placeholder="接口的描述信息" ng-model="api.remark"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="url" class="col-sm-1 control-label required">请求路径</label>
+        <div class="col-sm-5">
+          <input type="text" name="url" class="form-control" ng-model="api.url" placeholder="" validator="required">
+        </div>
+        <label for="method" class="col-sm-1 control-label required">请求方法</label>
+        <div class="col-sm-5">
           <select name="method" class="form-control" ng-model="api.method" ng-init="api.method='get'">
             <option value="get">get</option>
             <option value="post">post</option>
@@ -30,33 +36,34 @@
             <option value="delete">delete</option>
           </select>
         </div>
-        <div class="clearfix"></div>
-      </div>
-      <b>请求参数</b>
-      <div class="form-group">
-        <div class="col-sm-6">
-          <h4>编辑器</h4>
-          <div id="inEditor"></div>
-        </div>
-        <div class="col-sm-6">
-          <h4>示例</h4>
-          <pre id="inObject" contenteditable=""></pre>
-        </div>
-        <div class="clearfix"></div>
       </div>
       <div class="form-group">
-        <div class="col-sm-6">
-          <h4>校验规则</h4>
-          <pre id="inSchema" contenteditable=""></pre>
-        </div>
-        <div class="col-sm-6">
-          <h4>校验结果</h4>
-          <pre id="inError" class="col-sm-6"></pre>
-        </div>
-        <div class="clearfix"></div>
+          <label for="inObject" class="col-sm-1 control-label required">请求参数</label>
+          <div class="col-sm-5">
+            <textarea name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject"></textarea>
+          </div>
+          <label for="inSchema" class="col-sm-1 control-label"><a href="">校验规则<br>参数说明</a></label>
+          <div class="col-sm-2">
+            <textarea name="inSchema" contenteditable="" class="bg-white" ng-bind="api.inSchema"></textarea>
+          </div>
+          <label for="inValidation" class="col-sm-1 control-label">校验结果</label>
+          <div class="col-sm-2">
+            <pre id="inValidation"></pre>
+          </div>
       </div>
       <div class="form-group">
-        <textarea name="remark" class="form-control" placeholder="备注" ng-model="api.remark"></textarea>
+          <label class="col-sm-1 control-label required">返回值</label>
+          <div class="col-sm-5">
+            <textarea contenteditable="" class="bg-white" ng-bind="api.outObject"></textarea>
+          </div>
+          <label for="outSchema" class="col-sm-1 control-label"><a href="">校验规则<br>参数说明</a></label>
+          <div class="col-sm-2">
+            <textarea id="outSchema" contenteditable="" class="bg-white"></textarea>
+          </div>
+          <label for="outValidation" class="col-sm-1 control-label">校验结果</label>
+          <div class="col-sm-2">
+            <pre id="outValidation"></pre>
+          </div>
       </div>
       <div ng-if="message" class="alert alert-//message.level//" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -64,6 +71,7 @@
       </div>
       <div class="form-group text-right">
         <button type="button" class="pull-left btn btn-primary btn-large" ng-click="sendRequest();">发送请求</button>
+        <button type="button" class="pull-left btn btn-primary btn-large" ng-click="">复制接口</button>
         <button validation-submit="form" ng-click="submit(form);" class="btn btn-large btn-warning">保存</button>&emsp;&emsp;
       </div>
     </form>

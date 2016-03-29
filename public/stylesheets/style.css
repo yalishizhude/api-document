@@ -10,10 +10,25 @@ a {
 .validation-invalid{
 	color: red;
 }
-.ng-cloak{display:none;}  
+.ng-cloak{display:none;}
 .code{
   height: 30px;
   display: inline-block;
   line-height: 30px;
   font-size: 16px;
+}
+.required::before{
+  content: '*';
+  margin: 0 5px;
+  color: red;
+}
+.bg-white{
+  background-color: #fff;
+}
+textarea{
+  height: 300px;
+  width: 100%;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
 }
