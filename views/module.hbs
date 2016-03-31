@@ -1,5 +1,7 @@
 <div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()">
   <h1>{{projectName}} </h1>
+  <label for="" class="col-sm-1">测试地址：</label>
+  <input type="text" class="col-sm-5" ng-model="backendUrl" ng-init="backendUrl='http://show.tijianzhuanjia.com:2016'">
   <div>
     <div class="pull-right">
       <a href="javascript:void(0);" ng-click="sort('');">默认</a>&emsp;
@@ -26,10 +28,11 @@
             <th></th>
             <th></th>
         		<th></th>
+            <th>状态</th>
         	</tr>
           <tr ng-repeat="i in m.interfaces">
             <td>
-              <a target="_blank" href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//"  ng-bind="i.name+'('+i.version+')'"></a>
+              <a target="_blank" href="/schema/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//"  ng-bind="i.name+'('+i.version+')'"></a>
             </td>
             <td ng-bind="i.url"></td>
             <td ng-bind="i.method"></td>
@@ -40,15 +43,21 @@
             <td><a ng-if="i.outObject" href="" ng-click="showParam(i.name, i.outObject)"  data-toggle="modal" data-target="#myModal">返回值</a></td>
             {{#if editable}}
             <td style="text-align:right;">
-              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
+              <a href="/schema/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
               <a href="" title="双击删除" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
             </td>
             {{/if}}
+            <td ng-init="i.testStatus=0">
+              <span ng-if="0==i.testStatus" class="label label-warning" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：未连接后端服务器进行测试，可能无法正常使用。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">未测试</span>
+              <span ng-if="1==i.testStatus" class="label label-success" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：已通过后端服务器测试。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">测试通过</span>
+              <span ng-if="-1==i.testStatus" class="label label-info" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口有返回值，但未定义校验规则。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">接口可用</span>
+              <span ng-if="-2==i.testStatus" class="label label-danger" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口返回值未通过规则校验。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">测试失败</span>
+            </td>
           </tr>
           {{#if editable}}
           <tr>
             <td colspan="10" class="text-center">
-              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="glyphicon glyphicon-plus text-success">新增接口</a>
+              <a href="/schema/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" target="_blank" class="glyphicon glyphicon-plus text-success">新增接口</a>
             </td>
           </tr>
           {{/if}}
@@ -76,10 +85,11 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="myModalLabel" ng-bind="modalTitle"></h4>
         </div>
-        <textarea id="modalContent" style="width: 100%;height: 600px;" class="modal-body" ng-bind="modalContent">
+        <textarea id="modalContent" readonly="" style="width: 100%;height: 600px;" class="modal-body" ng-bind="modalContent">
         </textarea>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="saveTest();">保存结果</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="copy();">点击复制</button>
         </div>
       </div>
     </div>

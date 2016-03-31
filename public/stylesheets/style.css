@@ -19,7 +19,8 @@ a {
 }
 .required::before{
   content: '*';
-  margin: 0 5px;
+  position: absolute;
+  margin: 0 0 0 -10px;
   color: red;
 }
 .bg-white{

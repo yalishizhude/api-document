@@ -17,9 +17,12 @@
         <div class="col-sm-5">
           <input type="text" name="name" class="form-control" ng-model="api.name" validator="required">
         </div>
-        <label for="remark" class="col-sm-1 control-label">接口说明</label>
+        <label for="login" class="col-sm-1 control-label required">登录授权</label>
         <div class="col-sm-5">
-          <textarea name="remark" rows="1" class="form-control" placeholder="接口的描述信息" ng-model="api.remark"></textarea>
+          <select name="login" class="form-control" ng-model="api.login" ng-init="api.login='false'">
+            <option value="true">是</option>
+            <option value="false">否</option>
+          </select>
         </div>
       </div>
       <div class="form-group">
@@ -38,31 +41,37 @@
         </div>
       </div>
       <div class="form-group">
-          <label for="inObject" class="col-sm-1 control-label required">请求参数</label>
+        <label for="remark" class="col-sm-1 control-label">接口说明</label>
+        <div class="col-sm-11">
+          <textarea name="remark" rows="1" class="form-control" placeholder="接口的描述信息" ng-model="api.remark"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+          <label for="inObject" class="col-sm-1 control-label">请求参数</label>
           <div class="col-sm-5">
-            <textarea name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject"></textarea>
+            <textarea name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject" validator="json"></textarea>
           </div>
-          <label for="inSchema" class="col-sm-1 control-label"><a href="">校验规则<br>参数说明</a></label>
+          <label for="inSchema" class="col-sm-1 control-label">校验规则<br>参数说明<br><br><a href="">示例</a></label>
           <div class="col-sm-2">
-            <textarea name="inSchema" contenteditable="" class="bg-white" ng-bind="api.inSchema"></textarea>
+            <textarea name="inSchema" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
           </div>
           <label for="inValidation" class="col-sm-1 control-label">校验结果</label>
           <div class="col-sm-2">
-            <pre id="inValidation"></pre>
+            <pre name="inValidation" ng-bind="api.inValidation"></pre>
           </div>
       </div>
       <div class="form-group">
           <label class="col-sm-1 control-label required">返回值</label>
           <div class="col-sm-5">
-            <textarea contenteditable="" class="bg-white" ng-bind="api.outObject"></textarea>
+            <textarea contenteditable="" class="bg-white" ng-model="api.outObject"></textarea>
           </div>
-          <label for="outSchema" class="col-sm-1 control-label"><a href="">校验规则<br>参数说明</a></label>
+          <label for="outSchema" class="col-sm-1 control-label">校验规则<br>参数说明<br><br><a href="">示例</a></label>
           <div class="col-sm-2">
-            <textarea id="outSchema" contenteditable="" class="bg-white"></textarea>
+            <textarea id="outSchema" contenteditable="" class="bg-white" ng-model="api.outSchema"></textarea>
           </div>
           <label for="outValidation" class="col-sm-1 control-label">校验结果</label>
           <div class="col-sm-2">
-            <pre id="outValidation"></pre>
+            <pre ng-bind="api.outValidation"></pre>
           </div>
       </div>
       <div ng-if="message" class="alert alert-//message.level//" role="alert">
@@ -70,9 +79,26 @@
         <span class="sr-only">Error:</span> //message.text//
       </div>
       <div class="form-group text-right">
-        <button type="button" class="pull-left btn btn-primary btn-large" ng-click="sendRequest();">发送请求</button>
-        <button type="button" class="pull-left btn btn-primary btn-large" ng-click="">复制接口</button>
-        <button validation-submit="form" ng-click="submit(form);" class="btn btn-large btn-warning">保存</button>&emsp;&emsp;
+          <textarea style="height:0;width:0;margin:0;padding:0;" id="json"></textarea>&emsp;
+          <button type="button" class="btn btn-primary" ng-click="copy();">复制接口</button>&emsp;
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">粘贴接口</button>&emsp;
+          <button validation-submit="form" ng-click="submit(form);" class="btn btn-large btn-warning">保存</button>
       </div>
     </form>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel" ng-bind="modalTitle"></h4>
+          </div>
+          <textarea id="modalContent" style="width: 100%;height: 600px;" class="modal-body" ng-model="modalContent">
+          </textarea>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="paste();">粘贴</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

@@ -22,7 +22,7 @@ var util = require('./util');
       userName: req.session.user.name,
       projectName: req.query.projectName,
       moduleName: req.query.moduleName,
-      js: ['/lib/Validator/validator.js', '/lib/underscore/underscore-min.js', '/javascripts/schema.js']
+      js: ['/lib/Validator/validator.js', '/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/lib/underscore/underscore-min.js', '/javascripts/schema.js']
     });
   }).get('/:_id', function (req, res) {
     cInt.find({
