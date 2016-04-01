@@ -5,6 +5,7 @@ body {
 
 a {
   color: #00B7FF;
+  cursor: pointer;
 }
 
 .validation-invalid{
@@ -26,10 +27,12 @@ a {
 .bg-white{
   background-color: #fff;
 }
-textarea{
+textarea:not(.form-control){
   height: 300px;
   width: 100%;
   white-space: pre;
   word-break: break-all;
   word-wrap: break-word;
+  font-family: 仿宋;
+  font-weight: 700;
 }

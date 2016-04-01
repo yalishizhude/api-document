@@ -1,6 +1,6 @@
 (function (window, angular) {
   'use strict';
-  angular.module('app', []).config(function ($interpolateProvider) {
+  angular.module('app', ['validation.rule']).config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   }).directive('textarea', [function () {
@@ -37,7 +37,7 @@
         */
       }
     };
-  }]).controller('ctrl', ['$scope', '$http', function ($scope, $http) {
+  }]).controller('ctrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
     /**
      * 按照json schema规范校验参数
      * @param  {String} property "in"入参;"out"返回值
@@ -52,31 +52,45 @@
         }
         var validator = new Validator(schema);
         var check = validator.check(obj);
+        $scope.api[property + 'Verified'] = !!check._error;
         $scope.api[property + 'Validation'] = JSON.stringify(check, null, 2);
       } catch (e) {
+        $scope.api[property + 'Verified'] = true;
         $scope.api[property + 'Validation'] = '参数/规则有误，校验失败';
-        console.log(e);
       }
     }
-    $http.get('/interface/' + location.hash.replace('#', '')).success(function (resp) {
-      $scope.versions = resp.versions;
-      $scope.api = _.extend({
-        inObject: '',
-        inSchema: '',
-        outSchema: ''
-      }, resp.api);
-      $scope.$watch('api.inObject', function (newVal, oldVal) {
-        validate('in');
+
+    function countdown() {
+      $scope.second = 3;
+      $scope.interval = $interval(function () {
+        $scope.second--;
+        if ($scope.second <= 0) {
+          $interval.cancel($scope.interval);
+          window.close();
+        }
+      }, 1000);
+    }
+    if (location.hash.replace('#', '')) {
+      $http.get('/interface/' + location.hash.replace('#', '')).success(function (resp) {
+        $scope.versions = resp.versions;
+        $scope.api = _.extend({
+          inObject: '',
+          inSchema: '',
+          outSchema: ''
+        }, resp.api);
       });
-      $scope.$watch('api.inSchema', function (newVal, oldVal) {
-        validate('in');
-      });
-      $scope.$watch('api.outObject', function (newVal, oldVal) {
-        validate('out');
-      });
-      $scope.$watch('api.outSchema', function (newVal, oldVal) {
-        validate('out');
-      });
+    }
+    $scope.$watch('api.inObject', function (newVal, oldVal) {
+      validate('in');
+    });
+    $scope.$watch('api.inSchema', function (newVal, oldVal) {
+      validate('in');
+    });
+    $scope.$watch('api.outObject', function (newVal, oldVal) {
+      validate('out');
+    });
+    $scope.$watch('api.outSchema', function (newVal, oldVal) {
+      validate('out');
     });
     /**
      * 复制接口
@@ -84,29 +98,6 @@
      */
     $scope.copy = function () {
       var txt = document.getElementById('json');
-
-    //   "_id" : ObjectId("56d63e0b21931a201ebad436"),
-    //  "pid" : "56d4f0b5d1f45d581b4f1726",
-    //  "mid" : "56d5099e3393f30c2205d5c8",
-    //  "version" : 2,
-    //  "author" : "admin",
-    //  "updateDate" : "2016-03-01",
-    //  "method" : "get",
-    //  "inParams" : [],
-    //  "outParams" : [
-    //      {
-    //          "seq" : 1456816582682.0000000000000000,
-    //          "name" : "data",
-    //          "isNeed" : "true",
-    //          "type" : "boolean",
-    //          "desc" : "是否已经填写过问卷"
-    //      }
-    //  ],
-    //  "url" : "/answer",
-    //  "name" : "查询已回答问卷",
-    //  "outObject" : "{\n  \"data|1\": [\n    true,false\n  ] \n}",
-    //  "oid" : "56d541da33afd8882e130dea"
-
       txt.value = JSON.stringify(_.pick($scope.api, 'name', 'url', 'method', 'remark', 'inObject', 'inSchema', 'outObject', 'outSchema'), null, 2);
       txt.select();
       document.execCommand("Copy");
@@ -117,39 +108,39 @@
      * @return {[type]} [description]
      */
     $scope.paste = function () {
-      console.log($scope.modalContent);
+      var api = JSON.parse($scope.modalContent);
+      $scope.api = _.extend($scope.api, api);
     };
     /**
      * 保存
      * @return {[type]} [description]
      */
     $scope.submit = function () {
-      if (window.opener) {
-        window.opener.location.reload();
-      }
+      countdown();
+      var method = $scope.api._id ? 'put' : 'post',
+        param = $scope.api._id ? ('/' + $scope.api._id) : '',
+        api = _.omit($scope.api, 'inValidation', 'inVerified', 'outValidation', 'outVerified');
       if ($scope.api._id) {
-        $scope.api.version++;
-        $http.put('/interface/' + $scope.api._id, $scope.api).success(function (resp) {
-          if (resp) {
-            $scope.api = resp.api;
-            location.hash = '#' + resp.api._id;
-            $scope.versions = resp.versions;
-            $scope.hint('保存成功!', 'success');
-          } else {
-            $scope.hint('保存失败!\n' + resp, 'danger');
-          }
-        });
+        api.version++;
       } else {
-        $http.post('/interface', $scope.api).success(function (resp) {
-          if (resp) {
-            $scope.api = resp;
-            location.hash = '#' + resp._id;
-            $scope.hint('保存成功!', 'success');
-          } else {
-            $scope.hint('保存失败!\n' + resp, 'danger');
-          }
-        });
+        api.createDate = api.updateDate;
       }
+      $http[method]('/interface' + param, api).success(function (resp) {
+        if (resp) {
+          if (window.opener) {
+            window.opener.location.reload();
+          }
+          $scope.api = resp;
+          location.hash = '#' + resp._id;
+          countdown();
+        } else {
+          window.alert('保存失败!\n' + JSON.stringify(resp, null, 2));
+        }
+      });
+    };
+    $scope.stop = function () {
+      $scope.second = null;
+      $interval.cancel($scope.interval);
     };
   }]);
   angular.bootstrap(document, ['app']);
