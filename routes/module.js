@@ -5,7 +5,9 @@ var conf = require('./config');
 var monk = require('monk');
 var db = monk(conf.mongoUrl);
 var q = require('q');
+var superagent = require('superagent');
 var _ = require('underscore');
+var validator = require('schema-validator');
 var http = require('http');
 var util = require('./util');
 var cMod = db.get('modules');
@@ -45,7 +47,6 @@ var cInt = db.get('interfaces');
           oid: 1
         }
       };
-      console.log(req.query.sort);
       if ('name' === req.query.sort) {
         orderby = {
           sort: {
@@ -53,7 +54,7 @@ var cInt = db.get('interfaces');
             name: 1
           }
         };
-      } else if ('updateDate' === req.query.sort){
+      } else if ('updateDate' === req.query.sort) {
         orderby = {
           sort: {
             mid: 1,
@@ -94,6 +95,31 @@ var cInt = db.get('interfaces');
       console.error(err);
       res.status(500).send(err);
     });
+  }).get('/test/:id', function (req, res) {
+    cUsr.find({
+      _id: req.session.user._id
+    }, function (err, user) {
+      if (err) {
+        res.status(500).send(err);
+      } else if (user.backEndUrl) {
+        cInt.find({
+          _id: req.query.id
+        }, function (err, data) {
+          var inObject = data.inObject ? JSON.parse(data.inObject) : {};
+          superagent[data.method.toLowerCase()](user.backEndUrl).send(inObject).end(function (e, r) {
+            if (e) {
+              res.json(e);
+            } else {
+              var validator = new Validator(data.schema || {});
+              var check = validator.check(r.body);
+              res.json(check);
+            }
+          });
+        });
+      } else {
+        res.send('测试接口的URL不存在');
+      }
+    });
   }).post('', function (req, res) {
     cMod.insert(req.body, function (err, data) {
       if (err) {
@@ -116,6 +142,25 @@ var cInt = db.get('interfaces');
         res.json(data);
       }
     });
+  }).put('/url', function (req, res) {
+    if (!req.session || !req.session.user) {
+      res.status(401).send('请先登录！');
+    } else {
+      var cUsr = db.get('users');
+      cUsr.update({
+        _id: req.session.user._id
+      }, {
+        $set: {
+          backEndUrl: req.body.url
+        }
+      }, function (err, data) {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.json(data);
+        }
+      });
+    }
   }).delete('/:_id', function (req, res) {
     cMod.remove({
       _id: req.params._id

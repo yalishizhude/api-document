@@ -23,6 +23,7 @@
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.7",
     "q": "^1.4.1",
+    "schema-validator": "^3.3.0",
     "serve-favicon": "~2.3.0",
     "superagent": "^1.7.0",
     "underscore": "^1.8.3"
