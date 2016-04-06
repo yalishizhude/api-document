@@ -171,7 +171,6 @@
           $scope.backendMessage = 'URL地址填写有误';
           return;
         }
-        e.srcElement.blur();
         if ($scope.backendUrl) {
           $http.put('/module/url', {
             pid: pid,
@@ -198,14 +197,14 @@
           result: res.code
         };
         $scope.modalTitle = 1 === res.code ? '接口测试成功' : '接口返回值不符合校验规则';
-        $scope.modalContent = JSON.stringify(res.message, null, 2);
+        $scope.modalContent = res.message;
       }).error(function (res) {
         $scope.test = {
           id: id,
           result: res.code
         };
         $scope.modalTitle = '接口测试失败';
-        $scope.modalContent = JSON.stringify(res, null, 2);
+        $scope.modalContent = res.message;
       });
     };
     /**

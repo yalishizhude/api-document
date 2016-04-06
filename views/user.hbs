@@ -1,4 +1,7 @@
-<div ng-controller="mainCtrl"> 
+<p>
+  <a href="/project/index.html">首页</a>
+</p>
+<div ng-controller="mainCtrl">
 	<div ng-if="message" class="alert alert-//message.level//" role="alert">
 	  <span  class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	  <span  class="sr-only">Error:</span>
@@ -27,7 +30,7 @@
 					<td ng-bind="u.name"></td>
 					<td> <input type="checkbox" ng-model="u.manageable">管理账号权限</td>
 					<td> <input type="checkbox" ng-model="u.editable">编辑接口权限</td>
-					<td> 
+					<td>
 						<button type="button" ng-dblclick="delete(u._id);" class="pull-right btn-danger btn btn-sm">删除</button>
 	  				<button type="button" ng-click="edit(u);" class="btn btn-sm btn-warning pull-right">修改</button>
 					</td>

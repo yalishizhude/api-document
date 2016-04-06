@@ -3,7 +3,6 @@ var monk = require('monk');
 var conf = require('./config');
 var db = monk(conf.mongoUrl);
 var cUsr = db.get('users');
-var time = 0;
 
 module.exports = function (req, res, next) {
   'use strict';

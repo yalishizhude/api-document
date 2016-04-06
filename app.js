@@ -48,7 +48,6 @@
   app.use('/project', require('./routes/project'));
   app.use('/module', require('./routes/module'));
   app.use('/interface', require('./routes/interface'));
-  app.use('/schema', require('./routes/schema'));
   app.use('/user', require('./routes/user'));
   app.use('/readme.html', function (req, res) {
     res.render('readme', {static: true});

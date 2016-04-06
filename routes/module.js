@@ -33,27 +33,29 @@ var cInt = db.get('interfaces');
             res.status(500).json({
               code: -1,
               message: '查询接口出错'
-            })
+            });
           } else {
             var inObject = data.inObject ? JSON.parse(data.inObject) : {};
             superagent[data.method.toLowerCase()](user[req.query.pid] + data.url).send(inObject).end(function (e, r) {
+              data.schema = data.schema || [];
               if (e || 200 !== r.statusCode) {
                 res.json({
                   code: -1,
-                  message: e||r.body
+                  message: '服务器出错：\n' + JSON.stringify(e || r.body, null, 2)
                 });
               } else {
-                var validate = new validator(data.schema || {});
+                var validate = new validator(data.schema);
                 var check = validate.check(r.body);
+                var message = '校验规则：\n' + JSON.stringify(data.schema, null, 2) + '\n\n返回值：\n' + JSON.stringify(r.body, null, 2) + '\n\n校验结果：\n' + JSON.stringify(check, null, 2);
                 if (check._error) {
                   res.json({
                     code: -1,
-                    message: JSON.stringify(check, null, 2)
+                    message: message
                   });
                 } else {
                   res.json({
                     code: 1,
-                    message: r.body
+                    message: message
                   });
                 }
               }
@@ -184,17 +186,19 @@ var cInt = db.get('interfaces');
         if (err) {
           res.status(500).json(err);
         } else {
-          cUsr.findById(req.session.user._id, function (e, user) {
-            req.session.user = user;
-          });
+          req.session.user = null;
           res.json(data);
         }
       });
     }
-  }).put('/save', function (req, res){
-    cInt.update({_id: req.body.id}, {$set:{
-      testStatus: req.body.result
-    }}, function (err, data){
+  }).put('/save', function (req, res) {
+    cInt.update({
+      _id: req.body.id
+    }, {
+      $set: {
+        testStatus: req.body.result
+      }
+    }, function (err, data) {
       if (err) {
         res.status(500).json({
           code: -1,
