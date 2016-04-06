@@ -1,6 +1,6 @@
 <div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()">
-  <h3><small><a href="/project/index.html">首页</a>&nbsp;&gt;&nbsp;</small>{{projectName}} </h3>
-  测试接口的服务器地址：<input type="text" style="width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" placeholder="(如 http://192.168.199.1/zsd)" ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)">&emsp;<span style="color:red" ng-bind="backendMessage"></span>
+  <h3><small><a href="/project/index.html">首页</a>&nbsp;&gt;&nbsp;</small>//projectName//</h3>
+  测试接口的服务器地址：<input ng-init="backendUrl='{{backendUrl}}'" type="text" style="min-width:200px;width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" placeholder="如 http://192.168.199.1/zsd" ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)">&emsp;<span style="color:red" ng-bind="backendMessage"></span>
   <div>
     <div class="pull-right">
       <a href="javascript:void(0);" ng-click="sort('');">默认</a>&emsp;
@@ -15,7 +15,8 @@
         {{#if editable}}
           <input id="_moduleName" type="text" ng-model="m.text" ng-if="m.text" ng-keydown="keydown($event, m);" ng-blur="cancel(m)">
           <a href="javascript:void(0);" title="双击删除" ng-hide="m.text" ng-dblclick="remove(m._id);" class="pull-right text-danger glyphicon glyphicon-minus">删除&nbsp;</a>
-          <a href="javascript:void(0);" ng-hide="m.text" ng-click="edit(m)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a> {{/if}}
+          <a href="javascript:void(0);" ng-hide="m.text" ng-click="edit(m)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a>
+        {{/if}}
       </div>
       <div class="panel-body">
         <table class="table">
@@ -44,15 +45,14 @@
             <td><a ng-if="i.outObject" href="" ng-click="showParam(i.name, i.outObject)" data-toggle="modal" data-target="#myModal">返回值</a></td>
             {{#if editable}}
               <td style="text-align:right;">
-                <a href="/schema/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
+                <a target="_blank" href="/schema/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
                 <a href="" title="双击删除" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
               </td>
             {{/if}}
-            <td ng-init="i.testStatus=0">
-              <span ng-click="testInterface(i._id)" ng-if="0==i.testStatus" class="label label-warning" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：未连接后端服务器进行测试，可能无法正常使用。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间： //i.costTime//">未测试</span>
-              <span ng-click="testInterface(i._id)" ng-if="1==i.testStatus" class="label label-success" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：已通过后端服务器测试。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">测试通过</span>
-              <span ng-click="testInterface(i._id)" ng-if="-1==i.testStatus" class="label label-info" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口有返回值，但未定义校验规则。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">接口可用</span>
-              <span ng-click="testInterface(i._id)" ng-if="-2==i.testStatus" class="label label-danger" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口返回值未通过规则校验。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">测试失败</span>
+            <td >
+              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="!i.testStatus" class="label label-warning" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：未连接后端服务器进行测试，可能无法正常使用。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间： //i.costTime//">未测试</span>
+              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="1==i.testStatus" class="label label-success" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：已通过后端服务器测试。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">测试通过</span>
+              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="-1==i.testStatus" class="label label-danger" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口返回值未通过规则校验。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">测试失败</span>
             </td>
           </tr>
           {{#if editable}}
@@ -84,13 +84,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel" ng-bind="modalTitle"></h4>
+          <h4 class="modal-title" id="myModalLabel" ><b ng-bind="modalTitle"></b></h4>
         </div>
         <textarea id="modalContent" readonly="" style="width: 100%;height: 600px;" class="modal-body" ng-bind="modalContent">
         </textarea>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="saveTest();">保存结果</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="copy();">点击复制</button>
+          <button ng-show="xhr" type="button" class="btn btn-default" data-dismiss="modal" ng-click="saveTest();">保存结果</button>
+          <button ng-show="!xhr" type="button" class="btn btn-default" data-dismiss="modal" ng-click="copy();">点击复制</button>
         </div>
       </div>
     </div>

@@ -61,10 +61,10 @@
     }
 
     function countdown() {
-      $scope.second = 3;
+      $scope.second = 5;
       $scope.interval = $interval(function () {
         $scope.second--;
-        if ($scope.second <= 0) {
+        if (0 === $scope.second) {
           $interval.cancel($scope.interval);
           window.close();
         }
@@ -120,6 +120,7 @@
       var method = $scope.api._id ? 'put' : 'post',
         param = $scope.api._id ? ('/' + $scope.api._id) : '',
         api = _.omit($scope.api, 'inValidation', 'inVerified', 'outValidation', 'outVerified');
+        api.testStatus = 0;
       if ($scope.api._id) {
         api.version++;
       } else {
@@ -139,7 +140,6 @@
       });
     };
     $scope.stop = function () {
-      $scope.second = null;
       $interval.cancel($scope.interval);
     };
   }]);

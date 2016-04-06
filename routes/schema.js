@@ -127,6 +127,7 @@ var util = require('./util');
           } else {
             req.body.oid = r[0].oid;
             req.body.author = req.session.user.name;
+            req.body.testStatus = 0;
             cInt.insert(req.body, function (e3, r3) {
               if (e3) {
                 console.error(e3);

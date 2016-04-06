@@ -7,10 +7,10 @@
 	<ul class="list-group" >
 		<li class="list-group-item" >项目列表</li>
 	  <li class="list-group-item" ng-repeat="p in projects">
-	  	<span ng-if="pro._id===p._id" class="glyphicon glyphicon-pencil">&nbsp;</span><a href="/module/index.html?projectName=//p.name//#//p._id//" ng-bind="p.name"></a>
+	  	<span ng-if="pro._id===p._id" class="glyphicon glyphicon-pencil">&nbsp;</span><a href="/module/index.html?pid=//p._id//" ng-bind="p.name"></a>
 	  	{{#if editable}}
 	  	<a href="javascript:void(0);" ng-dblclick="remove(p._id);" class="pull-right text-danger glyphicon glyphicon-minus">双击删除&nbsp;</a>
-	  	<a href="javascript:void(0);" ng-click="edit(p._id, p.name)"class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a>
+	  	<a href="javascript:void(0);" ng-click="edit(p._id, p.name)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a>
 	  	{{/if}}
 		</li>
 		{{#if editable}}

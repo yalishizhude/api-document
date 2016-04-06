@@ -5,9 +5,10 @@
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   }]).controller('mainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-    var pid = location.hash.replace('#', '');
+    var pid = location.search.replace(/[\?|&]pid=(\S)/, '$1');
     $http.get('/module/' + pid).success(function (resp) {
-      $scope.modules = resp;
+      $scope.projectName = resp.projectName;
+      $scope.modules = resp.modules;
     });
     $scope.$watch('api.inObject', function (nVal) {
       try {
@@ -23,7 +24,8 @@
     });
     $scope.sort = function (col) {
       $http.get('/module/' + pid + '?sort=' + col).success(function (resp) {
-        $scope.modules = resp;
+        $scope.projectName = resp.projectName;
+        $scope.modules = resp.modules;
       });
     };
     $scope.sendRequest = function () {
@@ -129,6 +131,7 @@
       }
     };
     $scope.showParam = function (title, content) {
+      $scope.xhr = false;
       $scope.modalTitle = title;
       try {
         $scope.modalContent = JSON.stringify(JSON.parse(content), null, '  ');
@@ -171,7 +174,10 @@
         e.srcElement.blur();
         if ($scope.backendUrl) {
           $http.put('/module/url', {
+            pid: pid,
             url: $scope.backendUrl
+          }).success(function (res) {
+            $scope.backendMessage = '1' === res ? '' : res;
           }).error(function (res) {
             $scope.backendMessage = 'URL保存失败';
             console.error(res);
@@ -179,11 +185,37 @@
         }
       }
     };
+    /**
+     * 测试接口
+     * @param  {String} id 接口_id
+     * @return {[type]}    [description]
+     */
     $scope.testInterface = function (id) {
-      $http.get('/module/test/' + id).success(function (res) {
-        $scope.modalContent = JSON.stringify(res, null, 2);
+      $scope.xhr = true;
+      $http.get('/module/test/' + id + '?pid=' + pid).success(function (res) {
+        $scope.test = {
+          id: id,
+          result: res.code
+        };
+        $scope.modalTitle = 1 === res.code ? '接口测试成功' : '接口返回值不符合校验规则';
+        $scope.modalContent = JSON.stringify(res.message, null, 2);
       }).error(function (res) {
+        $scope.test = {
+          id: id,
+          result: res.code
+        };
+        $scope.modalTitle = '接口测试失败';
         $scope.modalContent = JSON.stringify(res, null, 2);
+      });
+    };
+    /**
+     * 保存接口测试结果
+     * @param  {String} id 接口_id
+     * @return {[type]}    [description]
+     */
+    $scope.saveTest = function (id) {
+      $http.put('/module/save', $scope.test).success(function (res){
+        location.reload();
       });
     };
   }]);

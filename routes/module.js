@@ -9,18 +9,63 @@ var superagent = require('superagent');
 var _ = require('underscore');
 var validator = require('schema-validator');
 var http = require('http');
+var debug = require('debug')('module');
 var util = require('./util');
 var cMod = db.get('modules');
 var cInt = db.get('interfaces');
 (function () {
   'use strict';
   router.get('/index.html', function (req, res) {
+    debug('*******************', req.session.user);
     res.render('module', {
-      backEndHost: conf.backEndHost,
-      backEndPort: conf.backEndPort,
+      backendUrl: req.session.user[req.query.pid],
       editable: req.session.user.editable,
-      projectName: req.query.projectName,
-      js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/underscore/underscore-min.js', '/javascripts/viewInterface.js', '/javascripts/module.js']
+      js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/underscore/underscore-min.js', '/javascripts/module.js']
+    });
+  }).get('/test/:id', function (req, res) {
+    var cUsr = db.get('users');
+    cUsr.findById(req.session.user._id, function (err, user) {
+      if (err) {
+        res.status(500).json(err);
+      } else if (user[req.query.pid]) {
+        cInt.findById(req.params.id, function (err, data) {
+          if (err) {
+            res.status(500).json({
+              code: -1,
+              message: '查询接口出错'
+            })
+          } else {
+            var inObject = data.inObject ? JSON.parse(data.inObject) : {};
+            superagent[data.method.toLowerCase()](user[req.query.pid] + data.url).send(inObject).end(function (e, r) {
+              if (e || 200 !== r.statusCode) {
+                res.json({
+                  code: -1,
+                  message: e||r.body
+                });
+              } else {
+                var validate = new validator(data.schema || {});
+                var check = validate.check(r.body);
+                if (check._error) {
+                  res.json({
+                    code: -1,
+                    message: JSON.stringify(check, null, 2)
+                  });
+                } else {
+                  res.json({
+                    code: 1,
+                    message: r.body
+                  });
+                }
+              }
+            });
+          }
+        });
+      } else {
+        res.json({
+          code: -1,
+          message: '测试接口的URL不存在'
+        });
+      }
     });
   }).get('/:pid', function (req, res) {
     var pId = req.params.pid;
@@ -82,51 +127,80 @@ var cInt = db.get('interfaces');
       });
       return def.promise;
     }
-    q.all([gm(pId), gi(pId)]).then(function (result) {
-      var modules = result[0];
+
+    function gp(id) {
+      var def = q.defer();
+      var cPro = db.get('projects');
+      cPro.findById(id, function (err, data) {
+        if (err) {
+          console.error(err);
+          def.reject(err);
+        } else {
+          def.resolve(data.name);
+        }
+      });
+      return def.promise;
+    }
+    q.all([gm(pId), gi(pId), gp(pId)]).then(function (result) {
+      var project = {
+        projectName: result[2],
+        modules: result[0]
+      };
       var interfaces = result[1];
-      _.each(modules, function (mod) {
+      _.each(project.modules, function (mod) {
         mod.interfaces = _.filter(interfaces, function (face) {
           return face.mid === mod._id.toString();
         });
       });
-      res.json(modules);
+      res.json(project);
     }, function (err) {
-      console.error(err);
-      res.status(500).send(err);
-    });
-  }).get('/test/:id', function (req, res) {
-    cUsr.find({
-      _id: req.session.user._id
-    }, function (err, user) {
-      if (err) {
-        res.status(500).send(err);
-      } else if (user.backEndUrl) {
-        cInt.find({
-          _id: req.query.id
-        }, function (err, data) {
-          var inObject = data.inObject ? JSON.parse(data.inObject) : {};
-          superagent[data.method.toLowerCase()](user.backEndUrl).send(inObject).end(function (e, r) {
-            if (e) {
-              res.json(e);
-            } else {
-              var validator = new Validator(data.schema || {});
-              var check = validator.check(r.body);
-              res.json(check);
-            }
-          });
-        });
-      } else {
-        res.send('测试接口的URL不存在');
-      }
+      res.status(500).json(err);
     });
   }).post('', function (req, res) {
     cMod.insert(req.body, function (err, data) {
       if (err) {
         console.error(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
       } else {
         util.rewrite();
+        res.json(data);
+      }
+    });
+  }).put('/url', function (req, res) {
+    if (!req.session || !req.session.user) {
+      res.status(401).json({
+        code: -1,
+        message: '请先登录！'
+      });
+    } else {
+      var cUsr = db.get('users');
+      var urlObj = {};
+      urlObj[req.body.pid] = req.body.url;
+      cUsr.update({
+        _id: req.session.user._id
+      }, {
+        $set: urlObj
+      }, function (err, data) {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          cUsr.findById(req.session.user._id, function (e, user) {
+            req.session.user = user;
+          });
+          res.json(data);
+        }
+      });
+    }
+  }).put('/save', function (req, res){
+    cInt.update({_id: req.body.id}, {$set:{
+      testStatus: req.body.result
+    }}, function (err, data){
+      if (err) {
+        res.status(500).json({
+          code: -1,
+          message: err
+        });
+      } else {
         res.json(data);
       }
     });
@@ -136,38 +210,19 @@ var cInt = db.get('interfaces');
     }, req.body, function (err, data) {
       if (err) {
         console.error(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
       } else {
         util.rewrite();
         res.json(data);
       }
     });
-  }).put('/url', function (req, res) {
-    if (!req.session || !req.session.user) {
-      res.status(401).send('请先登录！');
-    } else {
-      var cUsr = db.get('users');
-      cUsr.update({
-        _id: req.session.user._id
-      }, {
-        $set: {
-          backEndUrl: req.body.url
-        }
-      }, function (err, data) {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.json(data);
-        }
-      });
-    }
   }).delete('/:_id', function (req, res) {
     cMod.remove({
       _id: req.params._id
     }, function (err, data) {
       if (err) {
         console.error(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
       } else {
         util.rewrite();
         res.json(data);
