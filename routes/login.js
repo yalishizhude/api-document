@@ -3,6 +3,7 @@ var monk = require('monk');
 var conf = require('./config');
 var db = monk(conf.mongoUrl);
 var cUsr = db.get('users');
+var time = 0;
 
 module.exports = function (req, res, next) {
   'use strict';
@@ -28,7 +29,6 @@ module.exports = function (req, res, next) {
       res.status(500).send(e);
     }
   } else {
-    console.log(req.session.user);
     res.app.locals.user = req.session.user;
     logined();
   }

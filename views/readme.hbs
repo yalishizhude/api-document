@@ -1,0 +1,24 @@
+<pre>
+  belt: {
+    type: Object,
+    required: true,
+    team: {
+      type: Array,
+      required: true,
+      length: {
+        min: 1,
+        max: 6
+      }
+    },
+    inventory: {
+      type: Array,
+      default: [],
+      length: {
+        max: 255
+      }
+    }
+  }
+</pre>
+<a href="https://github.com/nijikokun/Validator">校验规则介绍</a>
+<br>
+<a href="http://json-schema.org/documentation.html">json schema介绍</a>

@@ -17,7 +17,7 @@
     app = express();
   // view engine setup
   hbsutils.registerWatchedPartials(__dirname + '/views/partials');
-  hbsutils.hbs.localsAsTemplateData(app);
+  hbs.localsAsTemplateData(app);
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'hbs');
   //记录日志
@@ -48,7 +48,11 @@
   app.use('/project', require('./routes/project'));
   app.use('/module', require('./routes/module'));
   app.use('/interface', require('./routes/interface'));
+  app.use('/schema', require('./routes/schema'));
   app.use('/user', require('./routes/user'));
+  app.use('/readme.html', function (req, res) {
+    res.render('readme', {static: true});
+  });
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
     var err = new Error('Not Found');

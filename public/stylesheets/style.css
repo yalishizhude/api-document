@@ -5,15 +5,34 @@ body {
 
 a {
   color: #00B7FF;
+  cursor: pointer;
 }
 
 .validation-invalid{
 	color: red;
 }
-.ng-cloak{display:none;}  
+.ng-cloak{display:none;}
 .code{
   height: 30px;
   display: inline-block;
   line-height: 30px;
   font-size: 16px;
+}
+.required::before{
+  content: '*';
+  position: absolute;
+  margin: 0 0 0 -10px;
+  color: red;
+}
+.bg-white{
+  background-color: #fff;
+}
+textarea:not(.form-control){
+  height: 300px;
+  width: 100%;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+  font-family: 仿宋;
+  font-weight: 700;
 }

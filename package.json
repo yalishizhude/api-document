@@ -12,7 +12,7 @@
   "dependencies": {
     "body-parser": "~1.13.2",
     "cookie-parser": "~1.3.5",
-    "debug": "~2.2.0",
+    "debug": "^2.2.0",
     "express": "~4.13.1",
     "express-session": "^1.12.1",
     "hbs": "^4.0.0",
@@ -23,6 +23,7 @@
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.7",
     "q": "^1.4.1",
+    "schema-validator": "^3.3.0",
     "serve-favicon": "~2.3.0",
     "sessionstore": "^1.2.11",
     "superagent": "^1.7.0",
