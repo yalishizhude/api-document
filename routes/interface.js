@@ -22,7 +22,7 @@ var util = require('./util');
       userName: req.session.user.name,
       projectName: req.query.projectName,
       moduleName: req.query.moduleName,
-      js: ['/lib/json-editor/dist/jsoneditor.js', '/lib/angular-json-editor/dist/angular-json-editor.js', '/lib/mockjs/dist/mock-min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
+      js: ['/lib/json-editor/dist/jsoneditor.js', '/lib/angular-json-editor/dist/angular-json-editor.js', '/lib/mockjs/dist/mock-min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/lib/mockjs/dist/mock-min.js', '/javascripts/interface.js']
     });
   }).get('/:_id', function (req, res) {
     cInt.find({
