@@ -33,28 +33,37 @@ var cInt = db.get('interfaces');
             res.status(500).json({
               code: -1,
               message: '查询接口出错'
-            })
+            });
           } else {
             var inObject = data.inObject ? JSON.parse(data.inObject) : {};
-            superagent[data.method.toLowerCase()](user[req.query.pid] + data.url).send(inObject).end(function (e, r) {
+            var method = data.method.toLowerCase();
+            superagent[method](user[req.query.pid] + data.url)['get' === method ? 'query' : 'send'](inObject).end(function (e, r) {
               if (e || 200 !== r.statusCode) {
                 res.json({
                   code: -1,
-                  message: e||r.body
+                  message: '服务器出错：\n' + JSON.stringify(e || r.body, null, 2)
                 });
               } else {
-                var validate = new validator(data.schema || {});
-                var check = validate.check(r.body);
-                if (check._error) {
-                  res.json({
-                    code: -1,
-                    message: JSON.stringify(check, null, 2)
-                  });
-                } else {
-                  res.json({
-                    code: 1,
-                    message: r.body
-                  });
+                try {
+                  data.outSchema = JSON.parse(data.outSchema || '{}');
+                  var validate = new validator(data.outSchema);
+                  var check = validate.check(r.body);
+                  check = check._error ? JSON.stringify(check, null, 2) : '成功';
+                  var message = '\n校验结果：\n' + check + '\n\n校验规则：\n' + JSON.stringify(data.outSchema, null, 2) + '\n\n返回值：\n' + JSON.stringify(r.body, null, 2);
+                  if (check._error) {
+                    res.json({
+                      code: -1,
+                      message: message
+                    });
+                  } else {
+                    res.json({
+                      code: 1,
+                      message: message
+                    });
+                  }
+                } catch (e) {
+                  console.error(e);
+                  res.status(500).send(e);
                 }
               }
             });
@@ -184,17 +193,19 @@ var cInt = db.get('interfaces');
         if (err) {
           res.status(500).json(err);
         } else {
-          cUsr.findById(req.session.user._id, function (e, user) {
-            req.session.user = user;
-          });
+          req.session.user = null;
           res.json(data);
         }
       });
     }
-  }).put('/save', function (req, res){
-    cInt.update({_id: req.body.id}, {$set:{
-      testStatus: req.body.result
-    }}, function (err, data){
+  }).put('/save', function (req, res) {
+    cInt.update({
+      _id: req.body.id
+    }, {
+      $set: {
+        testStatus: req.body.result
+      }
+    }, function (err, data) {
       if (err) {
         res.status(500).json({
           code: -1,

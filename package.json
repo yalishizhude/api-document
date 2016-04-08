@@ -23,8 +23,9 @@
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.7",
     "q": "^1.4.1",
-    "schema-validator": "^3.3.0",
+    "schema-validator": "git+https://github.com/yalishizhude/Validator.git",
     "serve-favicon": "~2.3.0",
+    "sessionstore": "^1.2.11",
     "superagent": "^1.7.0",
     "underscore": "^1.8.3"
   },

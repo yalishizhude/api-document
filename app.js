@@ -11,6 +11,7 @@
     hbsutils = require('hbs-utils')(hbs),
     log = require('./log'),
     session = require('express-session'),
+    sessionstore = require('sessionstore'),
     uuid = require('node-uuid'),
     login = require('./routes/login'),
     app = express();
@@ -38,6 +39,7 @@
     genid: uuid.v1,
     resave: false,
     saveUninitialized: true,
+    store: sessionstore.createSessionStore(),
     secret: 'api-document-server'
   }));
   //路由
@@ -46,10 +48,11 @@
   app.use('/project', require('./routes/project'));
   app.use('/module', require('./routes/module'));
   app.use('/interface', require('./routes/interface'));
-  app.use('/schema', require('./routes/schema'));
   app.use('/user', require('./routes/user'));
   app.use('/readme.html', function (req, res) {
-    res.render('readme', {static: true});
+    res.render('readme', {
+      static: true
+    });
   });
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
@@ -78,5 +81,6 @@
       error: {}
     });
   });
+  
   module.exports = app;
 }());

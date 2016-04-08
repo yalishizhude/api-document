@@ -22,7 +22,7 @@ var util = require('./util');
       userName: req.session.user.name,
       projectName: req.query.projectName,
       moduleName: req.query.moduleName,
-      js: ['/lib/json-editor/dist/jsoneditor.js', '/lib/angular-json-editor/dist/angular-json-editor.js', '/lib/mockjs/dist/mock-min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/lib/mockjs/dist/mock-min.js', '/javascripts/interface.js']
+      js: ['/lib/mockjs/dist/mock-min.js', '/lib/Validator/validator.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
     });
   }).get('/:_id', function (req, res) {
     cInt.find({
@@ -96,7 +96,7 @@ var util = require('./util');
           $set: {
             'oid': data._id.toString()
           }
-        }, function (e, data) {
+        }, function (e, his) {
           if (e) {
             console.error(e);
             res.status(500).send(e);
@@ -127,6 +127,7 @@ var util = require('./util');
           } else {
             req.body.oid = r[0].oid;
             req.body.author = req.session.user.name;
+            req.body.testStatus = 0;
             cInt.insert(req.body, function (e3, r3) {
               if (e3) {
                 console.error(e3);

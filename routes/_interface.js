@@ -12,7 +12,7 @@ var util = require('./util');
 (function () {
   'use strict';
   router.get('/index.html', function (req, res) {
-    res.render('schema', {
+    res.render('interface', {
       backEndHost: conf.backEndHost,
       backEndPort: conf.backEndPort,
       title: '编辑接口',
@@ -22,7 +22,7 @@ var util = require('./util');
       userName: req.session.user.name,
       projectName: req.query.projectName,
       moduleName: req.query.moduleName,
-      js: ['/lib/Validator/validator.js', '/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/lib/underscore/underscore-min.js', '/javascripts/schema.js']
+      js: ['/lib/json-editor/dist/jsoneditor.js', '/lib/angular-json-editor/dist/angular-json-editor.js', '/lib/mockjs/dist/mock-min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
     });
   }).get('/:_id', function (req, res) {
     cInt.find({
@@ -127,7 +127,6 @@ var util = require('./util');
           } else {
             req.body.oid = r[0].oid;
             req.body.author = req.session.user.name;
-            req.body.testStatus = 0;
             cInt.insert(req.body, function (e3, r3) {
               if (e3) {
                 console.error(e3);
