@@ -190,18 +190,22 @@
      * @return {[type]}    [description]
      */
     $scope.testInterface = function (id) {
+      var beginTime = _.now();
       $scope.xhr = true;
       $http.get('/module/test/' + id + '?pid=' + pid).success(function (res) {
         $scope.test = {
           id: id,
-          result: res.code
+          result: res.code,
+          costTime: (_.now() - beginTime) + 'ms'
         };
         $scope.modalTitle = 1 === res.code ? '接口测试成功' : '接口返回值不符合校验规则';
-        $scope.modalContent = res.message;
+        $scope.modalClass = 1 === res.code ? 'text-success' : 'text-danger';
+        $scope.modalContent = '消耗时间：' + $scope.test.costTime + '\n' + res.message;
       }).error(function (res) {
         $scope.test = {
           id: id,
-          result: res.code
+          result: res.code,
+          costTime: (_.now() - beginTime) + 'ms'
         };
         $scope.modalTitle = '接口测试失败';
         $scope.modalContent = res.message;
