@@ -41,49 +41,56 @@
         </select>
       </div>
     </div>
+
     <div class="form-group">
-      <label for="remark" class="col-sm-1 control-label">接口说明</label>
-      <div class="col-sm-11">
-        <textarea name="remark" rows="1" class="form-control" placeholder="接口的描述信息" ng-model="api.remark" maxlength="1024"></textarea>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="inObject" class="col-sm-1 control-label">请求参数<br><br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a></label>
+      <label for="inObject" class="col-sm-1 control-label">请求参数
+        <br>
+        <br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a>
+      </label>
       <div class="col-sm-5">
         <textarea name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject" validator="json"></textarea>
       </div>
-      <label for="inSchema" class="col-sm-1 control-label">校验规则
-        <br>参数说明
-        <br>
-        <br><a href="/readme.html#jsonschema" target="_blank">json schema <br>示例</a></label>
-      <div class="col-sm-2">
-        <textarea name="inSchema" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
-      </div>
-      <label for="inValidation" class="col-sm-1 control-label">校验结果</label>
-      <div class="col-sm-2">
-        <pre name="inValidation" ng-bind="api.inValidation" style="//api.inVerified?'color:red':''//"></pre>
+      <label for="inSchema" class="col-sm-1 control-label">
+        <p>
+          校验规则<br>
+          参数说明
+        </p>
+        <a href="/readme.html#jsonschema" target="_blank">json schema <br>示例</a>
+        <div style="margin-top:60px;" title="未出现错误则代表校验通过">校验结果 </div>
+      </label>
+      <div class="col-sm-5">
+        <textarea name="inSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
+        <pre name="inValidation" ng-bind="api.inValidation" style="height:150px;//api.inVerified?'color:red':''//"></pre>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-1 control-label required">返回值<br><br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a></label>
+      <label class="col-sm-1 control-label required">返回值
+        <br>
+        <br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a></label>
       <div class="col-sm-5">
         <textarea name="outObject" contenteditable="" class="bg-white" ng-model="api.outObject" validator="required,jsonString"></textarea>
       </div>
-      <label for="outSchema" class="col-sm-1 control-label">校验规则
-        <br>参数说明
-        <br>
-        <br><a href="/readme.html#jsonschema" target="_blank">json schema <br>示例</a></label>
-      <div class="col-sm-2">
-        <textarea id="outSchema" contenteditable="" class="bg-white" ng-model="api.outSchema" name="outSchema" validator="json"></textarea>
-      </div>
-      <label for="outValidation" class="col-sm-1 control-label">校验结果</label>
-      <div class="col-sm-2">
-        <pre ng-bind="api.outValidation" style="//api.outVerified?'color:red':''//"></pre>
+      <label for="outSchema" class="col-sm-1 control-label">
+        <p>
+          校验规则<br>参数说明
+        </p>
+        <a href="/readme.html#jsonschema" target="_blank">json schema <br>示例</a>
+        <div style="margin-top:60px;" title="未出现错误则代表校验通过">校验结果 </div>
+      </label>
+      <div class="col-sm-5">
+        <textarea id="outSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.outSchema" name="outSchema" validator="json"></textarea>
+        <pre ng-bind="api.outValidation" style="height:150px;//api.outVerified?'color:red':''//"></pre>
       </div>
     </div>
     <div ng-if="message" class="alert alert-//message.level//" role="alert">
       <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
       <span class="sr-only">Error:</span> //message.text//
+    </div>
+    <div class="form-group">
+      <label for="remark" class="col-sm-1 control-label">接口说明</label>
+      <div class="col-sm-11">
+        <pre name="remark" style="background-color:#fff;max-height:100px;" placeholder="接口的描述信息" contenteditable="" ng-bind="api.remark" maxlength="1024"></pre>
+      </div>
     </div>
     <div class="form-group text-right">
       <textarea style="height:0;width:0;margin:0;padding:0;" id="json"></textarea>&emsp;

@@ -2,30 +2,53 @@
   校验规则示例：
 </p>
 <pre id="jsonschema">
-  belt: {
-    type: Object,
-    required: true,
-    team: {
-      type: Array,
-      required: true,
-      length: {
-        min: 1,
-        max: 6
+  {
+    "id":{
+      "type": "String",
+      "required": true
+    },
+    "name":{
+      "length":{
+        "min": 2,
+        "max": 4
       }
     },
-    inventory: {
-      type: Array,
-      default: [],
-      length: {
-        max: 255
+    "_BIZCODE":{
+      "test": "/00023/"
+    },
+    "list":{
+      "name":{
+        "required": true
       }
     }
   }
-</pre>
 <p>
   mockjs模板示例：
 </p>
-<pre id="mockjs"></pre>
+<pre id="mockjs">
+  /*
+   * @id: 随机数字id，可用@guid生成带字符的guid
+   * @cword(2,4): 随机中文单词，长度在2个汉字到4个汉字之间，如果用英文随机单词可用@word
+   * "list|2-4": 从对应的数组中随机选择2~4个元素
+   * "money|1-10000.2": 整数位从1~10000，小数点保留2位
+   * "@province": 随机省份名称
+   * "@city": 随机城市名称
+   * "@paragraph": 一段中文文字
+   * "@datetime": 随机日期，默认格式"yyyy-mm-dd hh:mi:ss"
+   * "status|1": 从后面的枚举数组中随机取一个元素
+   */
+  {
+    "id": "@id",
+    "name":"@cword(2,4)",
+    "list|2-4":[{"name":"小红"},{"name":"小明"}, {"name":"小亮"}, {"name":"小超"}, {"name":"小王"}],
+    "money|1-1000.2":1,
+    "province": "@province",
+    "city": "@city",
+    "description":"@paragraph",
+    "date": "@datetime",
+    "status|1": ["0", "1"]
+  }
+</pre>
 <p>
   <a href="http://mockjs.com/examples.html">mockjs模板介绍</a>
   &emsp;

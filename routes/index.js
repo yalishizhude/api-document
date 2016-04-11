@@ -91,7 +91,7 @@ var cUsr = db.get('users');
     }
   });
   //更新老接口
-  if (process.argv.indexOf('--update')>-1) {
+  if (process.argv.indexOf('--update') > -1) {
     cInt.find({
       $or: [{
         inParams: {
@@ -113,41 +113,56 @@ var cUsr = db.get('users');
     }, function (err, ifc) {
       if (err) throw err;
       if (ifc.length > 0) {
-        cInt.find({}, function (e, r) {
-          var hdjk = process.argv.indexOf('--hdjk') > -1;
-          //将url不允许查询参数，如/s/d?_BIZCODE=006。url查询参数转为inObject
-          r.url = r.url || '';
-          if (r.url.indexOf('?') > -1) {
-            var search = r.url.split('?')[1];
-            var inObject = r.inObject ? JSON.parse(r.inObject) : {};
-            r.url = r.url.split('?')[0];
-            search.split('&').forEach(function (pair) {
-              inObject[pair.split('=')[0]] = pair.split('=')[1];
-            });
-            r.inObject = JSON.stringify(inObject, null, 2);
-          }
-          //将inParams/outParams参数说明转为inSchema/outSchema，考虑到嵌套参数描述，不加规则校验
-          r.inParams = r.inParams || [];
-          r.outParams = r.outParams || [];
-          if (r.inParams.length > 0 || r.outParams.length > 0) {
-            r.inSchema = {};
-            r.inParams.forEach(function (param) {
-              r.inSchema[param.name] = {
-                description: param.desc
-              };
-            });
-            if (hdjk) {
-              r.inSchema._BIZCODE.test = "/" + JSON.parse(r.inObject)._BIZCODE + "/";
+        var interfaceList = [];
+        var hdjk = process.argv.indexOf('--hdjk') > -1;
+        cInt.find({}, function (e, rr) {
+          rr.forEach(function (r) {
+            //将url不允许查询参数，如/s/d?_BIZCODE=006。url查询参数转为inObject
+            r.url = r.url || '';
+            if (r.url.indexOf('?') > -1) {
+              var search = r.url.split('?')[1];
+              var inObject = r.inObject ? JSON.parse(r.inObject) : {};
+              r.url = r.url.split('?')[0];
+              search.split('&').forEach(function (pair) {
+                inObject[pair.split('=')[0]] = pair.split('=')[1];
+              });
+              r.inObject = JSON.stringify(inObject, null, 2);
             }
-            r.outParams.forEach(function (param) {
-              r.outSchema[param.name] = {
-                description: param.desc
-              };
+            //将inParams/outParams参数说明转为inSchema/outSchema，考虑到嵌套参数描述，不加规则校验
+            r.inParams = r.inParams || [];
+            r.outParams = r.outParams || [];
+            r.inSchema = r.inSchema || {};
+            r.outSchema = r.outSchema || {};
+            if (r.inParams.length > 0 || r.outParams.length > 0) {
+              r.inParams.forEach(function (param) {
+                r.inSchema[param.name] = {
+                  description: param.desc
+                };
+              });
+              if (hdjk && r.inObject.indexOf('_BIZCODE')>-1) {
+                r.inSchema._BIZCODE.test = "/" + r.inObject._BIZCODE + "/";
+              }
+              r.inSchema = JSON.stringify(r.inSchema, null, 2);
+              r.outParams.forEach(function (param) {
+                r.outSchema[param.name] = {
+                  description: param.desc
+                };
+              });
+              r.outSchema = JSON.stringify(r.outSchema, null, 2);
+            }
+            delete r.inParams;
+            delete r.outParams;
+            delete r._id;
+            interfaceList.push(r);
+          });
+          console.log(interfaceList.length);
+          cInt.drop();
+          interfaceList.forEach(function (i) {
+            cInt.insert(i, function (err, data) {
+              if (err) throw err;
+              console.log(data);
             });
-          }
-          delete r.inParams;
-          delete r.outParams;
-          console.log(r);
+          });
         });
       }
     });

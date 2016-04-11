@@ -190,6 +190,9 @@
      * @return {[type]}    [description]
      */
     $scope.testInterface = function (id) {
+      if(!$scope.backendUrl) {
+        $scope.backendMessage = '请填写URL';
+      }
       $scope.xhr = true;
       $http.get('/module/test/' + id + '?pid=' + pid).success(function (res) {
         $scope.test = {
