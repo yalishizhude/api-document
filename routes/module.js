@@ -203,7 +203,10 @@ var cInt = db.get('interfaces');
       _id: req.body.id
     }, {
       $set: {
-        testStatus: req.body.result
+        testStatus: req.body.result,
+        costTime: req.body.costTime,
+        testUser: req.session.user.name,
+        testTime: (new Date()).toLocaleDateString()
       }
     }, function (err, data) {
       if (err) {
