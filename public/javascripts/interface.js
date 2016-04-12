@@ -38,6 +38,7 @@
       }
     };
   }]).controller('ctrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
+    $scope.editable = location.search.indexOf('editable=') < 0;
     /**
      * 按照json schema规范校验参数
      * @param  {String} property "in"入参;"out"返回值
@@ -69,7 +70,7 @@
     }
     if (location.hash.replace('#', '')) {
       $http.get('/interface/' + location.hash.replace('#', '')).success(function (resp) {
-        $scope.versions = resp.versions;
+        $scope.editable = !resp.editable ? resp.editable : $scope.editable;
         $scope.api = _.extend({
           login: 'false',
           inObject: '',

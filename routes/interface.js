@@ -33,6 +33,7 @@ var util = require('./util');
         res.status(500).send(e);
       } else {
         res.json({
+          editable: req.session.user.editable,
           api: r[0]
         });
       }

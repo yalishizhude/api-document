@@ -16,11 +16,11 @@
     <div class="form-group">
       <label for="name" class="col-sm-1 control-label required">接口名称</label>
       <div class="col-sm-5">
-        <input type="text" name="name" class="form-control" ng-model="api.name" validator="required" maxlength="50">
+        <input ng-readonly="!editable" type="text" name="name" class="form-control" ng-model="api.name" validator="required" maxlength="50">
       </div>
       <label for="login" class="col-sm-1 control-label required">登录授权</label>
       <div class="col-sm-5">
-        <select name="login" class="form-control" ng-model="api.login" ng-init="api.login=api.login||'false'" validator="required">
+        <select ng-readonly="!editable" name="login" class="form-control" ng-model="api.login" ng-init="api.login=api.login||'false'" validator="required">
           <option value="true">是</option>
           <option value="false">否</option>
         </select>
@@ -29,11 +29,11 @@
     <div class="form-group">
       <label for="url" class="col-sm-1 control-label required">请求路径</label>
       <div class="col-sm-5">
-        <input type="text" name="url" class="form-control" ng-model="api.url" placeholder="" validator="required" maxlength="100">
+        <input ng-readonly="!editable" type="text" name="url" class="form-control" ng-model="api.url" placeholder="" validator="required" maxlength="100">
       </div>
       <label for="method" class="col-sm-1 control-label required">请求方法</label>
       <div class="col-sm-5">
-        <select name="method" class="form-control" ng-model="api.method" ng-init="api.method='get'" validator="required">
+        <select ng-readonly="!editable" name="method" class="form-control" ng-model="api.method" ng-init="api.method='get'" validator="required">
           <option value="get">get</option>
           <option value="post">post</option>
           <option value="put">put</option>
@@ -48,7 +48,7 @@
         <br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a>
       </label>
       <div class="col-sm-5">
-        <textarea name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject" validator="json"></textarea>
+        <textarea ng-readonly="!editable" name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject" validator="json"></textarea>
       </div>
       <label for="inSchema" class="col-sm-1 control-label">
         <p>
@@ -59,7 +59,7 @@
         <div style="margin-top:60px;" title="未出现错误则代表校验通过">校验结果 </div>
       </label>
       <div class="col-sm-5">
-        <textarea name="inSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
+        <textarea ng-readonly="!editable" name="inSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
         <pre name="inValidation" ng-bind="api.inValidation" style="height:150px;//api.inVerified?'color:red':''//"></pre>
       </div>
     </div>
@@ -68,7 +68,7 @@
         <br>
         <br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a></label>
       <div class="col-sm-5">
-        <textarea name="outObject" contenteditable="" class="bg-white" ng-model="api.outObject" validator="required,jsonString"></textarea>
+        <textarea ng-readonly="!editable" name="outObject" contenteditable="" class="bg-white" ng-model="api.outObject" validator="required,jsonString"></textarea>
       </div>
       <label for="outSchema" class="col-sm-1 control-label">
         <p>
@@ -78,7 +78,7 @@
         <div style="margin-top:60px;" title="未出现错误则代表校验通过">校验结果 </div>
       </label>
       <div class="col-sm-5">
-        <textarea id="outSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.outSchema" name="outSchema" validator="json"></textarea>
+        <textarea ng-readonly="!editable" id="outSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.outSchema" name="outSchema" validator="json"></textarea>
         <pre ng-bind="api.outValidation" style="height:150px;//api.outVerified?'color:red':''//"></pre>
       </div>
     </div>
@@ -89,10 +89,10 @@
     <div class="form-group">
       <label for="remark" class="col-sm-1 control-label">接口说明</label>
       <div class="col-sm-11">
-        <pre name="remark" style="background-color:#fff;max-height:100px;" placeholder="接口的描述信息" contenteditable="" ng-bind="api.remark" maxlength="1024"></pre>
+        <textarea name="remark" ng-readonly="!editable" style="height:50px;" placeholder="接口的描述信息"  ng-bind="api.remark" maxlength="1024"></textarea>
       </div>
     </div>
-    <div class="form-group text-right">
+    <div ng-if="editable" class="form-group text-right">
       <textarea style="height:0;width:0;margin:0;padding:0;" id="json"></textarea>&emsp;
       <button type="button" class="btn btn-primary" ng-click="copy();">复制接口</button>&emsp;
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">粘贴接口</button>&emsp;

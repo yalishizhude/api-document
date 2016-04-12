@@ -14,7 +14,7 @@
     <div class="text-right">
       <span class="label label-info">{{@user.name}}</span>
       <span>
-        <a href="/user/index.html?userId={{@user._id}}">账号管理</a>&nbsp;|&nbsp;<a href="/login.html?loginout=true">登出</a>
+        {{#if editable}}<a href="/user/index.html?userId={{@user._id}}">账号管理</a>&nbsp;|{{/if}}&nbsp;<a href="/login.html?loginout=true">登出</a>
       </span>
     </div>
     <br>

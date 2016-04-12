@@ -2,26 +2,44 @@
   校验规则示例：
 </p>
 <pre id="jsonschema">
-  {
-    "id":{
-      "type": "String",
-      "required": true
-    },
-    "name":{
-      "length":{
-        "min": 2,
-        "max": 4
-      }
-    },
-    "_BIZCODE":{
-      "test": "/00023/"
-    },
-    "list":{
-      "name":{
-        "required": true
-      }
-    }
-  }
+{
+	"type": "object",
+	"properties": {
+		"firstName": {
+			"type": "string",
+			"description": "描述信息"
+		},
+		"lastName": {
+			"type": "string"
+		},
+		"age": {
+			"description": "Age in years",
+			"type": "integer",
+			"minimum": 1,
+      "maximum": 10
+		},
+		"list": {
+			"type": "array",
+			"items":{
+				"type": "object",
+				"properties":{
+					"id": {
+						"type": "string",
+						"enum":['a','b']
+					}
+				},
+				"required": ["id"]
+			}
+		}
+	},
+	"required": ["firstName", "list"]
+}
+</pre>
+<p class="text-right">
+  <a href="https://github.com/bugventure/jsen">校验规则配置说明</a>
+  &emsp;
+  <a href="http://json-schema.org/latest/json-schema-validation.html">json schema规范介绍</a>
+</p>
 <p>
   mockjs模板示例：
 </p>
@@ -49,10 +67,6 @@
     "status|1": ["0", "1"]
   }
 </pre>
-<p>
+<p class="text-right">
   <a href="http://mockjs.com/examples.html">mockjs模板介绍</a>
-  &emsp;
-  <a href="http://json-schema.org/documentation.html">json schema规范介绍</a>
-  &emsp;
-  <a href="https://github.com/nijikokun/Validator">校验规则介绍</a>
 </p>
