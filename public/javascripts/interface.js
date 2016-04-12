@@ -46,15 +46,24 @@
      */
     function validate(property) {
       try {
-        var obj = $scope.api[property + 'Object'] ? JSON.parse($scope.api[property + 'Object']) : {};
         var schema = $scope.api[property + 'Schema'] ? JSON.parse($scope.api[property + 'Schema']) : {};
-        var validator = new Validator(schema);
-        var check = validator.check(Mock.mock(obj));
-        $scope.api[property + 'Verified'] = !!check._error;
-        $scope.api[property + 'Validation'] = JSON.stringify(check, null, 2);
+        var validateSchema = jsen({
+          "$ref": "http://json-schema.org/draft-04/schema#"
+        });
+        var isSchemaValid = validateSchema(schema);
+        if (!isSchemaValid) {
+          return;
+        }
+        var obj = $scope.api[property + 'Object'] ? JSON.parse($scope.api[property + 'Object']) : {};
+        var validate = jsen(schema, {
+          greedy: true
+        });
+        var valid = validate(obj);
+        $scope.api[property + 'Verified'] = valid;
+        $scope.api[property + 'Validation'] = valid ? 'valid' : JSON.stringify(validate.errors, null, 2);
       } catch (e) {
-        $scope.api[property + 'Verified'] = true;
-        $scope.api[property + 'Validation'] = '参数/规则有误，校验失败';
+        $scope.api[property + 'Verified'] = false;
+        $scope.api[property + 'Validation'] = 'invalid';
       }
     }
 
@@ -143,6 +152,45 @@
       $interval.cancel($scope.interval);
       $scope.second = false;
     };
+    /**
+     * 自动缩进
+     */
+    $scope.indent = function (e) {
+      var node = e.srcElement;
+      var start = node.selectionStart;
+      var end = node.selectionEnd;
+      if (222 === e.keyCode) { //双引号
+        node.value = node.value.substring(0, start) + '"' + node.value.substring(end, node.value.length);
+        node.selectionStart = start;
+        node.selectionEnd = start;
+      } else if (219 === e.keyCode) { //括号
+        node.value = node.value.substring(0, start) + (e.shiftKey ? '}' : ']') + node.value.substring(end, node.value.length);
+        node.selectionStart = start;
+        node.selectionEnd = start;
+      } else if (9 === e.keyCode) { //tab
+        e.preventDefault();
+        e.stopPropagation();
+        node.value = node.value.substring(0, start) + '  ' + node.value.substring(end, node.value.length);
+        node.selectionStart = start + 2;
+        node.selectionEnd = start + 2;
+      } else if (13 === e.keyCode) { //回车
+        e.preventDefault();
+        e.stopPropagation();
+        var row = node.value.substring(0, start).split('\n').pop();
+        var space = '\n' + row.split(/[^\s]/)[0];
+        var symbolEnd = /[\}|\]]/.test(node.value.charAt(start));
+        if (start > 0) {
+          var before = node.value.charAt(start - 1)
+          if ('{' === before || '[' === before) {
+            space += '  ';
+          }
+        }
+        space += symbolEnd ? '\n' : '';
+        node.value = node.value.substring(0, start) + space + node.value.substring(end, node.value.length);
+        node.selectionStart = start + space.length + (symbolEnd ? -1 : 0); 
+        node.selectionEnd = start + space.length + (symbolEnd ? -1 : 0);
+      }
+    }
   }]);
   angular.bootstrap(document, ['app']);
 }(window, angular));
