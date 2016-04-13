@@ -7,7 +7,7 @@ var db = monk(conf.mongoUrl);
 var q = require('q');
 var superagent = require('superagent');
 var _ = require('underscore');
-var validator = require('schema-validator');
+var jsen = require('jsen');
 var http = require('http');
 var debug = require('debug')('module');
 var util = require('./util');
@@ -46,18 +46,17 @@ var cInt = db.get('interfaces');
               } else {
                 try {
                   data.outSchema = JSON.parse(data.outSchema || '{}');
-                  var validate = new validator(data.outSchema);
-                  var check = validate.check(r.body);
-                  check = check._error ? JSON.stringify(check, null, 2) : '成功';
-                  var message = '\n校验结果：\n' + check + '\n\n校验规则：\n' + JSON.stringify(data.outSchema, null, 2) + '\n\n返回值：\n' + JSON.stringify(r.body, null, 2);
-                  if (check._error) {
+                  var validate = jsen(data.outSchema);
+                  var check = validate(r.body);
+                  var message = '\n校验结果：\n' + (check ? '成功' : JSON.stringify(validate.errors, null, 2)) + '\n\n校验规则：\n' + JSON.stringify(data.outSchema, null, 2) + '\n\n返回值：\n' + JSON.stringify(r.body, null, 2);
+                  if (check) {
                     res.json({
-                      code: -1,
+                      code: 1,
                       message: message
                     });
                   } else {
                     res.json({
-                      code: 1,
+                      code: -1,
                       message: message
                     });
                   }

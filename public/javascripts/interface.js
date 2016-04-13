@@ -3,38 +3,58 @@
   angular.module('app', ['validation.rule']).config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
-  }).directive('textarea', [function () {
+  }).directive('jsonEditor', [function () {
     return {
-      restrict: 'E',
       link: function ($scope, element, attrs) {
-        /*        element.on('keydown', function (e) {
-                  var value = '';
-                  var index = 0;
-                  var lastChar = '';
-                  var spaceNum = 0;
-                  var pos = e.srcElement.selectionStart;
-                  var rows = element.val().split('\n');
-                  if (13 === e.keyCode) {
-                    _.each(rows, function (r, i) {
-                      var spaceNum = '';
-                      for (var j = 0; j < r.length; j++) {
-                        index++;
-                        if (index === pos) {
-                          lastChar = r.trim().split('').pop();
-                          if (',' === lastChar) {
-                            spaceNum = r.search(/\w/);
-                          } else if ('[' === lastChar || '{' === lastChar) {
-                            spaceNum = r.search(/\w/) + 2;
-                          }
-                        }
-                      }
-                      value += i === length - 1 ? '' : '\n';
-                    });
-                    e.preventDeafult();
-                    e.srcElement.value = value;
-                  }
-                });
-        */
+        element.on('keydown', function (e) {
+          var indent = new Array(parseInt((attrs.jsonEditor||2),10)+1).join(' ');
+          var node = element[0];
+          var value = node.value;
+          var start = node.selectionStart;
+          var end = node.selectionEnd;
+          var before = value.substring(0, start);
+          var after = value.substring(start, value.length);
+          if (222 === e.keyCode) { //双引号
+            if ('"' === value.charAt(start)) {
+              node.selectionStart = start + 1;
+              node.selectionEnd = start + 1;
+              e.preventDefault();
+              e.stopPropagation();
+            } else {
+              node.value = before + '"' + after;
+              node.selectionStart = start;
+              node.selectionEnd = start;
+            }
+          } else if (219 === e.keyCode) { //括号
+            node.value = before + (e.shiftKey ? '}' : ']') + after;
+            node.selectionStart = start;
+            node.selectionEnd = start;
+          } else if (9 === e.keyCode) { //tab
+            e.preventDefault();
+            e.stopPropagation();
+            node.value = before + indent + after;
+            node.selectionStart = start + indent.length;
+            node.selectionEnd = start + indent.length;
+          } else if (13 === e.keyCode) { //回车
+            e.preventDefault();
+            e.stopPropagation();
+            var row = before.split('\n').pop();
+            var space = '\n' + row.split(/[^\s]/)[0];
+            var wrap = '';
+            if (start > 0) {
+              var previous = value.charAt(start - 1);
+              if ('{' === previous || '[' === previous) {
+                space += indent;
+              }
+            }
+            if (/[\}|\]]/.test(node.value.charAt(start))) {
+              wrap = '\n' + space.substring(indent.length+1);
+            }
+            node.value = before + space + wrap + after;
+            node.selectionStart = start + space.length;
+            node.selectionEnd = start + space.length;
+          }
+        });
       }
     };
   }]).controller('ctrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
@@ -152,45 +172,6 @@
       $interval.cancel($scope.interval);
       $scope.second = false;
     };
-    /**
-     * 自动缩进
-     */
-    $scope.indent = function (e) {
-      var node = e.srcElement;
-      var start = node.selectionStart;
-      var end = node.selectionEnd;
-      if (222 === e.keyCode) { //双引号
-        node.value = node.value.substring(0, start) + '"' + node.value.substring(end, node.value.length);
-        node.selectionStart = start;
-        node.selectionEnd = start;
-      } else if (219 === e.keyCode) { //括号
-        node.value = node.value.substring(0, start) + (e.shiftKey ? '}' : ']') + node.value.substring(end, node.value.length);
-        node.selectionStart = start;
-        node.selectionEnd = start;
-      } else if (9 === e.keyCode) { //tab
-        e.preventDefault();
-        e.stopPropagation();
-        node.value = node.value.substring(0, start) + '  ' + node.value.substring(end, node.value.length);
-        node.selectionStart = start + 2;
-        node.selectionEnd = start + 2;
-      } else if (13 === e.keyCode) { //回车
-        e.preventDefault();
-        e.stopPropagation();
-        var row = node.value.substring(0, start).split('\n').pop();
-        var space = '\n' + row.split(/[^\s]/)[0];
-        var symbolEnd = /[\}|\]]/.test(node.value.charAt(start));
-        if (start > 0) {
-          var before = node.value.charAt(start - 1)
-          if ('{' === before || '[' === before) {
-            space += '  ';
-          }
-        }
-        space += symbolEnd ? '\n' : '';
-        node.value = node.value.substring(0, start) + space + node.value.substring(end, node.value.length);
-        node.selectionStart = start + space.length + (symbolEnd ? -1 : 0); 
-        node.selectionEnd = start + space.length + (symbolEnd ? -1 : 0);
-      }
-    }
   }]);
   angular.bootstrap(document, ['app']);
 }(window, angular));

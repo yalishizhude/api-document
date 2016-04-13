@@ -29,7 +29,7 @@
     <div class="form-group">
       <label for="url" class="col-sm-1 control-label required">请求路径</label>
       <div class="col-sm-5">
-        <input ng-readonly="!editable" type="text" name="url" class="form-control" ng-model="api.url" placeholder="" validator="required" maxlength="100">
+        <input ng-readonly="!editable" type="text" name="url" class="form-control" ng-model="api.url" placeholder="" validator="required,noSearch,path" maxlength="100">
       </div>
       <label for="method" class="col-sm-1 control-label required">请求方法</label>
       <div class="col-sm-5">
@@ -48,7 +48,7 @@
         <br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a>
       </label>
       <div class="col-sm-5">
-        <textarea ng-keydown="indent($event);" ng-readonly="!editable" name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject" validator="json"></textarea>
+        <textarea json-editor ng-readonly="!editable" name="inObject" contenteditable="" class="bg-white" ng-model="api.inObject" validator="json"></textarea>
       </div>
       <label for="inSchema" class="col-sm-1 control-label">
         <p>
@@ -59,7 +59,7 @@
         <div style="margin-top:60px;" title="未出现错误则代表校验通过">校验结果 </div>
       </label>
       <div class="col-sm-5">
-        <textarea ng-readonly="!editable" name="inSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
+        <textarea json-editor ng-readonly="!editable" name="inSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.inSchema" validator="json"></textarea>
         <pre name="inValidation" ng-bind="api.inValidation" style="height:150px;font-weight:700;" class="//api.inVerified?'text-success':'text-danger'//"></pre>
       </div>
     </div>
@@ -68,7 +68,7 @@
         <br>
         <br><a href="/readme.html#mockjs" target="_blank">mockjs <br>示例</a></label>
       <div class="col-sm-5">
-        <textarea ng-readonly="!editable" name="outObject" contenteditable="" class="bg-white" ng-model="api.outObject" validator="required,jsonString"></textarea>
+        <textarea json-editor ng-readonly="!editable" name="outObject" contenteditable="" class="bg-white" ng-model="api.outObject" validator="required,jsonString"></textarea>
       </div>
       <label for="outSchema" class="col-sm-1 control-label">
         <p>
@@ -78,7 +78,7 @@
         <div style="margin-top:60px;" title="未出现错误则代表校验通过">校验结果 </div>
       </label>
       <div class="col-sm-5">
-        <textarea ng-readonly="!editable" id="outSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.outSchema" name="outSchema" validator="json"></textarea>
+        <textarea json-editor ng-readonly="!editable" id="outSchema" style="height:150px;" contenteditable="" class="bg-white" ng-model="api.outSchema" name="outSchema" validator="json"></textarea>
         <pre ng-bind="api.outValidation" style="height:150px;font-weight:700;" class="//api.outVerified?'text-success':'text-danger'//"></pre>
       </div>
     </div>

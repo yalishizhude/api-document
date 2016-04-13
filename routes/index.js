@@ -131,38 +131,41 @@ var cUsr = db.get('users');
             //将inParams/outParams参数说明转为inSchema/outSchema，考虑到嵌套参数描述，不加规则校验
             r.inParams = r.inParams || [];
             r.outParams = r.outParams || [];
-            r.inSchema = r.inSchema || {};
-            r.outSchema = r.outSchema || {};
+            r.inSchema = r.inSchema || {"properties":{}};
+            r.outSchema = r.outSchema || {"properties":{}};
+            r.inObject = r.inObject || '';
             if (r.inParams.length > 0 || r.outParams.length > 0) {
               r.inParams.forEach(function (param) {
-                r.inSchema[param.name] = {
+                r.inSchema.properties[param.name] = {
+                  type: param.type.toLowerCase(),
                   description: param.desc
                 };
               });
               if (hdjk && r.inObject.indexOf('_BIZCODE')>-1) {
-                r.inSchema._BIZCODE.test = "/" + r.inObject._BIZCODE + "/";
+                r.inSchema.required = ['_BIZCODE'];
               }
-              r.inSchema = JSON.stringify(r.inSchema, null, 2);
               r.outParams.forEach(function (param) {
                 r.outSchema[param.name] = {
                   description: param.desc
                 };
               });
-              r.outSchema = JSON.stringify(r.outSchema, null, 2);
             }
+            r.inSchema = JSON.stringify(r.inSchema, null, 2);
+            r.outSchema = JSON.stringify(r.outSchema, null, 2);
             delete r.inParams;
             delete r.outParams;
             delete r._id;
             interfaceList.push(r);
           });
-          console.log(interfaceList.length);
           cInt.drop();
+          var len = 0;
           interfaceList.forEach(function (i) {
             cInt.insert(i, function (err, data) {
               if (err) throw err;
-              console.log(data);
+              else len++;
             });
           });
+          console.log('已更新接口：',len);
         });
       }
     });

@@ -28,6 +28,12 @@
         } catch (e) {
           return false;
         }
+      },
+      noSearch: function(value) {
+        return value? value.indexOf('?')<0:true;
+      },
+      path: function(value) {
+        return value?value.indexOf('/')===0:true;
       }
     };
     var defaultMsg = {
@@ -54,6 +60,12 @@
       },
       jsonString: {
         error: '必须为json格式或者字符串'
+      },
+      noSearch: {
+        error: 'URL参数填写到“请求参数”，非GET请求不支持URL参数'
+      },
+      path: {
+        error: '请求路径必须以"/"开头'
       }
     };
     $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
