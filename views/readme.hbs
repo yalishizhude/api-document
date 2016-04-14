@@ -1,22 +1,24 @@
+<span id="jsonschema"></span>
 <p>
   校验规则示例：
 </p>
-<pre id="jsonschema">
+<pre>
 {
 	"type": "object",
 	"properties": {
-		"firstName": {
+		"name": {
 			"type": "string",
-			"description": "描述信息"
+			"description": "姓名"
 		},
-		"lastName": {
-			"type": "string"
-		},
+    "_BIZCODE": {
+      "type": "string",
+      "enum": ["0002"]
+    }
 		"age": {
-			"description": "Age in years",
-			"type": "integer",
-			"minimum": 1,
-      "maximum": 10
+      "type": "integer",
+			"description": "年龄",
+			"minimum": 18,
+      "maximum": 50
 		},
 		"list": {
 			"type": "array",
@@ -26,14 +28,52 @@
 					"id": {
 						"type": "string",
 						"enum":['a','b']
-					}
+					},
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 4,
+            "pattern": "[/w]{2,4}"
+          }
 				},
-				"required": ["id"]
-			}
+        "minItems": 1,
+				"required": ["id","name"]
+			},
+      "uniqueItems": false
 		}
 	},
-	"required": ["firstName", "list"]
+	"required": ["_BIZCODE"]
 }
+<h5>对象 规则</h5>
+1. type值为"object"
+2. properties值为json对象，描述该对象的属性
+3. description值为字符串，描述该属性意义
+4. required值为数组，数组元素为字符串，表示必须传入的属性
+5. description值为字符串，描述该属性意义
+
+<h5>数组 规则</h5>
+1. type值为"array"
+2. items值为数组，用于描述该数组
+3. minItems值为数字，数组最少元素数量
+4. maxItems值为数字，数组最大元素数量
+5. uniqueItems值为布尔值，数组元素是否唯一
+6. description值为字符串，描述该属性意义
+
+<h5>字符串 规则</h5>
+1. type值为"string"
+2. pattern值为正则表达式的字符串
+3. minLength字符串最小长度
+4. maxLength字符串最大长度
+5. enum枚举属性，值为数组，字符串值必须在数组中
+6. description值为字符串，描述该属性意义
+
+<h5>数字</h5>
+1. type值为"number"或"integer"
+2. minimum值为数字
+3. maximum值为数字
+4. enum枚举属性，值为数组，数字值必须在数组中
+5. description值为字符串，描述该属性意义
+
 </pre>
 <p>
   <a href="https://github.com/bugventure/jsen">校验规则配置说明</a>
@@ -43,7 +83,8 @@
 <p>
   mockjs模板示例：
 </p>
-<pre id="mockjs">
+<span id="mockjs"></span>
+<pre>
   /*
    * @id: 随机数字id，可用@guid生成带字符的guid
    * @cword(2,4): 随机中文单词，长度在2个汉字到4个汉字之间，如果用英文随机单词可用@word
@@ -66,6 +107,88 @@
     "date": "@datetime",
     "status|1": ["0", "1"]
   }
+
+  <h4><b>数据模板定义</b></h4>
+  <h5>Number</h5>
+  1. 随机整数，大小在min和max之间： 'name|min-max': number
+  示例： { "number|+1": 100 }  =>  { "number" : 48 }
+
+  2. 随机浮点数，整数位在min和max之间，小数位在dmin和dmax之间： 'name|min-max.dmin-dmax': number
+  示例： { "number|1-100.1-10": 1 }  =>  { "number": 84.144485659 }
+        { "number|123.3": 1 } =>  { "number": 123.887 }
+
+  <h5>Boolean</h5>
+  1. 随机布尔值：'name|1': boolean
+  示例： { "bool|1": true }  =>  {"bool": true}
+
+  <h5>Object</h5>
+  1. 随机返回count个对象：'name|count': object
+  示例：{ "object|2": { "310000": "上海市", "320000": "江苏省", "330000": "浙江省", "340000": "安徽省" } }
+  =>
+  { "object": { "310000": "上海市", "340000": "安徽省" } }
+  2. 随机返回min~max之间个对象：'name|min-max': object
+  示例：{ "object|2-4": { "110000": "北京市", "120000": "天津市", "130000": "河北省", "140000": "山西省" } }
+  =>
+  { "object": { "110000": "北京市", "120000": "天津市", "130000": "河北省" } }
+
+  <h5>Array</h5>
+  1. 随机返回1个元素：'name|1': array
+  示例：{ "array|1": [ "AMD", "CMD", "UMD" ] } =>  { "array": "AMD" }
+  2. 轮流返回1个元素：'name|+1': array
+  示例：{ "array|+1": [ "AMD", "CMD", "UMD" ] }  =>  如果第一次返回 { "array": "AMD" } ,第二次返回 { "array": "CMD" }
+  3. 随机返回n个元素：'name|n-n': array
+  示例：{ "array|2-2": [ "AMD", "CMD", "UMD" ] } =>  { "array": [ "AMD", "UMD" ] }
+
+  <h5>RegExp</h5>
+  1. 返回一个匹配正则表达的字符串：'name': regexp
+  示例：{ 'regexp': /[a-z][A-Z][0-9]/ }  =>  { "regexp": "wD0" }
+
+  <h4><b>占位符定义</b></h4>
+  <h5>boolean</h5>
+  1. 随机布尔值：@boolean
+
+  <h5>integer</h5>
+  1. 随机整数：@integer
+  2. 返回随机不超过max的整数：@integer(max)
+  3. 返回值在min和max之间的整数：@integer(min,max)
+
+  <h5>lloat</h5>
+  1. 随机浮点数：@float
+  2. 返回不小于min的随机浮点数：@float(min)
+  3. 返回在min和max之间的随机浮点数：@float(min, max)
+  4. 返回在min和max之间，小数点位数超过dmin的浮点数：@float(min, max, dmin)
+  5. 返回在min和max之间，小数点位数在dmin和dmax之间的浮点数：@float(min, max, dmin, dmax)
+
+  <h5>string</h5>
+  1. 返回随机字符串：@string
+  2. 返回长度为n的随机字符串：@string(n)
+  3. 从可选字符中选取长度为n的随机字符串, 当可选字符串为 lower/upper/number/symbol 时分别返回 小写/大写/数字/符号 随机字符串：@string( pool , n )
+  4. 返回长度在min和max之间的字符串：@string( min, max )
+  5. 结合3和4：@string( pool, min, max )
+
+  <h5>range</h5>
+  1. 返回从0到stop的数组：@range(10)
+  2. 返回从start到stop的数组：@range( start, stop )
+  3. 返回从start到stop步长为step的数组 @range( start, stop, step )
+
+  <h5>date/time/now</h5>
+  1. 返回格式为format的日期字符串：@date(format)
+  2. 返回格式为format的时间字符串：@time(format)
+  3. 返回格式为format的日期时间字符串：@datetime(format)
+  4. 返回给事为format的当前日期/时间字符串：@now(format)
+
+  <h5>image/dataimage</h5>
+  1. 返回在线随机图片：@image
+  2. 返回大小为size的在线图片：@image(size)
+  3. 返回随机图片base64字符串：@dataImage()
+  4. 返回大小为size的随机图片base64字符串：@dataImage(size)
+
+  <h5>word/cword/cparagraph</h5>
+  1. 返回单词/中文单词/中文段落：@word/@cword/@cparagraph
+  2. 返回长度不超过len单词/中文单词/中文段落：@word(len)/@cword(len)/@cparagraph(len)
+  3. 返回长度在mix和max之间的单词/中文单词/中文段落：@word( min, max )/@cword( min, max )/@cparagraph( min, max )
+
+
   <h4><b>随机数</b></h4>
 </pre>
 <p>
