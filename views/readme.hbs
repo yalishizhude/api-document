@@ -44,40 +44,35 @@
 	},
 	"required": ["_BIZCODE"]
 }
-<h5>对象 规则</h5>
+<h5>对象</h5>
 1. type值为"object"
 2. properties值为json对象，描述该对象的属性
 3. description值为字符串，描述该属性意义
 4. required值为数组，数组元素为字符串，表示必须传入的属性
 5. description值为字符串，描述该属性意义
-
-<h5>数组 规则</h5>
+<h5>数组</h5>
 1. type值为"array"
 2. items值为数组，用于描述该数组
 3. minItems值为数字，数组最少元素数量
 4. maxItems值为数字，数组最大元素数量
 5. uniqueItems值为布尔值，数组元素是否唯一
 6. description值为字符串，描述该属性意义
-
-<h5>字符串 规则</h5>
+<h5>字符串</h5>
 1. type值为"string"
 2. pattern值为正则表达式的字符串
 3. minLength字符串最小长度
 4. maxLength字符串最大长度
 5. enum枚举属性，值为数组，字符串值必须在数组中
 6. description值为字符串，描述该属性意义
-
 <h5>数字</h5>
 1. type值为"number"或"integer"
 2. minimum值为数字
 3. maximum值为数字
 4. enum枚举属性，值为数组，数字值必须在数组中
 5. description值为字符串，描述该属性意义
-
 </pre>
 <p>
-  <a href="https://github.com/bugventure/jsen">校验规则配置说明</a>
-  &emsp;
+  <a href="https://github.com/bugventure/jsen">校验规则配置说明</a> &emsp;
   <a href="http://json-schema.org/latest/json-schema-validation.html">json schema规范介绍</a>
 </p>
 <p>

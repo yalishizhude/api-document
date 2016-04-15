@@ -10,7 +10,6 @@
     "test": "istanbul cover node_modules/mocha/bin/_mocha"
   },
   "dependencies": {
-    "agentkeepalive": "^2.1.1",
     "body-parser": "~1.13.2",
     "cookie-parser": "~1.3.5",
     "debug": "^2.2.0",
@@ -26,7 +25,6 @@
     "node-uuid": "^1.4.7",
     "q": "^1.4.1",
     "request": "^2.71.0",
-    "schema-validator": "git+https://github.com/yalishizhude/Validator.git",
     "serve-favicon": "~2.3.0",
     "sessionstore": "^1.2.11",
     "superagent": "^1.7.0",

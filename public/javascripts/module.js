@@ -170,11 +170,7 @@
     };
     $scope.saveUrl = function (e) {
       if ('keyup' === e.type && 13 === e.keyCode || 'blur' === e.type) {
-        if (!/^http:\/\/.*/.test($scope.backendUrl)) {
-          $scope.backendMessage = 'URL地址填写有误';
-          return;
-        }
-        if ($scope.backendUrl) {
+        if ($scope.form.$valid) {
           $http.put('/module/url', {
             pid: pid,
             backendUrl: $scope.backendUrl,
@@ -198,13 +194,12 @@
       if(!$scope.backendUrl) {
         $scope.backendMessage = '请填写URL';
       }
-      var beginTime = _.now();
       $scope.xhr = true;
       $http.get('/module/test/' + id + '?pid=' + pid).success(function (res) {
         $scope.test = {
           id: id,
           result: res.code,
-          costTime: (_.now() - beginTime) + 'ms'
+          costTime: res.time + 'ms'
         };
         $scope.modalTitle = 1 === res.code ? '接口测试成功' : '接口返回值不符合校验规则';
         $scope.modalClass = 1 === res.code ? 'text-success' : 'text-danger';
@@ -213,7 +208,7 @@
         $scope.test = {
           id: id,
           result: res.code,
-          costTime: (_.now() - beginTime) + 'ms'
+          costTime: res.time + 'ms'
         };
         $scope.modalTitle = '接口测试失败';
         $scope.modalContent = res.message;
