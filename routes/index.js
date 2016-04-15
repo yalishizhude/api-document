@@ -6,17 +6,9 @@ var monk = require('monk');
 var db = monk(conf.mongoUrl);
 var _ = require('underscore');
 var superagent = require('superagent');
-var Agent = require('agentkeepalive');
 
 var cInt = db.get('interfaces');
 var cUsr = db.get('users');
-
-var keepaliveAgent = new Agent({
-  maxSockets: 100,
-  maxFreeSockets: 10,
-  timeout: 60000,
-  keepAliveTimeout: 30000 // free socket keepalive for 30 seconds
-});
 
 (function() {
     'use strict';
@@ -189,32 +181,3 @@ var keepaliveAgent = new Agent({
     }
 })();
 module.exports = router;
-
-
-
-var http = require('http');
-var Agent = require('agentkeepalive');
-
-var keepaliveAgent = new Agent({
-  maxSockets: 100,
-  maxFreeSockets: 10,
-  timeout: 60000,
-  keepAliveTimeout: 30000 // free socket keepalive for 30 seconds
-});
-
-
-superagent.post('http://192.168.199.157:8080/login.json').agent(keepaliveAgent).send({
-  'username' : '18975824583',
-  'password' : '222222'
-}).end(function(err, resp){
-  if(err) console.log(err);
-  var cookie = resp.headers['set-cookie'].join('; ');
-  console.log(resp.headers);
-  superagent.post('http://192.168.199.157:8080/center/selfCheck-pagination.html').agent(keepaliveAgent).set('Cookie', cookie).send({
-    paginationSize:10,
-    paginationNo:1
-  }).end(function(e, r){
-    if(e) console.log(e);
-    else console.log(r.text);
-  })
-})

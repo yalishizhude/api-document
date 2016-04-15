@@ -1,10 +1,12 @@
 <div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()">
   <h3><small><a href="/project/index.html">首页</a>&nbsp;&gt;&nbsp;</small>//projectName//</h3> 测试接口的服务器地址：
-  <input ng-init="backendUrl='{{backendUrl}}'" type="text" style="min-width:200px;width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" placeholder="如 http://192.168.199.1/zsd" ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)">&emsp;<span style="color:red" ng-bind="backendMessage"></span>
-  登录账号：
-  <input type="text" ng-model="{{loginName}}">
-  登录密码：
-  <input type="text" ng-model="{{loginPasswrod}}">
+  <input type="text" style="min-width:200px;width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" placeholder="如 http://192.168.199.1/zsd" ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)">&emsp;<span style="color:red" ng-bind="backendMessage"></span>
+  <br>
+  登录地址：
+  <input type="text" ng-model="loginUrl" placeholder="例：http://www.xx.com/login.json">
+  <br>
+  登录信息：
+  <input type="text" ng-model="loginObj" validator="json">
   <div>
     <div class="pull-right">
       <a href="javascript:void(0);" ng-click="sort('');">默认</a>&emsp;

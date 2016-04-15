@@ -1,13 +1,16 @@
 /*global angular, _, Mock*/
 (function (window, angular) {
   'use strict';
-  angular.module('indexApp', []).config(['$interpolateProvider', function ($interpolateProvider) {
+  angular.module('indexApp', ['validation.rule']).config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   }]).controller('mainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     var pid = location.search.replace(/[\?|&]pid=(\S)/, '$1');
     $http.get('/module/' + pid).success(function (resp) {
       $scope.projectName = resp.projectName;
+      $scope.backendUrl = resp.backendUrl;
+      $scope.loginUrl = resp.loginUrl;
+      $scope.loginObj = JSON.stringify(resp.loginObj, null, 2);
       $scope.modules = resp.modules;
     });
     $scope.$watch('api.inObject', function (nVal) {
@@ -174,7 +177,9 @@
         if ($scope.backendUrl) {
           $http.put('/module/url', {
             pid: pid,
-            url: $scope.backendUrl
+            backendUrl: $scope.backendUrl,
+            loginUrl: $scope.loginUrl,
+            loginObj: JSON.parse($scope.loginObj)
           }).success(function (res) {
             $scope.backendMessage = '1' === res ? '' : res;
           }).error(function (res) {
