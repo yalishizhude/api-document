@@ -18,7 +18,7 @@ router.get('/index.html', function (req, res) {
     js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/module.js']
   });
 }).get('/test/:id', function (req, res) {
-  function testInterface(data, cookie, headers) {
+  function testInterface(data, headers) {
     var def = q.defer();
     var inObject = data.inObject ? JSON.parse(data.inObject) : {};
     var outSchema = JSON.parse(data.outSchema || '{}');
@@ -27,13 +27,9 @@ router.get('/index.html', function (req, res) {
       method: data.method.toUpperCase(),
       url: user[req.query.pid].backendUrl + data.url,
       forever: true,
+      headers: headers || {},
       timeout: 5000
     };
-    if (cookie || headers) {
-      option.headers = _.extend({
-        'Cookie': cookie
-      }, headers);
-    }
     if ('get' === data.method) {
       option.qs = inObject;
     } else {
@@ -86,11 +82,14 @@ router.get('/index.html', function (req, res) {
       request: 5000
     };
     request(option, function (e, r, body) {
-      if (e) {
-        def.reject(e);
+      if (err) {
+        def.reject(err);
       } else {
         var cookie = r.headers['set-cookie'] ? r.headers['set-cookie'].join('; ') : '';
-        def.resolve([cookie, body]);
+        var headers = _.extend({
+          Cookie : cookie
+        }, _.extend(obj.inObject, body));
+        def.resolve(headers);
       }
     });
     return def.promise;
@@ -105,7 +104,7 @@ router.get('/index.html', function (req, res) {
     } else {
       if ('true' === data.login) {
         q.when(auth()).then(function (result) {
-          return testInterface(data, result[0], result[1]);
+          return testInterface(data, result);
         }, function (error) {
           res.status(500).json(error);
         }).then(function (result) {

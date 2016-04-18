@@ -78,7 +78,7 @@ var validate = jsen(schema, {
             userName: req.session.user.name,
             projectName: req.query.projectName,
             moduleName: req.query.moduleName,
-            js: ['/lib/mockjs/dist/mock-min.js', '/lib/jsen/dist/jsen.min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
+            js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/mockjs/dist/mock-min.js', '/lib/jsen/dist/jsen.min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
         });
     }).get('/:_id', function(req, res) {
         cInt.find({
