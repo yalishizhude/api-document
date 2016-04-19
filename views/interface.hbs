@@ -10,7 +10,6 @@
 		</small>
     &emsp;
 		<small class="text-info" ng-bind="'更新日期:'+api.updateDate" ng-init="api.updateDate='{{updateDate}}'"></small>
-    <small class="pull-right text-success" ng-show="!!second">//second//秒后自动关闭，继续在当前模块下创建接口请点击&emsp;<a ng-click="stop();">取消</a>&emsp;</small>
 	</h3>
   <form name="form" class="form-horizontal">
     <div class="form-group">
@@ -91,6 +90,9 @@
       <div class="col-sm-11">
         <textarea name="remark" ng-readonly="!editable" style="height:50px;" placeholder="接口的描述信息"  ng-bind="api.remark" maxlength="1024"></textarea>
       </div>
+    </div>
+    <div class="form-group">
+      <p class="pull-right text-success" ng-show="!!second">//second//秒后自动关闭，继续在当前模块下创建接口请点击&emsp;<a ng-click="stop();">取消</a>&emsp;</p>
     </div>
     <div ng-if="editable" class="form-group text-right">
       <textarea style="height:0;width:0;margin:0;padding:0;" id="json"></textarea>&emsp;

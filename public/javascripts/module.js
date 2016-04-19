@@ -169,7 +169,6 @@
       }, 5000);
     };
     $scope.saveUrl = function (e) {
-      if ('keyup' === e.type && 13 === e.keyCode || 'blur' === e.type) {
         if ($scope.form.$valid) {
           $http.put('/module/url', {
             pid: pid,
@@ -183,7 +182,6 @@
             console.error(res);
           });
         }
-      }
     };
     /**
      * 测试接口

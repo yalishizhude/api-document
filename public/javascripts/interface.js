@@ -147,6 +147,10 @@
       var method = $scope.api._id ? 'put' : 'post',
         param = $scope.api._id ? ('/' + $scope.api._id) : '',
         api = _.omit($scope.api, 'inValidation', 'inVerified', 'outValidation', 'outVerified');
+        if (api.inObject) api.inObject = JSON.stringify(JSON.parse(api.inObject), null, 2);
+        if (api.outObject) api.outObject = JSON.stringify(JSON.parse(api.outObject), null, 2);
+        if (api.inSchema) api.inSchema = JSON.stringify(JSON.parse(api.inSchema), null, 2);
+        if (api.outSchema) api.outSchema = JSON.stringify(JSON.parse(api.outSchema), null, 2);
       api.testStatus = 0;
       if ($scope.api._id) {
         api.version++;

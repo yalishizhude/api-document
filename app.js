@@ -1,20 +1,18 @@
 /*global module,require,__dirname*/
-(function () {
-  'use strict';
-  var express = require('express'),
-    path = require('path'),
-    favicon = require('serve-favicon'),
-    logger = require('morgan'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    hbs = require('hbs'),
-    hbsutils = require('hbs-utils')(hbs),
-    log = require('./log'),
-    session = require('express-session'),
-    sessionstore = require('sessionstore'),
-    uuid = require('node-uuid'),
-    login = require('./routes/login'),
-    app = express();
+var express = require('express'),
+path = require('path'),
+favicon = require('serve-favicon'),
+logger = require('morgan'),
+cookieParser = require('cookie-parser'),
+bodyParser = require('body-parser'),
+hbs = require('hbs'),
+hbsutils = require('hbs-utils')(hbs),
+log = require('./log'),
+session = require('express-session'),
+sessionstore = require('sessionstore'),
+uuid = require('node-uuid'),
+login = require('./routes/login'),
+app = express();
   // view engine setup
   hbsutils.registerWatchedPartials(__dirname + '/views/partials');
   hbs.localsAsTemplateData(app);
@@ -81,6 +79,5 @@
       error: {}
     });
   });
-  
+
   module.exports = app;
-}());

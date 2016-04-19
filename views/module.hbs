@@ -1,11 +1,12 @@
 <div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()">
   <h3><small><a href="/project/index.html">首页</a>&nbsp;&gt;&nbsp;</small>//projectName//</h3>
   <form name="form">
+    登录接口：
+    <input type="text" ng-model="loginUrl" validator="path" placeholder="URL" style="width:325px;" ng-init="loginUrl='/'">
+    <input type="text" ng-model="loginObj" validator="json" placeholder="请求参数" ng-init="loginObj='{}'" style="width:400px;margin-top:5px;display:block;">
     测试接口的服务器地址：
-    <input type="text" style="min-width:200px;width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" validator="url" placeholder="如 http://192.168.199.1/zsd" ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)">
-    <br>登录接口：
-    <input ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)" type="text" ng-model="loginUrl" varlidator="url" placeholder="URL" style="width:300px;">
-    <input ng-keyup="saveUrl($event)" ng-blur="saveUrl($event)" type="text" ng-model="loginObj" validator="json" placeholder="请求参数" style="width:500px;">
+    <input type="text" style="margin-top:5px;min-width:200px;width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" validator="url" placeholder="如 http://192.168.199.1/zsd"  >
+    <button ng-click="saveUrl()" class="btn btn-primary btn-xs">保存</button>
   </form>
   <div>
     <div class="pull-right">

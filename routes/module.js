@@ -22,6 +22,13 @@ router.get('/index.html', function (req, res) {
     var def = q.defer();
     var inObject = data.inObject ? JSON.parse(data.inObject) : {};
     var outSchema = JSON.parse(data.outSchema || '{}');
+    if(!user[req.query.pid] || !user[req.query.pid].backendUrl) {
+      res.json({
+        code: -1,
+        message: '请先配置测试接口服务器地址'
+      });
+      return;
+    }
     var option = {
       json: true,
       method: data.method.toUpperCase(),
@@ -74,16 +81,16 @@ router.get('/index.html', function (req, res) {
     var def = q.defer();
     var obj = user[req.query.pid];
     var option = {
-      url: obj.loginUrl,
+      url: obj.backendUrl + obj.loginUrl,
       method: 'POST',
-      form: obj.loginObj,
       json: true,
       forever: true,
+      form: obj.loginObj,
       request: 5000
     };
     request(option, function (e, r, body) {
-      if (err) {
-        def.reject(err);
+      if (e) {
+        def.reject(e);
       } else {
         var cookie = r.headers['set-cookie'] ? r.headers['set-cookie'].join('; ') : '';
         var headers = _.extend({
@@ -130,7 +137,7 @@ router.get('/index.html', function (req, res) {
       pid: pId
     }, {
       sort: {
-        name: 1
+        _id: 1
       }
     }, function (err, data) {
       if (err) def.reject(err);
@@ -149,14 +156,12 @@ router.get('/index.html', function (req, res) {
     if ('name' === req.query.sort) {
       orderby = {
         sort: {
-          mid: 1,
           name: 1
         }
       };
     } else if ('updateDate' === req.query.sort) {
       orderby = {
         sort: {
-          mid: 1,
           updateDate: -1
         }
       };
