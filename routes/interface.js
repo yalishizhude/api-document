@@ -9,7 +9,6 @@ var http = require('http');
 var cInt = db.get('interfaces');
 var cIntHis = db.get('interfacesHistory');
 var util = require('./util');
-<<<<<<< HEAD
 var jsen = require('jsen');
 var schema = {
     "properties": {
@@ -80,33 +79,6 @@ var validate = jsen(schema, {
             projectName: req.query.projectName,
             moduleName: req.query.moduleName,
             js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/mockjs/dist/mock-min.js', '/lib/jsen/dist/jsen.min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
-=======
-(function () {
-  'use strict';
-  router.get('/index.html', function (req, res) {
-    res.render('interface', {
-      backEndHost: conf.backEndHost,
-      backEndPort: conf.backEndPort,
-      title: '编辑接口',
-      updateDate: (new Date()).toLocaleDateString(),
-      pid: req.query.pid,
-      mid: req.query.mid,
-      userName: req.session.user.name,
-      projectName: req.query.projectName,
-      moduleName: req.query.moduleName,
-      js: ['/lib/mockjs/dist/mock-min.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/rule.js', '/javascripts/interface.js']
-    });
-  }).get('/:_id', function (req, res) {
-    cInt.find({
-      _id: req.params._id
-    }, function (e, r) {
-      if (e) {
-        console.error(e);
-        res.status(500).send(e);
-      } else {
-        res.json({
-          api: r[0]
->>>>>>> 725a5355465833a351f0a8cc5ff2d14116ea80c2
         });
     }).get('/:_id', function(req, res) {
         cInt.find({
