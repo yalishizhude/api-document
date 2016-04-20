@@ -58,8 +58,8 @@
             </td>
             <td>
               <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="!i.testStatus" class="label label-warning" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：未连接后端服务器进行测试，可能无法正常使用。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间： //i.costTime//">未测试</span>
-              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="1==i.testStatus" class="label label-success" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：已通过后端服务器测试。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">通过</span>
-              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="-1==i.testStatus" class="label label-danger" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口返回值未通过规则校验。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">失败</span>
+              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="1==i.testStatus" class="label label-success" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：已通过后端服务器测试。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">通过</span><span ng-if="1==i.testStatus" ng-bind="i.costTime"></span>
+              <span data-toggle="modal" data-target="#myModal" ng-click="testInterface(i._id)" ng-if="-1==i.testStatus" class="label label-danger" style="cursor:pointer;" title="操作：点击进行接口测试并保存，可修改状态~&#10;描述：接口返回值未通过规则校验。&#10;测试者：//i.testUser//&#10;测试日期：//i.testTime//&#10;消耗时间：//i.costTime//">失败</span><span ng-if="-1==i.testStatus" ng-bind="i.costTime"></span>
             </td>
           </tr>
           {{#if editable}}

@@ -128,6 +128,7 @@
       var txt = document.getElementById('json');
       txt.value = JSON.stringify(_.pick($scope.api, 'name', 'url', 'method', 'remark', 'inObject', 'inSchema', 'outObject', 'outSchema'), null, 2);
       txt.select();
+      console.log(txt.value);
       document.execCommand("Copy");
       alert("已复制好，可贴粘。");
     };
