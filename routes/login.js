@@ -11,14 +11,14 @@ module.exports = function (req, res, next) {
     try{
       var dec = decode(req.cookies.token);
       var user = JSON.parse(dec);
-      cUsr.find(user, function(err, data){
+      cUsr.findOne(user, function(err, data){
         if(err){
           console.error(err);
           res.status(500).send(err);
         } else {
           if(data){
-            req.session.user = data[0];
-            res.app.locals.user = data[0];
+            req.session.user = data;
+            res.app.locals.user = data;
             logined();
           }
         }
@@ -28,7 +28,6 @@ module.exports = function (req, res, next) {
       res.status(500).send(e);
     }
   } else {
-    console.log(req.session.user);
     res.app.locals.user = req.session.user;
     logined();
   }

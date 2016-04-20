@@ -3,14 +3,18 @@
   <head>
     <title>{{title}}</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
+  {{#if static}}
+  <body>
+  {{else}}
   <body ng-cloak>
+  {{/if}}
     {{#if user}}
     <div class="text-right">
-      <span><a href="/">首页</a></span>
+      <span class="label label-info">{{@user.name}}</span>
       <span>
-        <a href="/user/index.html?userId={{@user._id}}" class="label label-info">{{@user.name}}</a>&nbsp;|&nbsp;<a href="/login.html?loginout=true">登出</a>
+        {{#if editable}}<a href="/user/index.html?userId={{@user._id}}">账号管理</a>&nbsp;|{{/if}}&nbsp;<a href="/login.html?loginout=true">登出</a>
       </span>
     </div>
     <br>
