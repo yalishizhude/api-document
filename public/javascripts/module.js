@@ -174,7 +174,7 @@
             pid: pid,
             backendUrl: $scope.backendUrl,
             loginUrl: $scope.loginUrl,
-            loginObj: JSON.parse($scope.loginObj)
+            loginObj: $scope.loginObj?JSON.parse($scope.loginObj):''
           }).success(function (res) {
             $scope.backendMessage = '1' === res ? '' : res;
           }).error(function (res) {
