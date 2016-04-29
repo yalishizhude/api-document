@@ -6,17 +6,17 @@ API document manage&http request test server.
 
 ## Installation
 
-1. Please make sure that you have installed [mongodb](https://www.mongodb.org/)
-2. [Node.js](https://nodejs.org) also needs to be installed
-3. Install the project
+1.Please make sure that you have installed [mongodb](https://www.mongodb.org/)<br>
+2.[Node.js](https://nodejs.org) also needs to be installed<br>
+3.Install the project
 ```
 $ git clone https://github.com/yalishizhude/api-document.git
 ```
-4. Install bower
+4.Install bower
 ```
 $ npm install bower
 ```
-5. install modules
+5.install modules<br>
 ```
 $ npm install
 $ bower install
@@ -31,7 +31,7 @@ $ bower install
 
 ## Quick Start
 
-1.Start your mongodb
+1.Start your mongodb<br>
 2.Install modules
 
 ```
