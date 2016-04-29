@@ -23,23 +23,22 @@ $ bower install
 ```
 
 ## Features
-* Based on MEAN(Mongodb,Express,Angular,Node) stack.
 * Support edit&view api document online.
 * Support simple authority management.
 * Provide a mock server responding data to front-end without database and back-end server([api-mock](https://github.com/yalishizhude/api-mock)must be installed).
-* Send request to back-end and display response.
-* According to REST specification.
+* Send request to back-end and mark status of the interface development.
+* Support JSON Schema validation to verify request/response params.
 
 ## Quick Start
 
-1. Start your mongodb
-2. Install modules
+1.Start your mongodb
+2.Install modules
 
 ```
 $ npm install
 ```
 
-3. Start the server
+3.Start the server
 
 ```
 $ npm start
@@ -50,14 +49,7 @@ $ npm start
 * Maybe you need to config the mongodb's params in **routes/config.js** if you changed mongodb's default connection.
 * All **delete** operation are **double left click**.
 
-## Tests
 
-  To run the tests, first install the dependencies, then run `npm test`:
-
-```
-$ npm install
-$ npm test
-```
 
 ## Docs
 
