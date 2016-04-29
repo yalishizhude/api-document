@@ -50,7 +50,7 @@ $ npm start
 
 * Maybe you need to config the mongodb's params in **routes/config.js** if you changed mongodb's default connection.
 * All **delete** operation are **double left click**.
-
+* default user: **admin/admin**
 
 
 ## Docs
