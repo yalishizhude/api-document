@@ -25,8 +25,8 @@ $ bower install
 * 支持在线编辑和查看文档。
 * 支持简单的权限管理。
 * 提供了一个mock服务器用来响应前端浏览器请求，不需要后端服务器和数据库（需要安装[api-mock](https://github.com/yalishizhude/api-mock)）。
-* 发送请求给后端并显示结果
-* 依照REST规范
+* 发送请求给后端并可根据后端返回结果更新接口开发状态。
+* 提供JSON schema校验规则来检查请求/返回参数。
 
 ## 快速开始
 
@@ -47,15 +47,6 @@ $ npm start
 
 * 如果你修改了mongodb的默认连接，请在 **routes/config.js**中进行重新配置。
 * 所有的 **删除** 操作都是 **双击左键**.
-
-## 测试
-
-  为了执行测试案例，请先安装依赖模块，然后执行 `npm test`:
-
-```
-$ npm install
-$ npm test
-```
 
 ## 文档
 
