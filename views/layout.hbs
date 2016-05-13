@@ -3,6 +3,7 @@
   <head>
     <title>{{title}}</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/lib/angular-text-json-editor/json-textarea.css">
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   {{#if static}}
@@ -14,7 +15,7 @@
     <div class="text-right">
       <span class="label label-info">{{@user.name}}</span>
       <span>
-        {{#if editable}}<a href="/user/index.html?userId={{@user._id}}">账号管理</a>&nbsp;|{{/if}}&nbsp;<a href="/login.html?loginout=true">登出</a>
+        <a href="/user/index.html?userId={{@user._id}}">账号管理</a>&nbsp;|&nbsp;<a href="/login.html?loginout=true">登出</a>
       </span>
     </div>
     <br>

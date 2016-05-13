@@ -21,6 +21,7 @@
     "underscore": "~1.8.3",
     "angular-validation": "~1.4.1",
     "mockjs": "~1.0.0",
-    "jsen": "~0.6.1"
+    "jsen": "~0.6.1",
+    "angular-text-json-editor": "1.1"
   }
 }

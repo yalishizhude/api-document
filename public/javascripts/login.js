@@ -7,8 +7,8 @@
 		$scope.submit = function(){
 			$http.post('/login', $scope.user).success(function(resp){
 				if(resp.url){
-					location.href = resp.url;
-					document.cookie="token="+resp.token;
+          document.cookie="token="+resp.token;
+					location= resp.url;
 				}
 				else $scope.message = '用户名/密码错误';
 			});

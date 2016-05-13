@@ -18,8 +18,13 @@
       },
       json: function (value, scope, element, attrs, param) {
         try {
-          return value ? 'object' === typeof JSON.parse(value) : true;
+          if(jsl) {
+            return !!jsl.parser.parse(value);
+          } else {
+            return value ? 'object' === typeof JSON.parse(value) : true;
+          }
         } catch (e) {
+          $validationProvider.setDefaultMsg({json:{error:e.toString()}});
           return false;
         }
       },
