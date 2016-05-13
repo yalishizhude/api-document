@@ -43,7 +43,9 @@
         cUsr.update({
           _id: req.body._id
         }, {
-          password: req.body._password
+          $set:{
+            password: req.body._password             
+          }
         }, function (err, data) {
           if (err) {
             console.error(err);

@@ -11,7 +11,7 @@
 			if(resp) $scope.userList = resp;
 		});
 		$scope.save = function(){
-			$http.put('/self', $scope.self).success(function(resp){
+			$http.put('/user/self', $scope.self).success(function(resp){
 				if(resp){
 					$scope.hint('保存成功', 'success');
 				} else {
