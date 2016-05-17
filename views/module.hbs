@@ -3,7 +3,7 @@
   <form name="form">
     登录接口：
     <input type="text" ng-model="loginUrl" validator="path" placeholder="URL" style="width:325px;" ng-init="loginUrl='/'">
-    <input type="text" ng-model="loginObj" validator="json" placeholder="请求参数" ng-init="loginObj='{}'" style="width:400px;margin-top:5px;display:block;">
+    <input type="text" ng-model="loginObj" validator="jsonString" placeholder="请求参数" ng-init="loginObj='{}'" style="width:400px;margin-top:5px;display:block;">
     测试接口的服务器地址：
     <input type="text" style="margin-top:5px;min-width:200px;width://(backendUrl.length*7)+'px'//" ng-model="backendUrl" validator="url" placeholder="如 http://192.168.199.1/zsd"  >
     <button ng-click="saveUrl()" class="btn btn-primary btn-xs">保存</button>
