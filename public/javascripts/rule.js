@@ -18,28 +18,32 @@
       },
       json: function (value, scope, element, attrs, param) {
         try {
-          if(jsl) {
-            return !!jsl.parser.parse(value);
+          if (jsl) {
+            return value ? !!jsl.parser.parse(value) : true;
           } else {
             return value ? 'object' === typeof JSON.parse(value) : true;
           }
         } catch (e) {
-          $validationProvider.setDefaultMsg({json:{error:e.toString()}});
+          $validationProvider.setDefaultMsg({
+            json: {
+              error: e.toString()
+            }
+          });
           return false;
         }
       },
-      jsonString: function(value) {
+      jsonString: function (value) {
         try {
           return value ? !!JSON.parse(value) : true;
         } catch (e) {
           return false;
         }
       },
-      noSearch: function(value) {
-        return value? value.indexOf('?')<0:true;
+      noSearch: function (value) {
+        return value ? value.indexOf('?') < 0 : true;
       },
-      path: function(value) {
-        return value?value.indexOf('/')===0:true;
+      path: function (value) {
+        return value ? value.indexOf('/') === 0 : true;
       }
     };
     var defaultMsg = {
