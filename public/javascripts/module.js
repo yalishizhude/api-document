@@ -1,7 +1,7 @@
 /*global angular, _, Mock*/
 (function (window, angular) {
   'use strict';
-  angular.module('indexApp', ['validation.rule']).config(['$interpolateProvider', function ($interpolateProvider) {
+  angular.module('app', ['validation.rule']).config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   }]).controller('mainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -223,5 +223,5 @@
       });
     };
   }]);
-  angular.bootstrap(document, ['indexApp']);
+  angular.bootstrap(document, ['app']);
 })(window, angular);

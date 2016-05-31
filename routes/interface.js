@@ -80,7 +80,11 @@ var validate = jsen(schema, {
       moduleName: req.query.moduleName,
       js: ['/lib/jquery/dist/jquery.min.js', '/lib/bootstrap/dist/js/bootstrap.min.js', '/lib/mockjs/dist/mock-min.js', '/lib/jsen/dist/jsen.min.js', '/lib/angular-text-json-editor/json-editor.js', '/lib/underscore/underscore-min.js', '/lib/angular-validation/dist/angular-validation.min.js', '/javascripts/parse.js', '/javascripts/rule.js', '/javascripts/interface.js']
     });
-  }).get('/:_id', function (req, res) {
+  })
+  .get('/ifc.html', function(req, res){
+    res.render('ifc', {view:true});
+  })
+  .get('/:_id', function (req, res) {
     cInt.find({
       _id: req.params._id
     }, function (e, r) {

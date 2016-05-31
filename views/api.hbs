@@ -1,0 +1,56 @@
+{{js '/lib/angular-ui-router/release/angular-ui-router.min.js'}} {{js '/javascripts/api.js'}} {{js '/javascripts/ifc.js'}}
+<div ng-controller="ctrl">
+  <div class="ptb5">
+    <button class="btn btn-primary" ng-click="state='edit'">编辑</button>
+    <button class="btn btn-danger" ng-show="'edit'==state" ng-click="state=''">取消</button>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3" style="-webkit-user-select:none;">
+        <div>
+          <span class="pointer pull-right" ng-click="fold(true);">折叠</span>
+          <span class="pointer pull-right glyphicon glyphicon-minus text-primary" ng-click="fold(true)"></span>
+          <span class="pointer pull-right" ng-click="fold(false);">展开</span>
+          <span class="pointer pull-right glyphicon glyphicon-plus text-primary" ng-click="fold(false)"></span>
+          <button ng-click="moduleState='add'" class="btn btn-xs btn-success" ng-show="'edit'==state&&'add'!=moduleState" ng-click=""><span class="pointer glyphicon glyphicon-plus text-default"></span>&nbsp;<b>新增模块</b></button>
+          <div class="clearfix"></div>
+        </div>
+        <ul class="list-unstyled" style="height: 800px; overflow-y:scroll;">
+          <li class="ptb5" ng-show="'add'==moduleState">
+            &emsp;
+            <input type="text" placeholder="请填写模块名称" ng-model="moduleName">
+            <button class="btn btn-xs btn-primary" ng-click="addModule();">保存</button>
+            <button class="btn btn-xs btn-danger" ng-click="moduleState=''">取消</button>
+          </li>
+          <li class="ptb5" ng-repeat="m in interfaceTree">
+            <span class="pointer glyphicon //m.fold?'glyphicon-plus':'glyphicon-minus'// text-primary" ng-click="m.fold=!m.fold"></span>
+            <b class="pointer" ng-click="m.fold=!m.fold" ng-bind="m.name" ng-hide="'edit'==m.state"></b> &nbsp;
+            <input type="text" ng-model="m._name" ng-show="'edit'==m.state">
+            <span ng-show="'edit'==state&&'edit'!==m.state" class="pointer glyphicon glyphicon-pencil text-warning" ng-click="m.state='edit'"></span> &nbsp;
+            <span ng-show="'edit'==state&&'edit'!==m.state" class="pointer glyphicon glyphicon-remove text-danger" ng-dblclick="deleteModule(m);"></span>
+            <button class="btn btn-xs btn-primary" ng-show="'edit'==m.state" ng-click="editModule(m);">保存</button>
+            <button class="btn btn-xs btn-danger" ng-show="'edit'==m.state" ng-click="m.state=''">取消</button>
+            <ul ng-hide="m.fold" class="list-unstyled" ng-if="m.interfaces.length>0">
+              <li class="ptb5 interface" ng-repeat="i in m.interfaces" ui-sref="interface({_id:i._id})">
+                &emsp;
+                <span ng-bind="i.name"></span> &nbsp;
+                <span ng-show="'edit'==state" class="glyphicon glyphicon-pencil text-warning"></span> &nbsp;
+                <span ng-show="'edit'==state" class="glyphicon glyphicon-remove text-danger"></span>
+              </li>
+            </ul>
+            <div>
+              &emsp;
+              <button ng-if="'edit'==state" class="btn btn-xs btn-success" ng-click=""><span class="pointer glyphicon glyphicon-plus text-default"></span>&nbsp;新增接口</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- 编辑接口 -->
+      <div class="col-md-9" ui-view></div>
+    </div>
+    <!-- loading -->
+    <div class="mask load4" ng-show="loading">
+      <div class="loader"> </div>
+    </div>
+  </div>
+</div>

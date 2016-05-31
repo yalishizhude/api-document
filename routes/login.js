@@ -49,7 +49,7 @@ module.exports = function (req, res, next) {
           var token = encode(JSON.stringify({name: req.body.name, password: req.body.password }));
           res.json({
             token: token,
-            url: '/project/index.html'
+            url: '/index.html'
           });
         } else {
           res.json({

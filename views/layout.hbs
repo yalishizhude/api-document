@@ -1,29 +1,51 @@
+{{#if isPage}}
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/lib/angular-text-json-editor/json-textarea.css">
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
-  {{#if static}}
-  <body>
-  {{else}}
-  <body ng-cloak>
-  {{/if}}
-    {{#if user}}
-    <div class="text-right">
-      <span class="label label-info">{{@user.name}}</span>
-      <span>
-        <a href="/user/index.html?userId={{@user._id}}">账号管理</a>&nbsp;|&nbsp;<a href="/login.html?loginout=true">登出</a>
-      </span>
+
+<head>
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  {{#each cssList}}
+    <link rel="stylesheet" href="{{this}}" />
+  {{/each}}
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">API服务器<small>&nbsp;v2.1.1</small></a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li ><a href="/project/index.html">项目</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{@user.name}} <span class="caret"></span></a>
+            {{#if user}}
+              <ul class="dropdown-menu">
+                <li><a href="/user/index.html?userId={{@user._id}}">账号管理</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/login.html?loginout=true">注销</a></li>
+              </ul>
+            {{/if}}
+          </li>
+        </ul>
+      </div>
     </div>
-    <br>
-    {{/if}}
-    {{{body}}}
-    <script type="text/javascript" src="/lib/angular/angular.min.js"></script>
-	  {{#each js}}
-		<script type="text/javascript" src="{{this}}"></script>
-    {{/each}}
-  </body>
+  </nav>
+  {{{body}}}
+  <script src="/lib/underscore/underscore-min.js" charset="utf-8"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
+  <script src="/lib/angular/angular.min.js"></script>
+  <script src="/lib/angular-animate/angular-animate.min.js"></script>
+  <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.min.js" charset="utf-8"></script>
+  {{#each jsList}}
+    <script type="text/javascript" src="{{this}}"></script>
+  {{/each}}
+</body>
+
 </html>
+{{/if}}

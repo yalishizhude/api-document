@@ -1,28 +1,21 @@
-<div ng-controller="mainCtrl">
-	<div ng-if="message" class="alert alert-danger" role="alert">
-	  <span  class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-	  <span  class="sr-only">Error:</span>
-	  //message//
-	</div>
-	<ul class="list-group" >
-		<li class="list-group-item" >项目列表</li>
-	  <li class="list-group-item" ng-repeat="p in projects">
-	  	<span ng-if="pro._id===p._id" class="glyphicon glyphicon-pencil">&nbsp;</span><a href="/module/index.html?pid=//p._id//" ng-bind="p.name"></a>
-	  	{{#if editable}}
-	  	<a href="javascript:void(0);" ng-dblclick="remove(p._id);" class="pull-right text-danger glyphicon glyphicon-minus">双击删除&nbsp;</a>
-	  	<a href="javascript:void(0);" ng-click="edit(p._id, p.name)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a>
-	  	{{/if}}
-		</li>
-		{{#if editable}}
-	  <li class="list-group-item" ng-if="pro">
-	  	<div class="col-sm-4">
-	  		<input type="text" id="projectName" class="form-control" ng-model="pro.name" ng-keydown="keydown($event);" ng-blur="cancel()">
-	  	</div>
-	  	<div class="clearfix"></div>
-	  </li>
-	  <li class="list-group-item text-center">
-	  	<a href="javascript:void(0);" class="text-success glyphicon glyphicon-plus" ng-click="edit()">新增项目&nbsp;</a>
-	  </li>
-	  {{/if}}
-	</ul>
+{{js '/javascripts/project.js'}}
+<div ng-cloak ng-controller="mainCtrl">
+  <div ng-mouseover="p.editable=true" ng-mouseout="p.editable=false" ng-repeat="p in projects" class="project">
+    <span tooltip="编辑"  tooltip-trigger="mouseenter" tooltip-placement="top" ng-click="edit(p, $event);" ng-show="p.editable&&!p.editing" class="glyphicon glyphicon-cog project"></span>
+    <span tooltip="双击删除"  tooltip-trigger="mouseenter" tooltip-placement="top" ng-dblclick="remove(p, $event);" ng-show="p.editable&&!p.editing" class="glyphicon glyphicon-remove project"></span>
+    <a href="/api/index.html#?pid={%p._id%}" class="btn {%p.className%} project">
+      <input ng-blur="cancel(p, $event);" id="{%p._id%}" ng-readonly="!p.editing" type="text" class="project" ng-model="p.name">
+      <br>
+      <button ng-mouseover="setLock(true)" ng-mouseout="setLock(false)" ng-click="save(p, $event);" ng-show="p.editing" type="button" class="btn btn-xs btn-default">确定</button>
+      <button ng-show="p.editing" type="button" class="btn btn-xs">取消</button>
+    </a>
+  </div>
+  <div class="project">
+    <a class="btn btn-default project" ng-click="edit(pro, $event)" ng-init="pro={name:'+ 新增项目',_name:'+ 新增项目'}">
+      <input ng-blur="cancel(pro, $event);" id="addBtn" ng-readonly="!pro.editing" type="text" class="project" ng-model="pro.name">
+      <br>
+      <button ng-mouseover="setLock(true)" ng-mouseout="setLock(false)" ng-click="save(pro, $event);" ng-show="pro.editing" type="button" class="btn btn-xs btn-default">确定</button>
+      <button ng-show="pro.editing" type="button" class="btn btn-xs">取消</button>
+    </a>
+  </div>
 </div>
