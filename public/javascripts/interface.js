@@ -72,6 +72,7 @@
 				$http.post('/interface', $scope.api).success(function(resp){
 					if(resp){
 						$scope.api = resp;
+						$scope.versions = resp.version
 						location.hash = '#'+resp._id;
 						$scope.hint('保存成功!', 'success');
 					} else {

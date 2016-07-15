@@ -106,7 +106,7 @@ var cIntHis = db.get('interfacesHistory');
             $set: {
               'oid': data._id.toString()
             }
-          }, function(e, data) {
+          }, function(e, _data) {
             if(e){
               console.error(e);
               res.status(500).send(e);

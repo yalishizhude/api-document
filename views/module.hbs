@@ -1,72 +1,68 @@
-<div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()">
+<div class="container col-sm-12" ng-controller="mainCtrl" ng-click="cancelRefer()" ng-claok>
   <h1>{{projectName}} </h1>
   <div class="col-sm-7">
     <div class="pull-right">
       <a href="javascript:void(0);" ng-click="sort('name');">按名称&uarr;</a>&nbsp;&nbsp;
       <a href="javascript:void(0);" ng-click="sort('updateDate');">按日期&darr;</a>
     </div>
-    <div class="clearfix"></div><br>
-    <div class="panel panel-default" ng-repeat="m in modules">
-      <div class="panel-heading">
-        <span ng-bind="m.name" ng-hide="m.text" placeholder="模块名称"></span> {{#if editable}}
-        <input id="_moduleName" type="text" ng-model="m.text" ng-if="m.text" ng-keydown="keydown($event, m);" ng-blur="cancel(m)">
-        <a href="javascript:void(0);" ng-hide="m.text" ng-dblclick="remove(m._id);" class="pull-right text-danger glyphicon glyphicon-minus">删除&nbsp;</a>
-        <a href="javascript:void(0);" ng-hide="m.text" ng-click="edit(m)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a> {{/if}}
-      </div>
-      <div class="panel-body">
-        <table class="table">
-        	<tr>
-        		<th>接口名称</th>
-            <th>请求路径</th>
-        		<th>版本</th>
-        		<th>请求方式</th>
-        		<th>修改者</th>
-        		<th>修改日期</th>
-            <th>前置接口</th>
-        		<th></th>
-        	</tr>
-          <tr ng-repeat="i in m.interfaces">
-            <td>
-              <a href="" ng-bind="i.name" ng-click="showInterfaceDetail(i._id)"></a>
-            </td>
-            <td ng-bind="i.url"></td>
-            <td ng-bind="i.version"></td>
-            <td ng-bind="i.method"></td>
-            <td ng-bind="i.author"></td>
-            <td ng-bind="i.updateDate"></td>
-            <td>
+    <div class="clearfix"></div>
+    <div class="interface-list">
+      <div class="panel panel-default" ng-repeat="m in modules">
+        <div class="panel-heading">
+          <span ng-bind="m.name" ng-hide="m.text" placeholder="模块名称"></span> {{#if editable}}
+          <input id="_moduleName" type="text" ng-model="m.text" ng-if="m.text" ng-keydown="keydown($event, m);" ng-blur="cancel(m)">
+          <a href="javascript:void(0);" ng-hide="m.text" ng-dblclick="remove(m._id);" class="pull-right text-danger glyphicon glyphicon-minus">删除&nbsp;</a>
+          <a href="javascript:void(0);" ng-hide="m.text" ng-click="edit(m)" class="pull-right text-warning glyphicon glyphicon-edit">编辑&nbsp;</a> {{/if}}
+        </div>
+        <div class="panel-body">
+          <table class="table">
+            <tr>
+              <th>接口名称</th>
+              <th>请求路径</th>
+              <th>请求方式</th>
+              <!-- <th>前置接口</th> -->
+              <th></th>
+            </tr>
+            <tr ng-repeat="i in m.interfaces">
+              <td>
+                <a href="" ng-bind="i.name" title="版本：//i.version//&#13修改者：//i.author//&#13修改日期：//i.updateDate//" ng-click="showInterfaceDetail(i._id)"></a>
+              </td>
+              <td ng-bind="i.url"></td>
+              <td ng-bind="i.method"></td>
+              <!-- <td>
               {{#if editable}}
               <a href="javascript:void 0;"><span ng-hide="refering" class="glyphicon glyphicon-retweet" ng-click="showReference($event,i)"></span></a>
               <a href="javascript:void 0;"><span ng-show="refering&&refering._id!=i._id" class="glyphicon glyphicon-magnet" ng-click="setReference($event,i)"></span></a>
               <a href="javascript:void 0;"><span ng-show="refering&&refering._id==i._id" class="glyphicon glyphicon-remove" ng-click="setReference($event)"></span></a>
               {{/if}}
               <span ng-bind="i.referenceName"></span>
-            </td>
+            </td> -->
+              {{#if editable}}
+              <td style="text-align:right;">
+                <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
+                <a href="" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
+              </td>
+              {{/if}}
+            </tr>
             {{#if editable}}
-            <td style="text-align:right;">
-              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//#//i._id//" class="text-warning"><span class="glyphicon glyphicon-edit"></span>编辑</a>
-              <a href="" ng-dblclick="deleteInterface(i._id, m.interfaces)" class="text-danger"><span class="glyphicon glyphicon-minus"></span>删除</a>
-            </td>
+            <tr>
+              <td colspan="8" class="text-center">
+                <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="text-success glyphicon glyphicon-plus">新增接口</a>
+              </td>
+            </tr>
             {{/if}}
-          </tr>
-          {{#if editable}}
-          <tr>
-            <td colspan="8" class="text-center">
-              <a href="/interface/index.html?pid=//m.pid//&mid=//m._id//&projectName={{projectName}}&moduleName=//m.name//" class="text-success glyphicon glyphicon-plus">新增接口</a>
-            </td>
-          </tr>
-          {{/if}}
-        </table>
+          </table>
+        </div>
       </div>
-    </div>
-    {{#if editable}}
-    <div class="panel panel-default">
-      <div class="panel-heading text-center"><a href="javascript:void 0;" ng-click="edit();"><span class="glyphicon glyphicon-plus"></span>新增模块</a></div>
-      <div class="panel-body" ng-if="mod">
-        <input type="text" id="moduleName" placeholder="模块名称" class="form-control" ng-model="mod.name" ng-keydown="keydown($event);" ng-blur="cancel()">
+      {{#if editable}}
+      <div class="panel panel-default">
+        <div class="panel-heading text-center"><a href="javascript:void 0;" ng-click="edit();"><span class="glyphicon glyphicon-plus"></span>新增模块</a></div>
+        <div class="panel-body" ng-if="mod">
+          <input type="text" id="moduleName" placeholder="模块名称" class="form-control" ng-model="mod.name" ng-keydown="keydown($event);" ng-blur="cancel()">
+        </div>
       </div>
+      {{/if}}
     </div>
-    {{/if}}
     <div ng-if="message" class="alert alert-danger" role="alert">
       <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
       <span class="sr-only">Error:</span> //message//

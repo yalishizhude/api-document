@@ -10,10 +10,28 @@ a {
 .validation-invalid{
 	color: red;
 }
-.ng-cloak{display:none;}  
+.ng-cloak{display:none;}
 .code{
   height: 30px;
   display: inline-block;
   line-height: 30px;
   font-size: 16px;
+}
+
+.interface-list {
+  position: fixed;
+  left: 50px;
+  width: 52%;
+  overflow: auto;
+  bottom: 20px;
+  top: 160px;
+}
+
+.interface-detail {
+  position: fixed;;
+  right: 50px;
+  overflow: auto;
+  bottom: 20px;
+  top: 160px;
+  width: 36%;
 }
