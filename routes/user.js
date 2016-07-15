@@ -36,7 +36,7 @@ var cUsr = db.get('users');
         res.json([]);
       }
     })
-    .put('/self', function(req, res) {
+    .put('/:id', function(req, res) {
       cUsr.find({
         _id: req.body._id,
         password: req.body.password
@@ -48,11 +48,13 @@ var cUsr = db.get('users');
           cUsr.update({
             _id: req.body._id
           }, {
-            password: req.body._password
+            $set: {
+              password: req.body._password
+            }
           }, function(err, data) {
             if (err) {
              console.error(err);
-             res.status(500).send(err); 
+             res.status(500).send(err);
             } else res.json({
               status: data,
               message: '修改成功'
@@ -66,24 +68,15 @@ var cUsr = db.get('users');
         }
       });
     })
-    .put('/:_id', function(req, res) {
-      cUsr.update({
-        _id: req.params._id
-      }, req.body, function(err, data) {
-        if (err){
-          res.status(500).send(err); 
-        } else res.json(data);
-      });
-    })
     .post('', function(req, res) {
       cUsr.find({
         name: req.body.name
       }, function(err, data) {
         if (err){
-          res.status(500).send(err); 
+          res.status(500).send(err);
         }
         else if (data.length === 0) {
-          req.body.password = '111111'; //默认密码 
+          req.body.password = '111111'; //默认密码
           cUsr.insert(req.body, function(err, data) {
             if (err) {
               res.status(500).send(err);
