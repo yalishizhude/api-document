@@ -4,6 +4,7 @@ var router = express.Router();
 var conf = require('./config');
 var monk = require('monk');
 var db = monk(conf.mongoUrl);
+var _ = require('underscore');
 
 var cUsr = db.get('users');
 (function() {
@@ -45,13 +46,11 @@ var cUsr = db.get('users');
           console.error(err);
           res.status(500).send(err);
         } else if (data.length) {
+          var user = _.omit(_.extend(data[0], req.body), '_password');
+          user.password =  req.body._password || user.password;
           cUsr.update({
             _id: req.body._id
-          }, {
-            $set: {
-              password: req.body._password
-            }
-          }, function(err, data) {
+          }, user, function(err, data) {
             if (err) {
              console.error(err);
              res.status(500).send(err);
