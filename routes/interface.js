@@ -139,37 +139,14 @@ var cIntHis = db.get('interfacesHistory');
                   console.error(e3);
                   res.status(500).send(e3);
                 } else {
+                  http.get(conf.mockUrl + _.now()).on('error', function() {
+                    console.log('mock server error');
+                  });
                   res.json({api:r3});
                 }
               });
             }
           });
-        }
-      });
-    })
-    .put('/:_id/:referenceId', function(req, res) {
-      cInt.update({_id: req.params._id }, {$set: {referenceId: req.params.referenceId } }, function(err, data) {
-        if (err) {
-          console.error(err);
-          res.status(500).send(err);
-        } else {
-          http.get(conf.mockUrl + _.now()).on('error', function() {
-            console.log('mock server error');
-          });
-          res.json(data);
-        }
-      });
-    })
-    .put('/:_id//1', function(req, res){
-      cInt.update({_id: req.params._id }, {$set: {referenceId: '',referenceName:'' } }, function(err, data) {
-        if (err) {
-          console.error(err);
-          res.status(500).send(err);
-        } else {
-          http.get(conf.mockUrl + _.now()).on('error', function() {
-            console.log('mock server error');
-          });
-          res.json(data);
         }
       });
     })
@@ -195,6 +172,10 @@ var cIntHis = db.get('interfacesHistory');
                 $set: {
                   referenceId: ''
                 }
+              });
+              console.log(conf.mockUrl + _.now());
+              http.get(conf.mockUrl + _.now()).on('error', function() {
+                console.log('mock server error');
               });
               res.json(data);
             }
