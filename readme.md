@@ -1,5 +1,7 @@
 # [中文文档](https://github.com/yalishizhude/api-document/blob/master/readme_zh.md)
 
+**Your star would encourage me to improve this project insistently and I really appreciate it.**
+
 ![demo](/demo.gif)
 
 # HTTP API document server

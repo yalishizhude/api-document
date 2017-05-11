@@ -1,5 +1,7 @@
 ![demo](demo.gif)
 
+**感谢你的star成为我持续改进此项目的最好鼓励。**
+
 # HTTP API 文档服务器
 
 用来管理HTTP API文档和测试http请求的服务器。
